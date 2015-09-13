@@ -30,6 +30,7 @@ public class MenuPrincipal extends javax.swing.JPanel {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jLabel1 = new javax.swing.JLabel();
         textField1 = new java.awt.TextField();
+        jTextField1 = new javax.swing.JTextField();
 
         setRequestFocusEnabled(false);
 
@@ -44,6 +45,10 @@ public class MenuPrincipal extends javax.swing.JPanel {
             }
         });
         jTabbedPane1.addTab("tab2", textField1);
+
+        jTextField1.setColumns(1);
+        jTextField1.setText("jTextField1");
+        jTabbedPane1.addTab("tab3", jTextField1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -71,6 +76,7 @@ public class MenuPrincipal extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextField jTextField1;
     private java.awt.TextField textField1;
     // End of variables declaration//GEN-END:variables
 }

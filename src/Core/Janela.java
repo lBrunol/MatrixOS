@@ -1,31 +1,28 @@
 package Core;
 
 import java.awt.*;
-
-
 import javax.swing.*;
 public class Janela extends JFrame {
 
 	private static final long serialVersionUID = 5138474335105346926L;
 	
-	public Janela(String titulo, Dimension tamanho)
-	{
-		setTitle(titulo); 
+        
+	public Janela(String titulo, String icone,  Dimension tamanho){
+		
+                setTitle(titulo); 
 		setSize(tamanho);
 		Image Ico;
-		Ico = Toolkit.getDefaultToolkit().getImage("/src/imagens/cadastro-os.png");
+		Ico = Toolkit.getDefaultToolkit().getImage(icone);
 		
-	    this.setIconImage(Ico);
+                this.setIconImage(Ico);
 
 		centralize(); 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
-		getContentPane().setLayout(null); 
-		getContentPane().setBackground(new Color (250,250,250)); 
-		
-		
-		 		
-		}
+                getContentPane().setLayout(null); 
+		getContentPane().setBackground(new Color (250,250,250));
+                
+        }
 	
 	public void centralize() {
 	
@@ -40,7 +37,7 @@ public class Janela extends JFrame {
 	}
 	public static void main(String[] args) {
 	
-		Janela jan = new Janela("Janela ",new Dimension(300,200));
+		Janela jan = new Janela("Janela ","/src/imagens/cadastro-os.png", new Dimension(800,800));
 		jan.setVisible(true); 
 		
 	}
