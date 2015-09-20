@@ -7,10 +7,10 @@ import javax.swing.table.*;
 import Core.ConexaoBanco;
 import Core.Janela;
 
-public class Login extends Janela {
+public final class Login extends Janela {
 	private static final long serialVersionUID = -352599882118966813L;
 	
-	ConexaoBanco cn = new ConexaoBanco("localhost","system","fanbno022");
+	ConexaoBanco cn = new ConexaoBanco("localhost","system","2020");
 	JTable tblTeste;
         JTextField txtNome;
 	 	
