@@ -22,24 +22,11 @@ public class Login extends Janela {
 	}
         
 	public Login(){
-		super("Login de Acesso" ,"", new Dimension(800, 800));
+		super("Login de Acesso" ,new Dimension(800, 800));
 		mostrar();
 	}
 	 void mostrar(){
-             
-             
-                JTabbedPane panelGenerico;
-                JLabel label1, label2;
-                label1 = new JLabel("teste");
-                label2 = new JLabel("teste2");
-                
-                panelGenerico = new JTabbedPane();
-                
-                panelGenerico.addTab("Cadastro", label1);
-                panelGenerico.addTab("Consulta", label2);
-                
-                panelGenerico.setBounds(10, 800, 600, 600);
-             
+                         
 		 DefaultTableModel tabela = new DefaultTableModel();
 		 tblTeste = new JTable(tabela);
                  txtNome = new JTextField();
@@ -61,10 +48,7 @@ public class Login extends Janela {
 		}
                 scrollpane.setBounds(10, 10, 1600 , 800);
                 scrollpane.add(txtNome); 
-
-                getContentPane().add(scrollpane);
-                getContentPane().add(panelGenerico);
-                
+                getContentPane().add(scrollpane);                
                         
 	}
 	 void criaTabela(){
