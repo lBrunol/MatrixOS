@@ -54,7 +54,7 @@ public class Janela extends JFrame {
 
             panelGenerico.setBounds(10, 10, 600, 600);
 
-            getContentPane().add(panelGenerico);
+            //getContentPane().add(panelGenerico);
         }
         
 	public static void main(String[] args) {	

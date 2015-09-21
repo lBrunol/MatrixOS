@@ -1,5 +1,6 @@
 package Core;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -23,7 +24,7 @@ public class ConexaoBanco {
      * @param usuario Nome do usuário
      * @param senha Senha do usuário
      */
-    public ConexaoBanco( String host, String usuario, String senha ) {
+    public ConexaoBanco(String host, String usuario, String senha ) {
         this.senha = senha;
         this.usuario = usuario;
         this.host = host;
@@ -145,13 +146,13 @@ public class ConexaoBanco {
         int result = -1;
        
         try {
-        	conectar();
+            conectar();
             st = this.c.createStatement();
             result = st.executeUpdate(query);
         } catch ( SQLException e ) {
             e.printStackTrace();
         }finally{
-        	desconectar();
+            desconectar();
         }
        
         return result;
@@ -183,6 +184,18 @@ public class ConexaoBanco {
         catch(SQLException e){  
             JOptionPane.showMessageDialog(null,"Erro ao listar no JTable " + e.getCause());        
         }  
-    }    
+    }
     
+    public void executaProcedure(String procedure){        
+        try {
+            conectar();
+            CallableStatement stmt = c.prepareCall("{call " + procedure + "}");    
+            stmt.execute();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally{
+            desconectar();
+        }
+    }    
 }
