@@ -28,7 +28,7 @@ public class InterfaceTeste implements ActionListener {
     private JPanel panelCadastro = new JPanel(new GridBagLayout());
     private int codigo;
     private String nome;
-    ConexaoBanco conexao = new ConexaoBanco("localhost","system","fanbno022");
+    ConexaoBanco conexao = new ConexaoBanco("localhost","system","2020");
     
     public InterfaceTeste(){
 		
