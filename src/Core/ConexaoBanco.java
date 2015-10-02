@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.*;
@@ -161,17 +162,28 @@ public class ConexaoBanco {
      * Este método preenche uma JTable com os dados provindos do método Executar .
      * @param tabela o nome da TableModel que você deseja preencher
      * @param query select da tabela que você deseja trazer os dados
-     * @param nome dos campos que você quer trazer para tabela
      */
     
-    public void preencheTabela(DefaultTableModel tabela,  String query, String campos[]) {  
+    public void preencheTabela(DefaultTableModel tabela,  String query) {  
     	ResultSet rs;
-    	tabela.setNumRows(0);  
-        rs = executar(query);
+        ResultSetMetaData rsmd;
+    	tabela.setNumRows(0);
+        
+        rs = executar(query);        
         try {
-        	int indice = campos.length;
+                //Armazena no objeto os metadados do resultset
+                rsmd = rs.getMetaData();
+                //Pega o numero de colunas do resultset
+        	int indice = rsmd.getColumnCount();
+                //Cria um array para armzenar o nome das colunas
+                String[] campos = new String[indice];
+                //Armazena na variável campos os nomes das colunas
+                for (int i = 0; i < indice; i++){
+                    campos[i] = rsmd.getColumnName(i+1);
+                }
+                //Adiciona as colunas
         	for(int i = 0; i < indice; i++){
-        		tabela.addColumn(campos[i]);	
+                    tabela.addColumn(campos[i]);	
         	}
         	Object row[] = new Object[indice];
             while(rs.next()) {            	

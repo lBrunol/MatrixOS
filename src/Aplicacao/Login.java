@@ -10,7 +10,7 @@ import Core.Janela;
 public final class Login extends Janela {
 	private static final long serialVersionUID = -352599882118966813L;
 	
-	ConexaoBanco cn = new ConexaoBanco("localhost","system","2020");
+	ConexaoBanco cn = new ConexaoBanco("localhost","system","fanbno022");
 	JTable tblTeste;
         JTextField txtNome;
 	 	
@@ -35,13 +35,9 @@ public final class Login extends Janela {
                  
 		 JScrollPane scrollpane = new JScrollPane(tblTeste); 		 
 		try{   	
-			ResultSet dados;
-			dados = cn.executar("SELECT * FROM CARGOS");
-
-                        String[] valores = new String[]{"carCodigo","carDescricao"};
-			cn.preencheTabela(tabela,"SELECT * FROM CARGOS", valores);
-			tblTeste.getColumnModel().getColumn(0).setHeaderValue("Código");
-			tblTeste.getColumnModel().getColumn(1).setHeaderValue("Descrição");
+			cn.preencheTabela(tabela,"SELECT * FROM");
+			//tblTeste.getColumnModel().getColumn(1).setHeaderValue("Descrição");
+			//tblTeste.getColumnModel().getColumn(0).setHeaderValue("Código");
 			
 		}catch(Exception erro){
 			JOptionPane.showMessageDialog(null, erro.getMessage());			
