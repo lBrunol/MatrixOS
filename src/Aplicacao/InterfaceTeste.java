@@ -2,7 +2,6 @@ package Aplicacao;
 
 import Core.ConexaoBanco;
 import Core.MontaInterfaces;
-import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,15 +23,21 @@ public class InterfaceTeste implements ActionListener {
     private JTextField txtCPF = new JTextField();
     private JTextField txtCEP = new JTextField();
     private JTextField txtEstado  = new JTextField();
+    private JTextField txtBairro= new JTextField();
+    private JTextField txtComplemento = new JTextField();
+    private JTextField txtCelular = new JTextField();
+    private JTextField txtEmail  = new JTextField();
     private JButton botCadastrar = new JButton();
     private JButton botExcluir = new JButton();
+    private JButton botAlterar = new JButton();
     DefaultTableModel tabela = new DefaultTableModel();
     private JTable tblClientes = new JTable(tabela);
     private JPanel panelConsulta = new JPanel(new GridBagLayout());
     private JPanel panelCadastro = new JPanel(new GridBagLayout());
+    private JPanel panelBotoes = new JPanel(new GridBagLayout());
     private int codigo;
     private String nome;
-    ConexaoBanco conexao = new ConexaoBanco("localhost","system","2020");
+    ConexaoBanco conexao = new ConexaoBanco();
     
     public InterfaceTeste(){
 		
@@ -48,9 +53,11 @@ public class InterfaceTeste implements ActionListener {
 
         Icon icone = new ImageIcon(getClass().getResource("/imagens/salvar.png"));
         Icon iconeExcluir = new ImageIcon(getClass().getResource("/imagens/excluir.png"));
+        Icon iconeAlterar = new ImageIcon(getClass().getResource("/imagens/alterar.png"));
         botCadastrar.setIcon(icone);
         botCadastrar.addActionListener(this);
         botExcluir.setIcon(iconeExcluir);
+        botAlterar.setIcon(iconeAlterar);
 
         //Instância da classe que montará a interface da sua janela, aqui deve ser passado o título da janela
         MontaInterfaces testeInterface = new MontaInterfaces("Tela de exemplo");
@@ -59,16 +66,19 @@ public class InterfaceTeste implements ActionListener {
         ConexaoBanco cn = new ConexaoBanco("localhost", "system", "fanbno022");
         cn.preencheTabela(tabela, "SELECT * FROM CLIENTE");
 
-        //Métodos que criarão a estrutura, imprescindível chamar o método add que aceita um JPanel para adicionar ao menos uma aba
+        //Métodos que criarão a estrutura, imprescindível chamar o método add que aceita um JPanel para adicionar ao menos uma aba        
         testeInterface.add(panelCadastro, "Cadastro");
         testeInterface.add(panelConsulta, "Consulta");
         //Em todos os métodos que adicionarão conteúdo, deve ser passado a aba que ele será adicionado, no caso o último argumento
-        testeInterface.add("Cadastrar", botCadastrar, panelCadastro);
-        //testeInterface.add("Excluir", botExcluir, panelCadastro);
+        testeInterface.add(panelCadastro, panelBotoes);
+        testeInterface.add("Cadastrar", botCadastrar, panelBotoes);
+        testeInterface.add("Excluir", botExcluir, panelBotoes);
+        testeInterface.add("Alterar", botAlterar, panelBotoes);
         testeInterface.add("Código", txtCodigo, "Nome", txtNome, panelCadastro);
         testeInterface.add("RG", txtRG, "CPF", txtCPF, panelCadastro);	
         testeInterface.add("Estado", txtEstado, panelCadastro);
         testeInterface.add("CEP", txtCEP, panelCadastro);
+        testeInterface.add("Bairro", txtBairro, "Celular", txtCelular, "Email", txtEmail, "Complemento", txtComplemento, panelCadastro);
         testeInterface.add(tblClientes, panelConsulta);
         testeInterface.setTamanho(800, 800);
         testeInterface.setVisible(true);

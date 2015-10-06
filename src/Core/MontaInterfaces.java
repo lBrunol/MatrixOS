@@ -14,7 +14,7 @@ public class MontaInterfaces extends JFrame {
 	
     /** 
     * Método construtor da classe de interface
-    * @param tituloForm onde será passado o título do seu formulário
+    * @param tituloForm onde será passado o título do seu formulário (janela e cabeçalho)
     */
     public MontaInterfaces(String tituloForm) {          
         
@@ -23,6 +23,7 @@ public class MontaInterfaces extends JFrame {
         this.getContentPane().setLayout(new GridBagLayout());
         this.setSize(600,600);
         this.setTitle(tituloForm);
+        this.centralize();
         
         panelPrincipal = new JPanel();
         JPanel panelTopo = new JPanel();
@@ -84,11 +85,24 @@ public class MontaInterfaces extends JFrame {
     * Inseri o panel principal 
     */
     public void addPrincipal(){
-            add(panelPrincipal);
+        add(panelPrincipal);
+    }
+    
+    /** 
+    * centraliza a janela na tela 
+    */    
+    private void centralize() {	
+        Dimension T = Toolkit.getDefaultToolkit().getScreenSize();		
+        Dimension J = getSize();
+
+        if (J.height > T.height) setSize(J.width,T.height); 
+        if (J.width > T.width) setSize(T.width,J.height); 
+
+        setLocation((T.width - J.width )/2,(T.height-J.height)/2);
     }
   
     /** 
-    * Altera o tamanho da janela 
+    * Altera o tamanho da janela com base em valores inteiros
     * @param largura passar a largura desejada para a janela
     * @param altura passar a altura desejada para janela
     */
@@ -97,7 +111,7 @@ public class MontaInterfaces extends JFrame {
     }
     
     /** 
-    * Altera o tamanho máximo da janela
+    * Altera o tamanho máximo da janela com base em valores inteiros
     * @param largura passar a largura máxima desejada para a janela
     * @param altura passar a altura máxima desejada para a janela
     */
@@ -106,7 +120,7 @@ public class MontaInterfaces extends JFrame {
     }
         
     /** 
-    * Altera o tamanho mínimo da janela
+    * Altera o tamanho mínimo da janela com base em valores inteiros
     * @param largura passar a largura mínima desejada para a janela
     * @param altura passar a altura mínima desejada para a janela
     */
@@ -120,14 +134,14 @@ public class MontaInterfaces extends JFrame {
     * @param g quantidade de verde
     * @param b quantiade de azul 
     */
-    public void setCor(int r, int g, int b){
+    private void setCor(int r, int g, int b){
         getContentPane().setBackground(new Color(r,g,b));
         panelPrincipal.setBackground(new Color(r,g,b));
     }
 	
     /** 
     * Altera o titulo da página
-    * @param titulo valor para alterar o título da janela
+    * @param titulo string para alterar o título da janela
     */
     public void setTitulo(String titulo){
         this.setTitle(titulo);
@@ -135,7 +149,7 @@ public class MontaInterfaces extends JFrame {
 	
     /** 
     * Inseri as abas no JTabbedPane
-    * @param titulo valor que servira de titulo para a aba
+    * @param titulo string que servira de titulo da aba
     * @param panel Objeto do tipo JPanel que servirá como aba
     */
     public void add(JPanel panel, String titulo){
@@ -145,7 +159,7 @@ public class MontaInterfaces extends JFrame {
     /** 
     * Adiciona um label e um componente horizontalmente 
     * @param label String que irá aparecer no label 
-    * @param componente Componente de edição 
+    * @param componente passar um componente para adição na janela, exemplo, JTextBox, JComboBox, JTextArea. 
     * @param panel onde os componentes serão adicionados
     */ 
     public void add(String label, JComponent componente, JPanel panel) {  
@@ -166,7 +180,7 @@ public class MontaInterfaces extends JFrame {
     
     /** 
     * Adiciona um panel
-    * @param componente Componente de edição
+    * @param componente passar um objeto do tipo JPanel.
     */  
     public void add(JComponent componente) {  
         GridBagConstraints cons = new GridBagConstraints();
@@ -182,7 +196,7 @@ public class MontaInterfaces extends JFrame {
     /** 
     * Adiciona um label e um componente horizontalmente. O componente ocupará todo o reto da tela 
     * @param label String que irá aparecer no label 
-    * @param componente Componente de edição 
+    * @param componente passar um componente para adição na janela, exemplo, JTextBox, JComboBox, JTextArea. 
     * @param panel onde os componentes serão adicionados
     */  
     public void add(String label, JScrollPane componente, JPanel panel) {  
@@ -207,9 +221,9 @@ public class MontaInterfaces extends JFrame {
     * Adiciona um label, um componente de edição, mais um label e outro componente de edição. Todos  
     * na mesma linha 
     * @param label Label 1  
-    * @param componente Componente de edição 
+    * @param componente passar um componente para adição na janela, exemplo, JTextBox, JComboBox, JTextArea. 
     * @param label2 Label 2 
-    * @param componente2 Componente de edição 2
+    * @param componente2 passar um componente para adição na janela, exemplo, JTextBox, JComboBox, JTextArea. 2
     * @param panel Jpanel onde os componentes ficarão
     */  
     public void add(String label, JComponent componente, String label2, JComponent componente2, JPanel panel) {  
@@ -239,6 +253,63 @@ public class MontaInterfaces extends JFrame {
         panel.add(componente2, cons);  
     }
     
+    /** 
+    * Adiciona 4 componentes junto as suas labels na mesma linha 
+    * @param label Label 1  
+    * @param componente passar um componente para adição na janela, exemplo, JTextBox, JComboBox, JTextArea. 
+    * @param label2 Label 2 
+    * @param componente2 passar um componente para adição na janela, exemplo, JTextBox, JComboBox, JTextArea.
+    * @param label3 Label 3 
+    * @param componente3 passar um componente para adição na janela, exemplo, JTextBox, JComboBox, JTextArea. 
+    * @param label4 Label 4
+    * @param componente4 passar um componente para adição na janela, exemplo, JTextBox, JComboBox, JTextArea.
+    * @param panel Jpanel onde os componentes ficarão
+    */  
+    public void add(String label, JComponent componente, String label2, JComponent componente2, String label3, JComponent componente3, String label4, JComponent componente4, JPanel panel) {  
+        GridBagConstraints cons = new GridBagConstraints();  
+        cons.fill = GridBagConstraints.BOTH;  
+        cons.insets = new Insets(4,4,4,4);  
+  
+        cons.fill = GridBagConstraints.NONE;  
+        cons.anchor = GridBagConstraints.NORTHWEST;  
+        cons.weightx = 0;  
+        cons.gridwidth = 1;  
+        panel.add(new JLabel(label), cons);  
+          
+        cons.weightx = 1;  
+        cons.gridwidth = 1;  
+        cons.fill = GridBagConstraints.BOTH;  
+        panel.add(componente, cons);  
+  
+        cons.fill = GridBagConstraints.NONE;  
+        cons.weightx = 0;  
+        cons.gridwidth = 1;  
+        panel.add(new JLabel(label2), cons);
+          
+        cons.weightx = 1;  
+        cons.fill = GridBagConstraints.BOTH;  
+        panel.add(componente2, cons);
+        
+        cons.fill = GridBagConstraints.NONE;  
+        cons.weightx = 0;  
+        cons.gridwidth = 1;  
+        panel.add(new JLabel(label3), cons);
+          
+        cons.weightx = 1;  
+        cons.fill = GridBagConstraints.BOTH;  
+        panel.add(componente3, cons);
+        
+        cons.fill = GridBagConstraints.NONE;  
+        cons.weightx = 0;  
+        cons.gridwidth = 1;  
+        panel.add(new JLabel(label4), cons);
+          
+        cons.weightx = 1;  
+        cons.fill = GridBagConstraints.BOTH;  
+        cons.gridwidth = GridBagConstraints.REMAINDER;  
+        panel.add(componente4, cons);
+    }
+    
     /**
     * Adiciona um label, um componente de edição, mais um label e outro
     * componente de edição. Todos na mesma linha
@@ -249,27 +320,35 @@ public class MontaInterfaces extends JFrame {
     */
     public void add(String label, JButton botao, JPanel panel) {
         GridBagConstraints cons = new GridBagConstraints();
+        JPanel panelBotaoContainer = new JPanel(new GridBagLayout());
         JPanel panelBotao = new JPanel(new GridBagLayout());
-
-        cons.fill = GridBagConstraints.NONE;
-        cons.anchor = GridBagConstraints.WEST;
+       
         cons.insets = new Insets(4, 4, 4, 4);
-        cons.gridx = GridBagConstraints.RELATIVE;
-        cons.weightx = 0;
-        cons.gridwidth = 1;
-        cons.gridy = 1;
-        panelBotao.add(new JLabel(label), cons);
-
-        cons.fill = GridBagConstraints.NONE;
-        cons.weightx = 1;
-        cons.gridwidth = GridBagConstraints.RELATIVE;
         cons.gridy = 0;
+        panelBotaoContainer.add(botao, cons);
+        
+        cons.gridy = 1;
+        panelBotaoContainer.add(new JLabel(label), cons);
 
-        panelBotao.add(botao, cons);
+        cons.insets = new Insets(0, 0, 20, 0);         
+        cons.weighty = 0;
+        panel.add(panelBotaoContainer, cons);
+
+    }
+    
+    /**
+    * Adiciona um panel para os botões, necessário para posicionar botões ao lado do outro
+    * @param aba Aba em que o panel com os botões será adicionado
+    * @param panelBotoes panel onde os botões ficarão
+    */    
+    public void add(JPanel aba, JPanel panelBotoes){
+        GridBagConstraints cons = new GridBagConstraints();
+        
+        cons.anchor = GridBagConstraints.WEST;        
         cons.insets = new Insets(0, 0, 20, 0);
-        cons.gridwidth = GridBagConstraints.REMAINDER;
-        panel.add(panelBotao, cons);
-
+        cons.gridwidth = GridBagConstraints.REMAINDER;   
+        aba.add(panelBotoes, cons);
+        
     }
     
     /**
@@ -289,7 +368,8 @@ public class MontaInterfaces extends JFrame {
         cons.gridwidth = GridBagConstraints.RELATIVE;
  
         panel.add(scrollpane ,cons);        
-    }
+    }     
+    
     
     public static void main(String[] args) {
         MontaInterfaces exe = new MontaInterfaces("Menu");

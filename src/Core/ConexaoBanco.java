@@ -30,6 +30,12 @@ public class ConexaoBanco {
         this.usuario = usuario;
         this.host = host;
     }
+    
+    public ConexaoBanco() {
+        this.senha = "fanbno022";
+        this.usuario = "system";
+        this.host = "localhost";
+    }
    
     /**
      * Método que estabelece a conexão com o banco de dados
