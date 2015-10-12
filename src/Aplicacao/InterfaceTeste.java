@@ -60,26 +60,26 @@ public class InterfaceTeste implements ActionListener {
         botAlterar.setIcon(iconeAlterar);
 
         //Instância da classe que montará a interface da sua janela, aqui deve ser passado o título da janela
-        MontaInterfaces testeInterface = new MontaInterfaces("Tela de exemplo");
+        MontaInterfaces testeInterface = new MontaInterfaces("Tela de exemplo", "/imagens/icone-servico.png");
         
         //Instância da classe de conexão com banco (teste da funcionalidade da tabela)
         ConexaoBanco cn = new ConexaoBanco("localhost", "system", "fanbno022");
         cn.preencheTabela(tabela, "SELECT * FROM CLIENTE");
 
-        //Métodos que criarão a estrutura, imprescindível chamar o método add que aceita um JPanel para adicionar ao menos uma aba        
-        testeInterface.add(panelCadastro, "Cadastro");
-        testeInterface.add(panelConsulta, "Consulta");
+        //Métodos que criarão a estrutura, imprescindível chamar o método addTabela que aceita um JPanel para adicionar ao menos uma aba        
+        testeInterface.addAbas(panelCadastro, "Cadastro");
+        testeInterface.addAbas(panelConsulta, "Consulta");
         //Em todos os métodos que adicionarão conteúdo, deve ser passado a aba que ele será adicionado, no caso o último argumento
-        testeInterface.add(panelCadastro, panelBotoes);
-        testeInterface.add("Cadastrar", botCadastrar, panelBotoes);
-        testeInterface.add("Excluir", botExcluir, panelBotoes);
-        testeInterface.add("Alterar", botAlterar, panelBotoes);
-        testeInterface.add("Código", txtCodigo, "Nome", txtNome, panelCadastro);
-        testeInterface.add("RG", txtRG, "CPF", txtCPF, panelCadastro);	
-        testeInterface.add("Estado", txtEstado, panelCadastro);
-        testeInterface.add("CEP", txtCEP, panelCadastro);
-        testeInterface.add("Bairro", txtBairro, "Celular", txtCelular, "Email", txtEmail, "Complemento", txtComplemento, panelCadastro);
-        testeInterface.add(tblClientes, panelConsulta);
+        testeInterface.addPanelBotoes(panelCadastro, panelBotoes);
+        testeInterface.addBotoes("Cadastrar", botCadastrar, panelBotoes);
+        testeInterface.addBotoes("Excluir", botExcluir, panelBotoes);
+        testeInterface.addBotoes("Alterar", botAlterar, panelBotoes);
+        testeInterface.addDoisComponentes("Código", txtCodigo, "Nome", txtNome, panelCadastro);
+        testeInterface.addDoisComponentes("RG", txtRG, "CPF", txtCPF, panelCadastro);	
+        testeInterface.addUmComponente("Estado", txtEstado, panelCadastro);
+        testeInterface.addUmComponente("CEP", txtCEP, panelCadastro);
+        testeInterface.addQuatroComponentes("Bairro", txtBairro, "Celular", txtCelular, "Email", txtEmail, "Complemento", txtComplemento, panelCadastro);
+        testeInterface.addTabela(tblClientes, panelConsulta);
         testeInterface.setTamanho(800, 800);
         testeInterface.setVisible(true);
     }

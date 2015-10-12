@@ -1,5 +1,7 @@
 package Core;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,6 +18,7 @@ public class ConexaoBanco {
     private String host;
     private String usuario;
     private String senha;
+    private int idCombo = 0 ;
    
     public Connection c;
    
@@ -164,12 +167,12 @@ public class ConexaoBanco {
        
         return result;
     }
+    
     /**
      * Este método preenche uma JTable com os dados provindos do método Executar .
      * @param tabela o nome da TableModel que você deseja preencher
      * @param query select da tabela que você deseja trazer os dados
-     */
-    
+     */    
     public void preencheTabela(DefaultTableModel tabela,  String query) {  
     	ResultSet rs;
         ResultSetMetaData rsmd;
@@ -200,10 +203,16 @@ public class ConexaoBanco {
             }
         }  
         catch(SQLException e){  
-            JOptionPane.showMessageDialog(null,"Erro ao listar no JTable " + e.getCause());        
-        }  
+            JOptionPane.showMessageDialog(null,"Ocorreu um erro  de SQL ao listar a tabela" + e.getMessage() + " \n Favor entrar em contato com administrador");        
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null,"Ocorreu um erro ao listar a tabela " + e.getMessage() + " \n Favor entrar em contato com administrador");
+        }
     }
-    
+        
+    /**
+     * Este executa procedures do tipo Update, Insert e Delete.
+     * @param procedure Passar a string da procedure
+     */
     public void executaProcedure(String procedure){        
         try {
             conectar();
@@ -215,5 +224,52 @@ public class ConexaoBanco {
         }finally{
             desconectar();
         }
-    }    
+    }
+    
+    public void preencheCombo(final JComboBox combo, String sql){
+        ResultSet rs;
+        try {
+            this.conectar();
+            rs = this.executar(sql);
+            while(rs.next()){
+                String id = rs.getString(1);
+                String nome = rs.getString(2);
+                
+                ComboItem cboItem = new ComboItem(id, nome);
+                combo.addItem(cboItem);
+            }
+            combo.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                   
+                }
+            });
+        }
+        catch(SQLException e){  
+            JOptionPane.showMessageDialog(null,"Ocorreu um erro  de SQL ao listar a combobox " + e.getMessage() + " \n Favor entrar em contato com administrador");        
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null,"Ocorreu um erro ao listar a combobox " + e.getMessage() + " \n Favor entrar em contato com administrador");
+        }
+                
+    }
+    
+    public void preencheCaixasTexto(JComponent componente){
+        //for(int i = 0; i < componente.length; i++){            
+            System.out.println(componente.getClass().getComponentType());
+        //}
+    }
+
+    /**
+     * @return the idCombo
+     */
+    public int getIdCombo() {
+        return idCombo;
+    }
+
+    /**
+     * @param idCombo the idCombo to set
+     */
+    public void setIdCombo(int idCombo) {
+        this.idCombo = idCombo;
+    }
 }
