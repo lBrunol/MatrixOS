@@ -8,6 +8,7 @@ package Aplicacao;
 import Core.ComboItem;
 import Core.ConexaoBanco;
 import Core.MontaInterfaces;
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -149,6 +150,10 @@ public class OrdemServico implements ActionListener  {
         telaOS.addLabelTitulo("Serviço", panelCadastro);
         telaOS.addQuatroComponentes("Selecione o Serviço*", cboServico, "Valor", txtValor,"Quantidade", txtQtde,  "Descrição", txtDescricaoServico,  panelCadastro);        
         telaOS.addAbas(panelConsulta, "Consulta");
+        telaOS.addTabela(tblOrdemServico, panelConsulta);
+        
+        conexao.preencheTabela(tabela, "SELECT ordCodigo Código, ordOcorrencia Ocorrência, ordDataAbertura, cliNome, funNome FROM cliente INNER JOIN (funcionario INNER JOIN ordemServico ON funcionario.funMatricula = ordemServico.funMatricula ) ON cliente.cliCodigo = ordemServico.cliCodigo");
+        
         
         //Preenche as combobox
         cboCliente.addItem("");
@@ -162,10 +167,6 @@ public class OrdemServico implements ActionListener  {
             @Override
             public void actionPerformed(ActionEvent e) {
             int idCombo;
-            
-            //idCombo = conexao.getIdCombo();
-            //idCombo = 1;
-            //if(idCombo != 0){
                 
                 ComboItem comboItem = (ComboItem) cboCliente.getSelectedItem();
                     System.out.println(comboItem.getId());
@@ -184,7 +185,6 @@ public class OrdemServico implements ActionListener  {
                     System.out.println("erro" + b.getMessage());
                 }
                 }
-            //}
         });
         
     }    

@@ -11,6 +11,7 @@ public class MontaInterfaces extends JFrame {
     private JPanel panelCadastro;
     private JTabbedPane tabbedPane;
     private JPanel panelPrincipal;
+    
     JLabel lblImagem = new JLabel("");
 	
     /** 
@@ -192,13 +193,15 @@ public class MontaInterfaces extends JFrame {
     */  
     public void addComponente(JComponent componente) {  
         GridBagConstraints cons = new GridBagConstraints();
+        JScrollPane scrollpane = new JScrollPane(componente);
         
         cons.insets = new Insets(10,10,10,10);           
         cons.fill = GridBagConstraints.BOTH;  
         cons.weightx = 1;  
         cons.weighty = 1;
-        cons.gridwidth = GridBagConstraints.RELATIVE;  
-        this.getContentPane().add(componente, cons);  
+        cons.gridwidth = GridBagConstraints.RELATIVE;
+        //scrollpane.add(componente, cons);
+        this.getContentPane().add(scrollpane, cons);  
     }
   
     /** 
@@ -236,6 +239,7 @@ public class MontaInterfaces extends JFrame {
     */  
     public void addDoisComponentes(String label, JComponent componente, String label2, JComponent componente2, JPanel panel) {  
         GridBagConstraints cons = new GridBagConstraints();  
+        
         cons.fill = GridBagConstraints.BOTH;  
         cons.insets = new Insets(4,4,4,4);  
   
@@ -275,7 +279,6 @@ public class MontaInterfaces extends JFrame {
     */  
     public void addQuatroComponentes(String label, JComponent componente, String label2, JComponent componente2, String label3, JComponent componente3, String label4, JComponent componente4, JPanel panel) {  
         GridBagConstraints cons = new GridBagConstraints();  
-        cons.fill = GridBagConstraints.BOTH;  
         cons.insets = new Insets(4,4,4,4);  
   
         cons.fill = GridBagConstraints.NONE;  
