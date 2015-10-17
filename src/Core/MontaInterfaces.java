@@ -239,6 +239,7 @@ public class MontaInterfaces extends JFrame {
     */  
     public void addDoisComponentes(String label, JComponent componente, String label2, JComponent componente2, JPanel panel) {  
         GridBagConstraints cons = new GridBagConstraints();  
+        JPanel jp = new JPanel(new GridBagLayout());
         
         cons.fill = GridBagConstraints.BOTH;  
         cons.insets = new Insets(4,4,4,4);  
@@ -262,7 +263,9 @@ public class MontaInterfaces extends JFrame {
         cons.weightx = 1;  
         cons.fill = GridBagConstraints.BOTH;  
         cons.gridwidth = GridBagConstraints.REMAINDER;  
-        panel.add(componente2, cons);  
+        panel.add(componente2, cons);
+        
+        //panel.add(jp, cons);
     }
     
     /** 
@@ -278,9 +281,10 @@ public class MontaInterfaces extends JFrame {
     * @param panel Jpanel onde os componentes ficarão
     */  
     public void addQuatroComponentes(String label, JComponent componente, String label2, JComponent componente2, String label3, JComponent componente3, String label4, JComponent componente4, JPanel panel) {  
-        GridBagConstraints cons = new GridBagConstraints();  
+        GridBagConstraints cons = new GridBagConstraints(); 
+        JPanel jp = new JPanel(new GridBagLayout());
+        
         cons.insets = new Insets(4,4,4,4);  
-  
         cons.fill = GridBagConstraints.NONE;  
         cons.anchor = GridBagConstraints.NORTHWEST;  
         cons.weightx = 0;  
@@ -319,6 +323,8 @@ public class MontaInterfaces extends JFrame {
         cons.fill = GridBagConstraints.BOTH;  
         cons.gridwidth = GridBagConstraints.REMAINDER;  
         panel.add(componente4, cons);
+        
+        //panel.add(jp, cons);
     }
     
     /**

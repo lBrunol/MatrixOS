@@ -11,8 +11,8 @@ package Core;
  */
 public interface PadraoFormulario {
     
-    public void cadastrar();
-    public void alterar();
-    public void inserir();  
+    public boolean cadastrar();
+    public boolean alterar();
+    public boolean inserir();  
     
 }
