@@ -7,12 +7,16 @@ package Aplicacao;
 
 import Core.ComboItem;
 import Core.ConexaoBanco;
+import Core.MetodosAuxiliares;
 import Core.MontaInterfaces;
 import Core.PadraoFormulario;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.naming.spi.DirStateFactory;
@@ -32,12 +36,14 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author CASA
  */
-public class OrdemServico implements ActionListener, PadraoFormulario {
-
+public class OrdemServico implements ActionListener, PadraoFormulario, FocusListener {
+    //Instância da classe Métodos auxliares
+    MetodosAuxiliares auxiliar = new MetodosAuxiliares();
+    
     //Criação dos objetos, imprescindível criar ao menos um JPanel para servir de aba no formulário
     private JTextField txtCodigo = new JTextField();
-    private JFormattedTextField txtDataAbertura = new JFormattedTextField();
-    private JFormattedTextField txtDataFechamento = new JFormattedTextField();
+    private JFormattedTextField txtDataAbertura = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
+    private JFormattedTextField txtDataFechamento = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
     private JTextArea txtDescricaoOcorrencia = new JTextArea();
     private JTextField txtValorTotal = new JTextField();
 
@@ -46,13 +52,13 @@ public class OrdemServico implements ActionListener, PadraoFormulario {
     private JTextField txtEndereco = new JTextField();
     private JTextField txtNumEndereco = new JTextField();
     private JTextField txtComplemento = new JTextField();
-    private JFormattedTextField txtCEP = new JFormattedTextField();
+    private JFormattedTextField txtCEP = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CEP));
     private JTextField txtBairro = new JTextField();
     private JTextField txtCidade = new JTextField();
     private JTextField txtUF = new JTextField();
-    private JFormattedTextField txtTelefone = new JFormattedTextField();
-    private JFormattedTextField txtCPF = new JFormattedTextField();
-    private JFormattedTextField txtRG = new JFormattedTextField();
+    private JFormattedTextField txtTelefone = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_TELEFONE));
+    private JFormattedTextField txtCPF = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CPF));
+    private JFormattedTextField txtRG = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_RG));
 
     //Funcionários
     private JComboBox cboFuncionario = new JComboBox();
@@ -91,11 +97,13 @@ public class OrdemServico implements ActionListener, PadraoFormulario {
     private int intCodigoCliente;
     private int intMatricula;
     private int intCodigoServico;
+    private int intQtdeServico;
     private String strDataAbertura;
     private String strDataFechamento;
     private String strOcorrencia;
     private float fltValorTotal;
     private float fltValorDesconto;
+    private float fltValorServico;
 
     public OrdemServico() {
         this.iniciaComponentes();
@@ -106,7 +114,8 @@ public class OrdemServico implements ActionListener, PadraoFormulario {
         OrdemServico os = new OrdemServico();
     }
 
-    public void iniciaComponentes() {
+    private void iniciaComponentes() {
+        //Instância da classe que monta a tela
         MontaInterfaces telaOS = new MontaInterfaces("Gerenciamento de Ordem de Serviço", "/imagens/os.png");
         telaOS.setVisible(true);
         telaOS.setTamanho(1000, 1000);
@@ -120,7 +129,8 @@ public class OrdemServico implements ActionListener, PadraoFormulario {
         telaOS.addBotoes("Limpar", botLimpar, panelBotoesCadastro);
 
         //Botões de alteração
-        panelBotoesAlteracao.setVisible(false);
+        panelBotoesAlteracao.setVisible(true);
+        panelBotoesCadastro.setVisible(false);
         telaOS.addBotoes("Faturar Nota Fiscal", botFaturarNotaFiscal, panelBotoesAlteracao);
         telaOS.addBotoes("Modo Inserir", botInserir, panelBotoesAlteracao);
         telaOS.addBotoes("Excluir Registro", botExcluir, panelBotoesAlteracao);
@@ -142,9 +152,11 @@ public class OrdemServico implements ActionListener, PadraoFormulario {
         botInserir.setIcon(iconeInserir);
         botLimpar.setIcon(iconeLimpar);
 
-        //Adiciona eventos aos botões 
+        //Adiciona eventos
         botCadastrar.addActionListener(this);
         botInserir.addActionListener(this);
+        botExcluir.addActionListener(this);
+        txtQtde.addFocusListener(this);
 
         conexao.preencheCaixasTexto(txtBairro);
 
@@ -178,7 +190,7 @@ public class OrdemServico implements ActionListener, PadraoFormulario {
         txtValor.setEnabled(false);
         txtDescricaoServico.setEnabled(false);
                     
-        conexao.preencheTabela(tabela, "SELECT ordCodigo Código, ordOcorrencia Ocorrência, ordDataAbertura, cliNome, funNome FROM cliente INNER JOIN (funcionario INNER JOIN ordemServico ON funcionario.funMatricula = ordemServico.funMatricula ) ON cliente.cliCodigo = ordemServico.cliCodigo");
+        conexao.preencheTabela(tabela, "SELECT ordCodigo Código, ordOcorrencia Ocorrência, ordDataAbertura, cliNome, funNome FROM cliente INNER JOIN (funcionario INNER JOIN ordemServico ON funcionario.funMatricula = ordemServico.funMatricula ) ON cliente.cliCodigo = ordemServico.cliCodigo ORDER BY ordCodigo");
 
         //Preenche as combobox
         cboCliente.addItem("");
@@ -194,15 +206,15 @@ public class OrdemServico implements ActionListener, PadraoFormulario {
             public void actionPerformed(ActionEvent e) {                
                 if(cboCliente.getSelectedItem() != ""){
                     ComboItem comboItem = (ComboItem) cboCliente.getSelectedItem();
-                    setIntCodigoCliente(Integer.parseInt(comboItem.getId()));
+                    intCodigoCliente = Integer.parseInt(comboItem.getId());
                     try {
-                        ResultSet rs = conexao.executar("SELECT cliTipo FROM cliente WHERE cliCodigo = " + getIntCodigoCliente());
+                        ResultSet rs = conexao.executar("SELECT cliTipo FROM cliente WHERE cliCodigo = " + intCodigoCliente);
                         rs.next();
                         if("J".equals(rs.getString(1).toUpperCase())){                        
-                            rs = conexao.executar("SELECT cliEndereco, cliNumEndereco, cliComplemento, cliCEP, cliBairro, cliCidade, cliUF, cliTelefone, cliCNPJ, cliIM FROM cliente INNER JOIN cliPessoaJuridica ON cliente.cliCodigo = cliPessoaJuridica.cliCodigo WHERE cliente.cliCodigo = " + getIntCodigoCliente());
+                            rs = conexao.executar("SELECT cliEndereco, cliNumEndereco, cliComplemento, cliCEP, cliBairro, cliCidade, cliUF, cliTelefone, cliCNPJ, cliIM FROM cliente INNER JOIN cliPessoaJuridica ON cliente.cliCodigo = cliPessoaJuridica.cliCodigo WHERE cliente.cliCodigo = " + intCodigoCliente);
                             rs.next();
                         }else if("F".equals(rs.getString(1).toUpperCase())){
-                            rs = conexao.executar("SELECT cliEndereco, cliNumEndereco, cliComplemento, cliCEP, cliBairro, cliCidade, cliUF, cliTelefone, cliCPF, cliRG FROM cliente INNER JOIN cliPessoaFisica ON cliente.cliCodigo = cliPessoaFisica.cliCodigo WHERE cliente.cliCodigo = " + getIntCodigoCliente());
+                            rs = conexao.executar("SELECT cliEndereco, cliNumEndereco, cliComplemento, cliCEP, cliBairro, cliCidade, cliUF, cliTelefone, cliCPF, cliRG FROM cliente INNER JOIN cliPessoaFisica ON cliente.cliCodigo = cliPessoaFisica.cliCodigo WHERE cliente.cliCodigo = " + intCodigoCliente);
                             rs.next();
                         }else{
                             throw new IllegalArgumentException("Este cliente foi cadastrado de forma incorreta. Por favor, entre em contato com administrador do sistema.");
@@ -248,9 +260,9 @@ public class OrdemServico implements ActionListener, PadraoFormulario {
             public void actionPerformed(ActionEvent e) {
                 if(cboFuncionario.getSelectedItem() != ""){
                     ComboItem comboItem = (ComboItem) cboFuncionario.getSelectedItem();
-                    setIntMatricula(Integer.parseInt(comboItem.getId()));
+                    intMatricula = Integer.parseInt(comboItem.getId());
                     try {
-                        ResultSet rs = conexao.executar("SELECT carDescricao FROM funcionario INNER JOIN cargos ON funcionario.carCodigo = cargos.carCodigo WHERE funcionario.funMatricula= " + getIntMatricula());
+                        ResultSet rs = conexao.executar("SELECT carDescricao FROM funcionario INNER JOIN cargos ON funcionario.carCodigo = cargos.carCodigo WHERE funcionario.funMatricula= " + intMatricula);
                         rs.next();                  
 
                         txtCargo.setText(rs.getString(1));
@@ -272,9 +284,9 @@ public class OrdemServico implements ActionListener, PadraoFormulario {
             public void actionPerformed(ActionEvent e) {
                 if(cboServico.getSelectedItem() != ""){
                     ComboItem comboItem = (ComboItem) cboServico.getSelectedItem();
-                    setIntCodigoServico(Integer.parseInt(comboItem.getId()));
+                    intCodigoServico = Integer.parseInt(comboItem.getId());
                     try {
-                        ResultSet rs = conexao.executar("SELECT svcValorHora, svcDescricao FROM servicos WHERE svcCodigo = " + getIntCodigoServico());
+                        ResultSet rs = conexao.executar("SELECT svcValorHora, svcDescricao FROM servicos WHERE svcCodigo = " + intCodigoServico);
                         rs.next();                  
 
                         txtValor.setText(rs.getString(1));
@@ -330,136 +342,10 @@ public class OrdemServico implements ActionListener, PadraoFormulario {
                 }                                    
             }
         }
-        if (botao.getSource() == botInserir) {
-            this.mostraBotoesCadastro();
+        if (botao.getSource() == botExcluir) {
+            deletar();
         }
-    }
-
-    /**
-     * @return the intCodigoOS
-     */
-    public int getIntCodigoOS() {
-        return intCodigoOS;
-    }
-
-    /**
-     * @param intCodigoOS the intCodigoOS to set
-     */
-    public void setIntCodigoOS(int intCodigoOS) {
-        this.intCodigoOS = intCodigoOS;
-    }
-
-    /**
-     * @return the intCodigoCliente
-     */
-    public int getIntCodigoCliente() {
-        return intCodigoCliente;
-    }
-
-    /**
-     * @param intCodigoCliente the intCodigoCliente to set
-     */
-    public void setIntCodigoCliente(int intCodigoCliente) {
-        this.intCodigoCliente = intCodigoCliente;
-    }
-
-    /**
-     * @return the intMatricula
-     */
-    public int getIntMatricula() {
-        return intMatricula;
-    }
-
-    /**
-     * @param intMatricula the intMatricula to set
-     */
-    public void setIntMatricula(int intMatricula) {
-        this.intMatricula = intMatricula;
-    }
-
-    /**
-     * @return the strDataAbertura
-     */
-    public String getStrDataAbertura() {
-        return strDataAbertura;
-    }
-
-    /**
-     * @param strDataAbertura the strDataAbertura to set
-     */
-    public void setStrDataAbertura(String strDataAbertura) {
-        this.strDataAbertura = strDataAbertura;
-    }
-
-    /**
-     * @return the strDataFechamento
-     */
-    public String getStrDataFechamento() {
-        return strDataFechamento;
-    }
-
-    /**
-     * @param strDataFechamento the strDataFechamento to set
-     */
-    public void setStrDataFechamento(String strDataFechamento) {
-        this.strDataFechamento = strDataFechamento;
-    }
-
-    /**
-     * @return the strOcorrencia
-     */
-    public String getStrOcorrencia() {
-        return strOcorrencia;
-    }
-
-    /**
-     * @param strOcorrencia the strOcorrencia to set
-     */
-    public void setStrOcorrencia(String strOcorrencia) {
-        this.strOcorrencia = strOcorrencia;
-    }
-
-    /**
-     * @return the fltValorTotal
-     */
-    public float getFltValorTotal() {
-        return fltValorTotal;
-    }
-
-    /**
-     * @param fltValorTotal the fltValorTotal to set
-     */
-    public void setFltValorTotal(float fltValorTotal) {
-        this.fltValorTotal = fltValorTotal;
-    }
-
-    /**
-     * @return the fltValorDesconto
-     */
-    public float getFltValorDesconto() {
-        return fltValorDesconto;
-    }
-
-    /**
-     * @param fltValorDesconto the fltValorDesconto to set
-     */
-    public void setFltValorDesconto(float fltValorDesconto) {
-        this.fltValorDesconto = fltValorDesconto;
-    }
-
-    /**
-     * @return the intCodigoServico
-     */
-    public int getIntCodigoServico() {
-        return intCodigoServico;
-    }
-
-    /**
-     * @param intCodigoServico the intCodigoServico to set
-     */
-    public void setIntCodigoServico(int intCodigoServico) {
-        this.intCodigoServico = intCodigoServico;
-    }
+    }    
 
     @Override
     public boolean cadastrar() {
@@ -482,8 +368,38 @@ public class OrdemServico implements ActionListener, PadraoFormulario {
     }
 
     @Override
-    public boolean inserir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean deletar() {
+        if(JOptionPane.showConfirmDialog(null, "Deseja realmente excluir o registro?", "Confirmação", JOptionPane.YES_NO_OPTION) == 0){
+            try {
+                conexao.executaProcedure("DELETE_ORDEMSERVICO(" + this.intCodigoOS + ")");
+                JOptionPane.showMessageDialog(null, "Dados deletados");
+                return true;
+            } catch (SQLException | HeadlessException e) {
+                JOptionPane.showMessageDialog(null, e.getCause());
+                return false;
+            }           
+        }else{
+            return false;
+        }
+    }
+
+    @Override
+    public void focusGained(FocusEvent e) {
+        if(e.getSource() == txtQtde){            
+            //JOptionPane.showMessageDialog(null, "Olá");
+        }
+    }
+
+    @Override
+    public void focusLost(FocusEvent e) {
+        if(e.getSource() == txtQtde){
+            if(txtValor.getText().isEmpty() == false && txtQtde.getText().isEmpty() == false){                
+                this.intQtdeServico = Integer.parseInt(txtQtde.getText());
+                this.fltValorServico = Integer.parseInt(txtValor.getText());
+                this.fltValorTotal = auxiliar.calculaValorTotal(this.fltValorServico, this.intQtdeServico);
+                txtValorTotal.setText(String.valueOf(this.fltValorTotal));
+            }
+        }
     }
 
 }

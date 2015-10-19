@@ -18,7 +18,6 @@ public class ConexaoBanco {
     private String host;
     private String usuario;
     private String senha;
-    private int idCombo = 0 ;
    
     public Connection c;
    
@@ -213,7 +212,7 @@ public class ConexaoBanco {
      * Este executa procedures do tipo Update, Insert e Delete.
      * @param procedure Passar a string da procedure
      */
-    public void executaProcedure(String procedure){        
+    public void executaProcedure(String procedure) throws SQLException{        
         try {
             conectar();
             CallableStatement stmt = c.prepareCall("{call " + procedure + "}");    
@@ -257,19 +256,5 @@ public class ConexaoBanco {
         //for(int i = 0; i < componente.length; i++){            
             System.out.println(componente.getClass().getComponentType());
         //}
-    }
-
-    /**
-     * @return the idCombo
-     */
-    public int getIdCombo() {
-        return idCombo;
-    }
-
-    /**
-     * @param idCombo the idCombo to set
-     */
-    public void setIdCombo(int idCombo) {
-        this.idCombo = idCombo;
     }
 }

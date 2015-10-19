@@ -13,6 +13,6 @@ public interface PadraoFormulario {
     
     public boolean cadastrar();
     public boolean alterar();
-    public boolean inserir();  
+    public boolean deletar();  
     
 }
