@@ -10,6 +10,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Locale;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -176,6 +179,7 @@ public class ConexaoBanco {
     	ResultSet rs;
         ResultSetMetaData rsmd;
     	tabela.setNumRows(0);
+        Locale localPadrao = Locale.getDefault();
         
         rs = executar(query);        
         try {
@@ -194,9 +198,18 @@ public class ConexaoBanco {
                     tabela.addColumn(campos[i]);	
         	}
         	Object row[] = new Object[indice];
+                Object dadosCampos[] = new Object[indice];
             while(rs.next()) {            	
                 for(int i = 0; i < indice; i++){
-                    row[i] = rs.getString(campos[i]);
+                    
+                    dadosCampos[i] = rs.getObject(campos[i]);
+                    
+                    if(dadosCampos[i] instanceof Date){                        
+                        DateFormat formatoMoeda = DateFormat.getDateInstance(2,localPadrao);
+                        dadosCampos[i] = formatoMoeda.format(dadosCampos[i]);
+                    }
+                    
+                    row[i] = dadosCampos[i];
                 }
                 tabela.addRow(row);
             }
@@ -250,11 +263,5 @@ public class ConexaoBanco {
             JOptionPane.showMessageDialog(null,"Ocorreu um erro ao listar a combobox " + e.getMessage() + " \n Favor entrar em contato com administrador");
         }
                 
-    }
-    
-    public void preencheCaixasTexto(JComponent componente){
-        //for(int i = 0; i < componente.length; i++){            
-            System.out.println(componente.getClass().getComponentType());
-        //}
     }
 }

@@ -19,6 +19,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.NumberFormat;
+import java.util.Locale;
 import javax.naming.spi.DirStateFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -31,6 +33,8 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.MaskFormatter;
 
 /**
  *
@@ -38,7 +42,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class OrdemServico implements ActionListener, PadraoFormulario, FocusListener {
     //Instância da classe Métodos auxliares
-    MetodosAuxiliares auxiliar = new MetodosAuxiliares();
+    MetodosAuxiliares auxiliar = new MetodosAuxiliares();    
     
     //Criação dos objetos, imprescindível criar ao menos um JPanel para servir de aba no formulário
     private JTextField txtCodigo = new JTextField();
@@ -129,8 +133,8 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         telaOS.addBotoes("Limpar", botLimpar, panelBotoesCadastro);
 
         //Botões de alteração
-        panelBotoesAlteracao.setVisible(true);
-        panelBotoesCadastro.setVisible(false);
+        panelBotoesAlteracao.setVisible(false);
+        panelBotoesCadastro.setVisible(true);
         telaOS.addBotoes("Faturar Nota Fiscal", botFaturarNotaFiscal, panelBotoesAlteracao);
         telaOS.addBotoes("Modo Inserir", botInserir, panelBotoesAlteracao);
         telaOS.addBotoes("Excluir Registro", botExcluir, panelBotoesAlteracao);
@@ -158,8 +162,6 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         botExcluir.addActionListener(this);
         txtQtde.addFocusListener(this);
 
-        conexao.preencheCaixasTexto(txtBairro);
-
         //Adiciona os componentes na tela
         telaOS.addLabelTitulo("Ordem de Serviço", panelCadastro);
         telaOS.addQuatroComponentes("Código", txtCodigo, "Data de Abertura", txtDataAbertura, "Data de Fechamento", txtDataFechamento, "Valor Total", txtValorTotal, panelCadastro);
@@ -176,22 +178,25 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         telaOS.addAbas(panelConsulta, "Consulta");
         telaOS.addTabela(tblOrdemServico, panelConsulta);
 
-        txtEndereco.setEnabled(false);
-        txtNumEndereco.setEnabled(false);
-        txtComplemento.setEnabled(false);
-        txtCEP.setEnabled(false);
-        txtBairro.setEnabled(false);
-        txtCidade.setEnabled(false);
-        txtUF.setEnabled(false);
-        txtTelefone.setEnabled(false);
-        txtCPF.setEnabled(false);
-        txtRG.setEnabled(false);
-        txtCargo.setEnabled(false);
-        txtValor.setEnabled(false);
-        txtDescricaoServico.setEnabled(false);
+        //txtEndereco.setEnabled(false);
+        //txtNumEndereco.setEnabled(false);
+        //txtComplemento.setEnabled(false);
+        //txtCEP.setEnabled(false);
+        //txtBairro.setEnabled(false);
+        //txtCidade.setEnabled(false);
+        //txtUF.setEnabled(false);
+        //txtTelefone.setEnabled(false);
+        //txtCPF.setEnabled(false);
+        //txtRG.setEnabled(false);
+        //txtCargo.setEnabled(false);
+        //txtValor.setEnabled(false);
+        //txtDescricaoServico.setEnabled(false);
+        txtQtde.setEnabled(false);
                     
-        conexao.preencheTabela(tabela, "SELECT ordCodigo Código, ordOcorrencia Ocorrência, ordDataAbertura, cliNome, funNome FROM cliente INNER JOIN (funcionario INNER JOIN ordemServico ON funcionario.funMatricula = ordemServico.funMatricula ) ON cliente.cliCodigo = ordemServico.cliCodigo ORDER BY ordCodigo");
-
+        conexao.preencheTabela(tabela, "SELECT ordCodigo Código, ordOcorrencia Ocorrência, ordDataAbertura, ordValorTotal Valor, cliNome, funNome FROM cliente INNER JOIN (funcionario INNER JOIN ordemServico ON funcionario.funMatricula = ordemServico.funMatricula ) ON cliente.cliCodigo = ordemServico.cliCodigo ORDER BY ordCodigo");
+        //Formata os valores em moeda
+        auxiliar.formataValorTabela(tblOrdemServico, 3);
+        
         //Preenche as combobox
         cboCliente.addItem("");
         cboFuncionario.addItem("");
@@ -213,9 +218,13 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
                         if("J".equals(rs.getString(1).toUpperCase())){                        
                             rs = conexao.executar("SELECT cliEndereco, cliNumEndereco, cliComplemento, cliCEP, cliBairro, cliCidade, cliUF, cliTelefone, cliCNPJ, cliIM FROM cliente INNER JOIN cliPessoaJuridica ON cliente.cliCodigo = cliPessoaJuridica.cliCodigo WHERE cliente.cliCodigo = " + intCodigoCliente);
                             rs.next();
+                            txtCPF.setFormatterFactory(new DefaultFormatterFactory(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CNPJ)));
+                            txtRG.getFormatter().uninstall();
                         }else if("F".equals(rs.getString(1).toUpperCase())){
                             rs = conexao.executar("SELECT cliEndereco, cliNumEndereco, cliComplemento, cliCEP, cliBairro, cliCidade, cliUF, cliTelefone, cliCPF, cliRG FROM cliente INNER JOIN cliPessoaFisica ON cliente.cliCodigo = cliPessoaFisica.cliCodigo WHERE cliente.cliCodigo = " + intCodigoCliente);
                             rs.next();
+                            txtCPF.setFormatterFactory(new DefaultFormatterFactory(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CPF)));
+                            txtRG.setFormatterFactory(new DefaultFormatterFactory(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_RG)));
                         }else{
                             throw new IllegalArgumentException("Este cliente foi cadastrado de forma incorreta. Por favor, entre em contato com administrador do sistema.");
                         }
@@ -291,6 +300,7 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
 
                         txtValor.setText(rs.getString(1));
                         txtDescricaoServico.setText(rs.getString(2));
+                        txtQtde.setEnabled(true);
              
                     }catch (SQLException b) {
                         JOptionPane.showMessageDialog(null, b.getMessage() + ". Entre em contato com administrador do sistema.");
@@ -301,6 +311,8 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
                 }else{
                     txtValor.setText("");
                     txtDescricaoServico.setText("");
+                    txtQtde.setText("");
+                    txtQtde.setEnabled(false);
                 }
             }
         });
@@ -343,7 +355,7 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
             }
         }
         if (botao.getSource() == botExcluir) {
-            deletar();
+            deletar();           
         }
     }    
 
@@ -357,7 +369,7 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
             this.strDataAbertura = txtDataAbertura.getText();
             this.strDataFechamento = txtDataFechamento.getText();
             this.strOcorrencia =  txtDescricaoOcorrencia.getText();
-            this.fltValorTotal = Float.parseFloat(txtValorTotal.getText());            
+            this.fltValorTotal = auxiliar.removeCaracteresFloat(txtValorTotal.getText());
             return true;
         }
     }
@@ -385,20 +397,24 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
 
     @Override
     public void focusGained(FocusEvent e) {
-        if(e.getSource() == txtQtde){            
-            //JOptionPane.showMessageDialog(null, "Olá");
-        }
+        
     }
 
     @Override
     public void focusLost(FocusEvent e) {
         if(e.getSource() == txtQtde){
             if(txtValor.getText().isEmpty() == false && txtQtde.getText().isEmpty() == false){                
+                
                 this.intQtdeServico = Integer.parseInt(txtQtde.getText());
                 this.fltValorServico = Integer.parseInt(txtValor.getText());
                 this.fltValorTotal = auxiliar.calculaValorTotal(this.fltValorServico, this.intQtdeServico);
-                txtValorTotal.setText(String.valueOf(this.fltValorTotal));
-            }
+                String strValorTotal;           
+                strValorTotal = auxiliar.formataValor(this.fltValorTotal);
+                txtValorTotal.setText(strValorTotal);
+                
+            }else if(txtQtde.getText().isEmpty() == true && txtValor.getText().isEmpty() == false){            
+                txtValorTotal.setText("");
+            }            
         }
     }
 
