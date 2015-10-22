@@ -1,6 +1,9 @@
 package Core;
 import java.awt.*;  
+import java.util.ArrayList;
+import java.util.Arrays;
 import javax.swing.*;  
+import javax.swing.text.JTextComponent;
 public class MontaInterfaces extends JFrame {
 
     /**
@@ -11,7 +14,7 @@ public class MontaInterfaces extends JFrame {
     private JPanel panelCadastro;
     private JTabbedPane tabbedPane;
     private JPanel panelPrincipal;
-    
+    private ArrayList<JComponent> listaComponentes = new ArrayList<>();
     JLabel lblImagem = new JLabel("");
 	
     /** 
@@ -85,7 +88,7 @@ public class MontaInterfaces extends JFrame {
     * Inseri o panel principal 
     */
     private void addPrincipal(){
-        addComponente(panelPrincipal);
+        addComponente(getPanelPrincipal());
     }
     
     /** 
@@ -145,7 +148,7 @@ public class MontaInterfaces extends JFrame {
     */
     private void setCor(int r, int g, int b){
         getContentPane().setBackground(new Color(r,g,b));
-        panelPrincipal.setBackground(new Color(r,g,b));
+        getPanelPrincipal().setBackground(new Color(r,g,b));
     }
 	
     /** 
@@ -183,7 +186,8 @@ public class MontaInterfaces extends JFrame {
           
         cons.fill = GridBagConstraints.BOTH;  
         cons.weightx = 1;  
-        cons.gridwidth = GridBagConstraints.REMAINDER;  
+        cons.gridwidth = GridBagConstraints.REMAINDER;
+        listaComponentes.add(componente);
         panel.add(componente, cons);  
     }
     
@@ -252,7 +256,8 @@ public class MontaInterfaces extends JFrame {
           
         cons.weightx = 1;  
         cons.gridwidth = 1;  
-        cons.fill = GridBagConstraints.BOTH;  
+        cons.fill = GridBagConstraints.BOTH;
+        listaComponentes.add(componente);
         panel.add(componente, cons);  
   
         cons.fill = GridBagConstraints.NONE;  
@@ -262,7 +267,8 @@ public class MontaInterfaces extends JFrame {
           
         cons.weightx = 1;  
         cons.fill = GridBagConstraints.BOTH;  
-        cons.gridwidth = GridBagConstraints.REMAINDER;  
+        cons.gridwidth = GridBagConstraints.REMAINDER;
+        listaComponentes.add(componente2);
         panel.add(componente2, cons);
         
         //panel.add(jp, cons);
@@ -293,7 +299,8 @@ public class MontaInterfaces extends JFrame {
           
         cons.weightx = 1;  
         cons.gridwidth = 1;  
-        cons.fill = GridBagConstraints.BOTH;  
+        cons.fill = GridBagConstraints.BOTH;
+        listaComponentes.add(componente);
         panel.add(componente, cons);  
   
         cons.fill = GridBagConstraints.NONE;  
@@ -302,7 +309,8 @@ public class MontaInterfaces extends JFrame {
         panel.add(new JLabel(label2), cons);
           
         cons.weightx = 1;  
-        cons.fill = GridBagConstraints.BOTH;  
+        cons.fill = GridBagConstraints.BOTH;
+        listaComponentes.add(componente2);
         panel.add(componente2, cons);
         
         cons.fill = GridBagConstraints.NONE;  
@@ -311,7 +319,8 @@ public class MontaInterfaces extends JFrame {
         panel.add(new JLabel(label3), cons);
           
         cons.weightx = 1;  
-        cons.fill = GridBagConstraints.BOTH;  
+        cons.fill = GridBagConstraints.BOTH;
+        listaComponentes.add(componente3);
         panel.add(componente3, cons);
         
         cons.fill = GridBagConstraints.NONE;  
@@ -321,10 +330,9 @@ public class MontaInterfaces extends JFrame {
           
         cons.weightx = 1;  
         cons.fill = GridBagConstraints.BOTH;  
-        cons.gridwidth = GridBagConstraints.REMAINDER;  
+        cons.gridwidth = GridBagConstraints.REMAINDER;
+        listaComponentes.add(componente4);
         panel.add(componente4, cons);
-        
-        //panel.add(jp, cons);
     }
     
     /**
@@ -411,5 +419,45 @@ public class MontaInterfaces extends JFrame {
         MontaInterfaces exe = new MontaInterfaces("Menu", "/imagens/icone-servico.png");
         exe.setVisible(true);
 
+    }
+
+    /**
+     * @return the panelPrincipal
+     */
+    public JPanel getPanelPrincipal() {
+        return panelPrincipal;
+    }
+
+    /**
+     * @param panelPrincipal the panelPrincipal to set
+     */
+    public void setPanelPrincipal(JPanel panelPrincipal) {
+        this.panelPrincipal = panelPrincipal;
+    }
+    
+    public void limpaCampos(){        
+        
+        for (Component C : this.getContentPane().getComponents()){    
+            if (C instanceof JTextField || C instanceof JTextArea){
+                
+                ((JTextComponent) C).setText(""); //abstract superclass
+            }
+            System.out.println(C);
+            
+        }
+    }
+
+    /**
+     * @return the listaComponentes
+     */
+    public ArrayList<JComponent> getListaComponentes() {
+        return listaComponentes;
+    }
+
+    /**
+     * @param listaComponentes the listaComponentes to set
+     */
+    public void setListaComponentes(ArrayList<JComponent> listaComponentes) {
+        this.listaComponentes = listaComponentes;
     }
 }

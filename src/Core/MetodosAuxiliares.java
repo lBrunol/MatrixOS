@@ -5,11 +5,19 @@
  */
 package Core;
 
+import java.awt.Component;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Locale;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.text.JTextComponent;
 import javax.swing.text.MaskFormatter;
 
 /**
@@ -186,5 +194,22 @@ public class MetodosAuxiliares {
         valorRetorno = Integer.parseInt(valor);
         
         return valorRetorno;
-    }    
+    }
+    /**
+     * Este método itera sobre todos os componentes provindos de uma lista que vem da classe MontaInterfaces
+     * @param lista passar um arraylist com os componentes
+     */
+    public void limpaCampos(ArrayList<JComponent> lista){        
+        //Loop que itera sobre a lista
+        for (Component C : lista){
+            //Verifica se os tipos são de caixas de texto, se sim ele limpa os campos
+            if (C instanceof JTextField || C instanceof JTextArea || C instanceof JFormattedTextField){
+                ((JTextComponent) C).setText(""); //abstract superclass
+            //Verifica se é do tipo combobox se sim ele manda para o indice 0 da lista
+            }else if(C instanceof JComboBox){
+                ((JComboBox) C).setSelectedIndex(0); //abstract superclass
+            }
+            
+        }
+    }
 }

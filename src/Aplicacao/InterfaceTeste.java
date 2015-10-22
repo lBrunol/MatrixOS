@@ -2,6 +2,7 @@ package Aplicacao;
 
 import Core.ConexaoBanco;
 import Core.MontaInterfaces;
+import java.awt.Component;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,8 +12,10 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.JTextComponent;
 
 public class InterfaceTeste implements ActionListener {
     
@@ -102,11 +105,10 @@ public class InterfaceTeste implements ActionListener {
             boolean ok ;
             ok = cadastrar();
             if(ok){	
-                conexao.executaProcedure("insert_cargos (" + codigo + ",'" + nome + "')");
+                //conexao.executaProcedure("insert_cargos (" + codigo + ",'" + nome + "')");
                 JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
             }
         }
 
-    }
-    
+    }   
 }

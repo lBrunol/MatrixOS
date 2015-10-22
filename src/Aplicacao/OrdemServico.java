@@ -10,18 +10,18 @@ import Core.ConexaoBanco;
 import Core.MetodosAuxiliares;
 import Core.MontaInterfaces;
 import Core.PadraoFormulario;
-import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.HeadlessException;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.NumberFormat;
-import java.util.Locale;
-import javax.naming.spi.DirStateFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -34,15 +34,17 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.MaskFormatter;
+
 
 /**
  *
  * @author CASA
  */
-public class OrdemServico implements ActionListener, PadraoFormulario, FocusListener {
+public class OrdemServico implements ActionListener, PadraoFormulario, FocusListener, MouseListener {
     //Instância da classe Métodos auxliares
-    MetodosAuxiliares auxiliar = new MetodosAuxiliares();    
+    MetodosAuxiliares auxiliar = new MetodosAuxiliares();
+    //Instância da classe que monta a tela
+    MontaInterfaces telaOS = new MontaInterfaces("Gerenciamento de Ordem de Serviço", "/imagens/os.png");
     
     //Criação dos objetos, imprescindível criar ao menos um JPanel para servir de aba no formulário
     private JTextField txtCodigo = new JTextField();
@@ -119,8 +121,7 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
     }
 
     private void iniciaComponentes() {
-        //Instância da classe que monta a tela
-        MontaInterfaces telaOS = new MontaInterfaces("Gerenciamento de Ordem de Serviço", "/imagens/os.png");
+        
         telaOS.setVisible(true);
         telaOS.setTamanho(1000, 1000);
 
@@ -160,6 +161,7 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         botCadastrar.addActionListener(this);
         botInserir.addActionListener(this);
         botExcluir.addActionListener(this);
+        botLimpar.addActionListener(this);
         txtQtde.addFocusListener(this);
 
         //Adiciona os componentes na tela
@@ -316,7 +318,20 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
                 }
             }
         });
+        
+        tblOrdemServico.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent me) {
+            JTable table =(JTable) me.getSource();
+            Point p = me.getPoint();
+            int row = table.rowAtPoint(p);
+            if (me.getClickCount() == 2) {
+                
+                JOptionPane.showMessageDialog(null, tblOrdemServico.getValueAt(row, 0));
+            }
+        }
 
+        });
     }
 
     public void mostraBotoesAlteracao() {
@@ -337,7 +352,33 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
             panelBotoesAlteracao.setVisible(false);
             panelBotoesCadastro.setVisible(true);
         }
+    }    
+    
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+ 
 
     @Override
     public void actionPerformed(ActionEvent botao) {
@@ -348,7 +389,8 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
             if(ok){	
                 try {
                     conexao.executaProcedure("INSERT_ORDEMSERVICO (" + this.intCodigoOS + ",'" + this.strOcorrencia + "','" + this.strDataAbertura + "', '" + this.strDataFechamento + "', " + this.fltValorTotal + ", " + this.fltValorDesconto + " , " + this.intMatricula + " , " + this.intCodigoCliente + " )");
-                    JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso"); 
+                    JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
+                    auxiliar.limpaCampos(telaOS.getListaComponentes());
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, e.getMessage());    
                 }                                    
@@ -356,6 +398,9 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         }
         if (botao.getSource() == botExcluir) {
             deletar();           
+        }
+        if (botao.getSource() == botLimpar) {            
+            auxiliar.limpaCampos(telaOS.getListaComponentes());
         }
     }    
 
@@ -417,5 +462,8 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
             }            
         }
     }
+    
+        
+    
 
 }
