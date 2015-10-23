@@ -5,6 +5,7 @@
  */
 package Aplicacao;
 
+import Core.ConexaoBanco;
 import Core.MontaInterfaces;
 import java.awt.GridBagLayout;
 import javax.swing.Icon;
@@ -85,6 +86,8 @@ public class Cliente {
         telaOS.addQuatroComponentes("RG", txtRG, "CPF", txtCPF, "CEP", txtCEP, "Estado", txtEstado, panelCadastro);
         telaOS.addDoisComponentes("Celular", txtCelular, "Email", txtEmail, panelCadastro);
         telaOS.addTabela(tblClientes, panelConsulta);
+        ConexaoBanco teste=new ConexaoBanco();
+        teste.preencheTabela(tabela, "select *from cliente");
 
         
     }
