@@ -205,8 +205,8 @@ public class ConexaoBanco {
                     dadosCampos[i] = rs.getObject(campos[i]);
                     
                     if(dadosCampos[i] instanceof Date){                        
-                        DateFormat formatoMoeda = DateFormat.getDateInstance(2,localPadrao);
-                        dadosCampos[i] = formatoMoeda.format(dadosCampos[i]);
+                        DateFormat formatoData = DateFormat.getDateInstance(2,localPadrao);
+                        dadosCampos[i] = formatoData.format(dadosCampos[i]);
                     }
                     
                     row[i] = dadosCampos[i];

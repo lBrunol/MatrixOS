@@ -6,9 +6,11 @@
 package Core;
 
 import java.awt.Component;
+import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -93,6 +95,16 @@ public class MetodosAuxiliares {
         
         return valorFormatado;
     }
+    
+    public String formataData(Date data){
+        String dataFormatada;
+        DateFormat formatoData = DateFormat.getDateInstance(2,localPadrao);
+        dataFormatada = formatoData.format(data);
+        
+        return dataFormatada;
+    }
+    
+    
     
     /** Método para inserir a formatação de moeda em um valor de uma tabela
      * 

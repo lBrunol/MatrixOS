@@ -165,7 +165,7 @@ public class MontaInterfaces extends JFrame {
     * @param panel Objeto do tipo JPanel que servirá como aba
     */
     public void addAbas(JPanel panel, String titulo){
-        tabbedPane.addTab(titulo, panel);
+        getTabbedPane().addTab(titulo, panel);
     }
 	
     /** 
@@ -459,5 +459,19 @@ public class MontaInterfaces extends JFrame {
      */
     public void setListaComponentes(ArrayList<JComponent> listaComponentes) {
         this.listaComponentes = listaComponentes;
+    }
+
+    /**
+     * @return the tabbedPane
+     */
+    public JTabbedPane getTabbedPane() {
+        return tabbedPane;
+    }
+
+    /**
+     * @param tabbedPane the tabbedPane to set
+     */
+    public void setTabbedPane(JTabbedPane tabbedPane) {
+        this.tabbedPane = tabbedPane;
     }
 }

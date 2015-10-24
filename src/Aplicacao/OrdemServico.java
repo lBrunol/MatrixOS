@@ -22,6 +22,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -163,6 +166,7 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         botExcluir.addActionListener(this);
         botLimpar.addActionListener(this);
         txtQtde.addFocusListener(this);
+        botAlterarRegistro.addActionListener(this);
 
         //Adiciona os componentes na tela
         telaOS.addLabelTitulo("Ordem de Serviço", panelCadastro);
@@ -326,8 +330,32 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
             Point p = me.getPoint();
             int row = table.rowAtPoint(p);
             if (me.getClickCount() == 2) {
+                int intCodigoSelecionado;
+                intCodigoSelecionado = Integer.parseInt(tblOrdemServico.getValueAt(row, 0).toString());
+                try {
+                    ResultSet rs;
+                    rs = conexao.executar("SELECT * FROM ordemServico WHERE ordCodigo =" + intCodigoSelecionado);
+                    rs.next();                    
+                    txtCodigo.setText(rs.getString(1));
+                    txtDescricaoOcorrencia.setText(rs.getString(2));
+                    txtDataAbertura.setText(auxiliar.formataData(rs.getDate(3)));
+                    txtDataFechamento.setText(auxiliar.formataData(rs.getDate(4)));
+                    txtValorTotal.setText(auxiliar.formataValor(rs.getFloat(5)));
+                    cboFuncionario.setSelectedIndex(rs.getInt(7));
+                    cboCliente.setSelectedIndex(rs.getInt(8));                    
+                    
+                    rs = conexao.executar("SELECT * FROM servicosOS WHERE ordCodigo =" + intCodigoSelecionado);
+                    rs.next();
+                    cboServico.setSelectedIndex(rs.getInt(4));
+                    txtQtde.setText(rs.getString(2));
+                    
+                    mostraBotoesAlteracao();
+                    
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }                
+                telaOS.getTabbedPane().setSelectedIndex(0);
                 
-                JOptionPane.showMessageDialog(null, tblOrdemServico.getValueAt(row, 0));
             }
         }
 
@@ -388,7 +416,9 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
             ok = cadastrar();
             if(ok){	
                 try {
+                    Calendar c = new GregorianCalendar();
                     conexao.executaProcedure("INSERT_ORDEMSERVICO (" + this.intCodigoOS + ",'" + this.strOcorrencia + "','" + this.strDataAbertura + "', '" + this.strDataFechamento + "', " + this.fltValorTotal + ", " + this.fltValorDesconto + " , " + this.intMatricula + " , " + this.intCodigoCliente + " )");
+                    conexao.executaProcedure("INSERT_SERVICOSOS ('24/10/2015', " + this.intQtdeServico + ", " + this.intCodigoOS + ", " + this.intCodigoServico + ")");
                     JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
                     auxiliar.limpaCampos(telaOS.getListaComponentes());
                 } catch (Exception e) {
@@ -397,10 +427,41 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
             }
         }
         if (botao.getSource() == botExcluir) {
-            deletar();           
+            ok = deletar();
+            if(ok){	
+                try {
+                    this.intCodigoOS = Integer.parseInt(txtCodigo.getText());
+                    System.out.println(this.intCodigoOS);
+                    conexao.executaProcedure("DELETE_SERVICOSOS(" + this.intCodigoOS + ")");
+                    conexao.executaProcedure("DELETE_ORDEMSERVICO(" + this.intCodigoOS + ")");
+                    JOptionPane.showMessageDialog(null, "Dados deletados com sucesso");
+                    auxiliar.limpaCampos(telaOS.getListaComponentes());
+                    this.mostraBotoesAlteracao();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage());    
+                }                                    
+            }           
+        }
+        if (botao.getSource() == botInserir) {
+            auxiliar.limpaCampos(telaOS.getListaComponentes());
+            this.mostraBotoesAlteracao();
         }
         if (botao.getSource() == botLimpar) {            
             auxiliar.limpaCampos(telaOS.getListaComponentes());
+        }
+        if (botao.getSource() == botAlterarRegistro) {            
+            ok = alterar();
+            if(ok){	
+                try {
+                    conexao.executaProcedure("UPDATE_ORDEMSERVICO (" + this.intCodigoOS + ",'" + this.strOcorrencia + "','" + this.strDataAbertura + "', '" + this.strDataFechamento + "', " + this.fltValorTotal + ", " + this.fltValorDesconto + " , " + this.intMatricula + " , " + this.intCodigoCliente + " )");
+                    conexao.executaProcedure("UPDATE_SERVICOSOS('24/10/2015', " + this.intQtdeServico + ", " + this.intCodigoOS + ", " + this.intCodigoServico + ")");
+                    JOptionPane.showMessageDialog(null, "Dados Alterados com sucesso");
+                    auxiliar.limpaCampos(telaOS.getListaComponentes());
+                    this.mostraBotoesAlteracao();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage());    
+                }                                    
+            }
         }
     }    
 
@@ -415,26 +476,34 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
             this.strDataFechamento = txtDataFechamento.getText();
             this.strOcorrencia =  txtDescricaoOcorrencia.getText();
             this.fltValorTotal = auxiliar.removeCaracteresFloat(txtValorTotal.getText());
+            this.intQtdeServico = Integer.parseInt(txtQtde.getText());
+            this.intCodigoServico = cboServico.getSelectedIndex();            
             return true;
         }
     }
 
     @Override
     public boolean alterar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(cboCliente.getSelectedItem() == "" || cboFuncionario.getSelectedItem() == "" || cboServico.getSelectedItem() == "" || txtValorTotal.getText().isEmpty() || txtDataAbertura.getText().isEmpty() || txtDescricaoOcorrencia.getText().isEmpty() || txtCodigo.getText().isEmpty() || txtQtde.getText().isEmpty()){			
+            JOptionPane.showMessageDialog(null, "Preencha os campos corretamente");
+            return false;
+        }else{            
+            this.intCodigoOS = Integer.parseInt(txtCodigo.getText());
+            this.strDataAbertura = txtDataAbertura.getText();
+            this.strDataFechamento = txtDataFechamento.getText();
+            this.strOcorrencia =  txtDescricaoOcorrencia.getText();
+            this.fltValorTotal = auxiliar.removeCaracteresFloat(txtValorTotal.getText());
+            this.intCodigoCliente = cboCliente.getSelectedIndex();
+            this.intCodigoServico = cboServico.getSelectedIndex();
+            this.intMatricula = cboFuncionario.getSelectedIndex();
+            return true;
+        }
     }
 
     @Override
     public boolean deletar() {
-        if(JOptionPane.showConfirmDialog(null, "Deseja realmente excluir o registro?", "Confirmação", JOptionPane.YES_NO_OPTION) == 0){
-            try {
-                conexao.executaProcedure("DELETE_ORDEMSERVICO(" + this.intCodigoOS + ")");
-                JOptionPane.showMessageDialog(null, "Dados deletados");
-                return true;
-            } catch (SQLException | HeadlessException e) {
-                JOptionPane.showMessageDialog(null, e.getCause());
-                return false;
-            }           
+        if(JOptionPane.showConfirmDialog(null, "Deseja realmente excluir o registro?", "Confirmação", JOptionPane.YES_NO_OPTION) == 0){                                
+            return true;                       
         }else{
             return false;
         }
