@@ -334,7 +334,67 @@ public class MontaInterfaces extends JFrame {
         listaComponentes.add(componente4);
         panel.add(componente4, cons);
     }
+   
     
+    public void addCincoComponentes(String label, JComponent componente, String label2, JComponent componente2, String label3, JComponent componente3, String label4, JComponent componente4,String label5, JComponent componente5, JPanel panel) {  
+        GridBagConstraints cons = new GridBagConstraints(); 
+        JPanel jp = new JPanel(new GridBagLayout());
+        
+        cons.insets = new Insets(4,4,4,4);  
+        cons.fill = GridBagConstraints.NONE;  
+        cons.anchor = GridBagConstraints.NORTHWEST;  
+        cons.weightx = 0;  
+        cons.gridwidth = 1;  
+        panel.add(new JLabel(label), cons);  
+          
+        cons.weightx = 1;  
+        cons.gridwidth = 1;  
+        cons.fill = GridBagConstraints.BOTH;
+        listaComponentes.add(componente);
+        panel.add(componente, cons);  
+  
+        cons.fill = GridBagConstraints.NONE;  
+        cons.weightx = 0;  
+        cons.gridwidth = 1;  
+        panel.add(new JLabel(label2), cons);
+          
+        cons.weightx = 1;  
+        cons.fill = GridBagConstraints.BOTH;
+        listaComponentes.add(componente2);
+        panel.add(componente2, cons);
+        
+        cons.fill = GridBagConstraints.NONE;  
+        cons.weightx = 0;  
+        cons.gridwidth = 1;  
+        panel.add(new JLabel(label3), cons);
+          
+        cons.weightx = 1;  
+        cons.fill = GridBagConstraints.BOTH;
+        listaComponentes.add(componente3);
+        panel.add(componente3, cons);
+        
+        cons.fill = GridBagConstraints.NONE;  
+        cons.weightx = 0;  
+        cons.gridwidth = 1;  
+        panel.add(new JLabel(label4), cons);
+          
+        cons.weightx = 1;  
+        cons.fill = GridBagConstraints.BOTH;  
+        listaComponentes.add(componente4);
+        panel.add(componente4, cons);
+        
+        cons.fill = GridBagConstraints.NONE;  
+        cons.weightx = 0;  
+        cons.gridwidth = 1;  
+        panel.add(new JLabel(label5), cons);
+          
+        cons.weightx = 1;  
+        cons.fill = GridBagConstraints.BOTH;  
+        cons.gridwidth = GridBagConstraints.REMAINDER;
+        listaComponentes.add(componente5);
+        panel.add(componente5, cons);
+    }
+
     /**
     * Adiciona um label, um componente de edição, mais um label e outro
     * componente de edição. Todos na mesma linha
@@ -390,7 +450,7 @@ public class MontaInterfaces extends JFrame {
         cons.fill = GridBagConstraints.BOTH;  
         cons.weightx = 1;  
         cons.weighty = 1;
-        cons.gridwidth = GridBagConstraints.RELATIVE;
+        cons.gridwidth = GridBagConstraints.REMAINDER;
  
         panel.add(scrollpane ,cons);        
     }

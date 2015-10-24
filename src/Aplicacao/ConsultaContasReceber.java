@@ -54,8 +54,12 @@ public class ConsultaContasReceber {
         telaOS.setVisible(true);        
         //Adicionei as abas com o método addAbas e o panel para os botões com o método addPanelBotoes
         //Adiciona os componentes na tela
-        telaOS.addQuatroComponentes("Cliente", txtCliente, "Data Inicial", txtDataInicial,"Entre Datas",chkEntreDatas,"DataFinal",txtDataFinal,panelConsulta);
         telaOS.addAbas(panelConsulta, "Consulta");
+        telaOS.addCincoComponentes("Cliente", txtCliente, "Data Inicial", txtDataInicial,"Entre Datas",chkEntreDatas,"DataFinal",txtDataFinal,"Status",cboStatus,panelConsulta);
+        telaOS.addTabela(tblConsultaContasReceber,panelConsulta);
+        ConexaoBanco teste=new ConexaoBanco();
+        teste.preencheTabela(tabela, "select *from contasreceber");
+        
     
     }
 }
