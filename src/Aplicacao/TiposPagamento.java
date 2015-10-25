@@ -49,7 +49,7 @@ public class TiposPagamento {
     
     public void iniciaComponentes(){
         //Instância da classe monta interfaces, passei o nome do formulário e o caminho onde a imagem dele está
-        MontaInterfaces telaOS = new MontaInterfaces("Lançamentos de Pagamentos", "/imagens/icones-tipos-pagamento.png");
+        MontaInterfaces telaOS = new MontaInterfaces("Lançamentos de Pagamentos", "/imagens/icone-tipos-pagamento.png");
         //Deixei a janela visível
         telaOS.setVisible(true);        
         //Adicionei as abas com o método addAbas e o panel para os botões com o método addPanelBotoes
@@ -64,6 +64,10 @@ public class TiposPagamento {
         //Criei objetos do tipo icone com o caminho do icone para coloca-los nos botões 
         Icon iconeCadastrar = new ImageIcon(getClass().getResource("/imagens/salvar.png"));
         Icon iconeExcluir = new ImageIcon(getClass().getResource("/imagens/cancelar.png"));
+        
+        //Coloca incone nos botões
+        botCadastrar.setIcon(iconeCadastrar);
+        botExcluir.setIcon(iconeExcluir);
         
          //Adiciona os componentes na tela
         telaOS.addLabelTitulo("Cliente", panelLancar);
