@@ -80,7 +80,7 @@ public class Cliente {
         botCadastrar.setIcon(iconeCadastrar);
         botExcluir.setIcon(iconeExcluir);
         
-         //Adiciona os componentes na tela
+        //Adiciona os componentes na tela
         telaOS.addLabelTitulo("Cliente", panelCadastro);
         telaOS.addQuatroComponentes("Código", txtCodigo, "Nome", txtNome, "Bairro", txtBairro, "Complemento", txtComplemento, panelCadastro);
         telaOS.addQuatroComponentes("RG", txtRG, "CPF", txtCPF, "CEP", txtCEP, "Estado", txtEstado, panelCadastro);
