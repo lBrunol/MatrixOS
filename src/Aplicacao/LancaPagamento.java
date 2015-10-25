@@ -58,6 +58,22 @@ public void iniciaComponentes(){
         telaOS.setVisible(true);        
         //Adicionei as abas com o método addAbas e o panel para os botões com o método addPanelBotoes
         telaOS.addAbas(panelLancamento, "Lançamentos");
+        telaOS.addPanelBotoes(panelLancamento, panelBotoes);
         
+        //Adicionei os botões dentro do panelBotoes
+        telaOS.addBotoes("Salvar", botSalvar, panelBotoes);
+        telaOS.addBotoes("Cancelar", botCancelar, panelBotoes);
+        
+        //Criei objetos do tipo icone com o caminho do icone para coloca-los nos botões 
+        Icon iconeSalvar = new ImageIcon(getClass().getResource("/imagens/salvar.png"));
+        Icon iconeCancelar = new ImageIcon(getClass().getResource("/imagens/cancelar.png"));
+       
+        //Seta os icones dos botões
+        botSalvar.setIcon(iconeSalvar);
+        botCancelar.setIcon(iconeCancelar);
+       
+        //Adiciona os componentes na tela
+        telaOS.addLabelTitulo("Lançamento", panelLancamento);
+        telaOS.addQuatroComponentes("Numero do Documento", txtNumeroDocumento, "Data de Vencimento", txtDataVencimento, "Data Pagamento", txtDataPagamento, "Valor Pago", txtValorPago, panelLancamento);
     }
 }
