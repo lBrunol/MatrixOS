@@ -65,12 +65,12 @@ public class TiposPagamento {
         Icon iconeCadastrar = new ImageIcon(getClass().getResource("/imagens/salvar.png"));
         Icon iconeExcluir = new ImageIcon(getClass().getResource("/imagens/cancelar.png"));
         
-        //Coloca incone nos botões
+        //Coloca icone nos botões
         botCadastrar.setIcon(iconeCadastrar);
         botExcluir.setIcon(iconeExcluir);
         
          //Adiciona os componentes na tela
-        telaOS.addLabelTitulo("Cliente", panelLancar);
+        telaOS.addLabelTitulo("Lançamento", panelLancar);
         telaOS.addDoisComponentes("Codigo", txtCodigo, "Descrição", txtDescricao, panelLancar);
         telaOS.addTabela(tblTiposPagamento, panelConsulta);
         ConexaoBanco teste=new ConexaoBanco();
