@@ -70,7 +70,7 @@ public class TiposPagamento {
         botExcluir.setIcon(iconeExcluir);
         
          //Adiciona os componentes na tela
-        telaOS.addLabelTitulo("Lançamento", panelLancar);
+        telaOS.addLabelTitulo("Tipo De Pagamento", panelLancar);
         telaOS.addDoisComponentes("Codigo", txtCodigo, "Descrição", txtDescricao, panelLancar);
         telaOS.addTabela(tblTiposPagamento, panelConsulta);
         ConexaoBanco teste=new ConexaoBanco();
