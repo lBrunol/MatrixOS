@@ -11,12 +11,12 @@ import Core.MontaInterfaces;
 import java.awt.GridBagLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.JComboBox;
 import javax.swing.JCheckBox;
 
@@ -29,6 +29,7 @@ public class ConsultaContasReceber {
     MetodosAuxiliares auxiliar = new MetodosAuxiliares();
     //Panels
     private JPanel panelConsulta = new JPanel(new GridBagLayout());
+    private JPanel panelBotoesConsulta = new JPanel(new GridBagLayout());
     //Caixas de texto
     private JTextField txtCliente = new JTextField();
     private JTextField txtDataInicial = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
@@ -38,6 +39,9 @@ public class ConsultaContasReceber {
     //Tabela
     DefaultTableModel tabela = new DefaultTableModel();
     private JTable tblConsultaContasReceber = new JTable(tabela);
+    //botões
+    private JButton botLancaPagamento = new JButton();
+    private JButton botGerarRelatorio = new JButton();
     
     public ConsultaContasReceber(){
         this.iniciaComponentes();
@@ -55,10 +59,19 @@ public class ConsultaContasReceber {
         //Adicionei as abas com o método addAbas e o panel para os botões com o método addPanelBotoes
         //Adiciona os componentes na tela
         telaOS.addAbas(panelConsulta, "Consulta");
+        telaOS.addPanelBotoes(panelConsulta,panelBotoesConsulta);
+        telaOS.addBotoes("Lançar Pagamento", botLancaPagamento, panelBotoesConsulta);
+        telaOS.addBotoes("Gerar Relatório", botGerarRelatorio, panelBotoesConsulta); 
         telaOS.addCincoComponentes("Cliente", txtCliente, "Data Inicial", txtDataInicial,"Entre Datas",chkEntreDatas,"DataFinal",txtDataFinal,"Status",cboStatus,panelConsulta);
         telaOS.addTabela(tblConsultaContasReceber,panelConsulta);
         ConexaoBanco teste=new ConexaoBanco();
         teste.preencheTabela(tabela, "select *from contasreceber");
+        //Cria objetos do tipo icone para coloca-los nos botões
+        Icon iconeLancaPagamento = new ImageIcon(getClass().getResource("/imagens/lancar-pagamento.png"));
+        Icon iconeGerarRelatorio = new ImageIcon(getClass().getResource("/imagens/relatorio.png"));
+        //Seta os icones dos botões
+        botLancaPagamento.setIcon(iconeLancaPagamento);
+        botGerarRelatorio.setIcon(iconeGerarRelatorio);
         
     
     }

@@ -152,7 +152,7 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         Icon iconeFaturar = new ImageIcon(getClass().getResource("/imagens/faturar-nota-fiscal.png"));
         Icon iconeLimpar = new ImageIcon(getClass().getResource("/imagens/limpar.png"));
 
-        //Seta os icones dos bortões
+        //Seta os icones dos botões
         botAlterarRegistro.setIcon(iconeAlterar);
         botCadastrar.setIcon(iconeCadastrar);
         botExcluir.setIcon(iconeExcluir);
