@@ -6,11 +6,14 @@
 package Aplicacao;
 
 import Core.ConexaoBanco;
+import Core.MetodosAuxiliares;
 import Core.MontaInterfaces;
 import java.awt.GridBagLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -21,6 +24,11 @@ import javax.swing.table.DefaultTableModel;
  * @author CASA
  */
 public class Cliente {
+    //Instância da classe Métodos auxliares
+    MetodosAuxiliares auxiliar = new MetodosAuxiliares();
+    //Instância da classe que monta a tela
+    MontaInterfaces telaOS = new MontaInterfaces("Gerenciamento de Clientes", "/imagens/clientes.png");
+    
     
     //Panels
     private JPanel panelConsulta = new JPanel(new GridBagLayout());
@@ -30,14 +38,21 @@ public class Cliente {
     //Caixas de texto
     private JTextField txtCodigo = new JTextField();
     private JTextField txtNome = new JTextField();
-    private JTextField txtRG= new JTextField();
-    private JTextField txtCPF = new JTextField();
-    private JTextField txtCEP = new JTextField();
-    private JTextField txtEstado  = new JTextField();
-    private JTextField txtBairro= new JTextField();
-    private JTextField txtComplemento = new JTextField();
-    private JTextField txtCelular = new JTextField();
-    private JTextField txtEmail  = new JTextField();
+    private JTextField txtEndereco = new JTextField();
+    private JTextField txtCPF = new  JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CPF));
+    private JFormattedTextField txtRG = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_RG));
+    private JFormattedTextField txtCNPJ = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CNPJ));
+    private JTextField txtBairro = new JTextField();
+    private JTextField txtCidade = new JTextField();
+    private JTextField txtDataCadastro  = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
+    private JComboBox cboEstado= new JComboBox();
+    private JTextField txtEmail = new JTextField();
+    private JTextField txtCEP = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CEP));
+    private JTextField txtCelular = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_TELEFONE));
+    private JTextField txtTelefone = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_TELEFONE));
+    private JTextField txtObservacao = new JTextField();
+    private JTextField txtComplemento= new JTextField();
+  
     
     //Botões
     private JButton botCadastrar = new JButton();
@@ -59,8 +74,7 @@ public class Cliente {
     
     public void iniciaComponentes(){
         
-        //Instância da classe monta interfaces, passei o nome do formulário e o caminho onde a imagem dele está
-        MontaInterfaces telaOS = new MontaInterfaces("Gerenciamento de Clientes", "/imagens/clientes.png");
+      
         //Deixei a janela visível
         telaOS.setVisible(true);        
         //Adicionei as abas com o método addAbas e o panel para os botões com o método addPanelBotoes
@@ -82,14 +96,18 @@ public class Cliente {
         
         //Adiciona os componentes na tela
         telaOS.addLabelTitulo("Cliente", panelCadastro);
-        telaOS.addQuatroComponentes("Código", txtCodigo, "Nome", txtNome, "Bairro", txtBairro, "Complemento", txtComplemento, panelCadastro);
-        telaOS.addQuatroComponentes("RG", txtRG, "CPF", txtCPF, "CEP", txtCEP, "Estado", txtEstado, panelCadastro);
-        telaOS.addDoisComponentes("Celular", txtCelular, "Email", txtEmail, panelCadastro);
+       
+        telaOS.addDoisComponentes("Codigo", txtCodigo,"Nome",txtNome,panelCadastro);
+        telaOS.addUmComponente("Endereço",txtEndereco,panelCadastro);
+        telaOS.addQuatroComponentes( "Bairro", txtBairro, "Complemento", txtComplemento,"Estado", cboEstado,"Cidade",txtCidade, panelCadastro);
+        telaOS.addQuatroComponentes("CEP", txtCEP, "Telefone", txtTelefone, "Celular", txtCelular, "Data Cadastro", txtDataCadastro, panelCadastro);
+        telaOS.addUmComponente("Observação",txtObservacao,panelCadastro);
         telaOS.addTabela(tblClientes, panelConsulta);
         ConexaoBanco teste=new ConexaoBanco();
         teste.preencheTabela(tabela, "select *from cliente");
 
         
     }
-    
+
+  
 }
