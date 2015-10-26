@@ -224,4 +224,35 @@ public class MetodosAuxiliares {
             
         }
     }
+    /**
+     * Este método recebe o código da tecla que foi digitada e verifica se está na array com os números e teclas permitidas
+     * Atualmente é permitido 0,1,2,3,4,5,6,7,8,9, enter, backspace e delete
+     * @param keycode int com o código da tecla que foi digitada
+     * @return retorna verdadeiro se a tecla digita estiver na lista permitida e falso se não
+     */
+    public boolean apenasNumeros(int keycode){
+        System.out.println(keycode);
+        int[] numeros = {48,49,50,51,52,53,54,55,56,57,127,10,8};
+        for(int i = 0; i < numeros.length; i++){
+            if(numeros[i] == keycode){
+                return true;
+            }
+        }
+        return false;        
+    }
+    
+    public boolean validaCampos(ArrayList<JComponent> lista){
+        for (Component C : lista){
+            //Verifica se os tipos são de caixas de texto, se sim ele limpa os campos
+            if (C instanceof PTextField){
+                if(((PTextField) C).isObrigatorio()){
+                    if("".equals(((PTextField) C).getText())){
+                        JOptionPane.showMessageDialog(null, "O campo " + C.getName()+ " não está preenchido corretamente ou está vazio");
+                        return false;
+                    }
+                }
+            }            
+        }
+        return true;
+    }
 }

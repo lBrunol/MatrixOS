@@ -9,6 +9,7 @@ import Core.ComboItem;
 import Core.ConexaoBanco;
 import Core.MetodosAuxiliares;
 import Core.MontaInterfaces;
+import Core.PTextField;
 import Core.PadraoFormulario;
 import java.awt.GridBagLayout;
 import java.awt.HeadlessException;
@@ -17,6 +18,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -43,7 +46,7 @@ import javax.swing.text.DefaultFormatterFactory;
  *
  * @author CASA
  */
-public class OrdemServico implements ActionListener, PadraoFormulario, FocusListener, MouseListener {
+public class OrdemServico implements ActionListener, PadraoFormulario, FocusListener, MouseListener, KeyListener {
     //Instância da classe Métodos auxliares
     MetodosAuxiliares auxiliar = new MetodosAuxiliares();
     //Instância da classe que monta a tela
@@ -58,9 +61,9 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
 
     //Clientes
     private JComboBox cboCliente = new JComboBox();
-    private JTextField txtEndereco = new JTextField();
-    private JTextField txtNumEndereco = new JTextField();
-    private JTextField txtComplemento = new JTextField();
+    private JTextField txtEndereco = new PTextField();
+    private JTextField txtNumEndereco = new PTextField();
+    private JTextField txtComplemento = new PTextField();
     private JFormattedTextField txtCEP = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CEP));
     private JTextField txtBairro = new JTextField();
     private JTextField txtCidade = new JTextField();
@@ -166,6 +169,7 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         botExcluir.addActionListener(this);
         botLimpar.addActionListener(this);
         txtQtde.addFocusListener(this);
+        txtQtde.addKeyListener(this);
         botAlterarRegistro.addActionListener(this);
 
         //Adiciona os componentes na tela
@@ -198,6 +202,8 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         //txtValor.setEnabled(false);
         //txtDescricaoServico.setEnabled(false);
         txtQtde.setEnabled(false);
+        this.setaNomes();
+        
                     
         conexao.preencheTabela(tabela, "SELECT ordCodigo Código, ordOcorrencia Ocorrência, ordDataAbertura, ordValorTotal Valor, cliNome, funNome FROM cliente INNER JOIN (funcionario INNER JOIN ordemServico ON funcionario.funMatricula = ordemServico.funMatricula ) ON cliente.cliCodigo = ordemServico.cliCodigo ORDER BY ordCodigo");
         //Formata os valores em moeda
@@ -363,23 +369,19 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
     }
 
     public void mostraBotoesAlteracao() {
-        if (panelBotoesAlteracao.isVisible()) {
-            panelBotoesAlteracao.setVisible(false);
-            panelBotoesCadastro.setVisible(true);
-        } else {
             panelBotoesAlteracao.setVisible(true);
             panelBotoesCadastro.setVisible(false);
-        }
     }
 
     public void mostraBotoesCadastro() {
-        if (panelBotoesCadastro.isVisible()) {
-            panelBotoesAlteracao.setVisible(true);
-            panelBotoesCadastro.setVisible(false);
-        } else {
             panelBotoesAlteracao.setVisible(false);
             panelBotoesCadastro.setVisible(true);
-        }
+    }
+    
+    public void setaNomes(){
+        txtEndereco.setName("Endereço");
+        txtNumEndereco.setName("Número do endereço");
+        txtComplemento.setName("Complemento");
     }    
     
     @Override
@@ -444,10 +446,11 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         }
         if (botao.getSource() == botInserir) {
             auxiliar.limpaCampos(telaOS.getListaComponentes());
-            this.mostraBotoesAlteracao();
+            this.mostraBotoesCadastro();
         }
         if (botao.getSource() == botLimpar) {            
-            auxiliar.limpaCampos(telaOS.getListaComponentes());
+            //auxiliar.limpaCampos(telaOS.getListaComponentes());
+            auxiliar.validaCampos(telaOS.getListaComponentes());
         }
         if (botao.getSource() == botAlterarRegistro) {            
             ok = alterar();
@@ -457,8 +460,8 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
                     conexao.executaProcedure("UPDATE_SERVICOSOS('24/10/2015', " + this.intQtdeServico + ", " + this.intCodigoOS + ", " + this.intCodigoServico + ")");
                     JOptionPane.showMessageDialog(null, "Dados Alterados com sucesso");
                     auxiliar.limpaCampos(telaOS.getListaComponentes());
-                    this.mostraBotoesAlteracao();
-                } catch (Exception e) {
+                    this.mostraBotoesCadastro();
+                } catch (SQLException | HeadlessException e) {
                     JOptionPane.showMessageDialog(null, e.getMessage());    
                 }                                    
             }
@@ -530,6 +533,27 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
                 txtValorTotal.setText("");
             }            
         }
+    }
+    
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        char key = e.getKeyChar();
+        int k = key;  
+        //JOptionPane.showMessageDialog(null, k);
+        if(!auxiliar.apenasNumeros(k)){
+            e.consume();
+        }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+       //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
         
