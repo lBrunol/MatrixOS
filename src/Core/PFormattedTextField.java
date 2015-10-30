@@ -5,20 +5,33 @@
  */
 package Core;
 
-import javax.swing.JTextField;
+import javax.swing.JFormattedTextField;
 
 /**
  *
  * @author CASA
  */
-public class PTextField extends JTextField {
+public class PFormattedTextField extends JFormattedTextField {
     
     private boolean obrigatorio = true;
     
-    public PTextField() {
+    public PFormattedTextField() {
         super();
     }
-
+    
+    public PFormattedTextField(AbstractFormatter formatter) {
+        super(formatter);
+    }
+    
+    public PFormattedTextField(AbstractFormatterFactory factory) {
+        super(factory);
+    }
+    
+    public PFormattedTextField(java.text.Format format) {
+        super(format);
+    }
+    
+    
     /**
      * @return the OBRIGATORIO
      */

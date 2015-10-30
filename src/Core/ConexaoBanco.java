@@ -13,6 +13,8 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -138,9 +140,9 @@ public class ConexaoBanco {
             rs = stmt.executeQuery(query);
             return rs;
         } catch ( SQLException e ) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }finally{
-        	desconectar();            
+            desconectar();            
         }
         return null;        
     }
@@ -177,26 +179,31 @@ public class ConexaoBanco {
      */    
     public void preencheTabela(DefaultTableModel tabela,  String query) {  
     	ResultSet rs;
-        ResultSetMetaData rsmd;
-    	tabela.setNumRows(0);
+        ResultSetMetaData rsmd;    	
         Locale localPadrao = Locale.getDefault();
-        
+        //for(int i = 0; i < tabela.getRowCount(); i++){
+        //    tabela.removeRow(i);
+        //}
+        tabela.setRowCount(0);
         rs = executar(query);        
         try {
+                
                 //Armazena no objeto os metadados do resultset
                 rsmd = rs.getMetaData();
                 //Pega o numero de colunas do resultset
         	int indice = rsmd.getColumnCount();
                 //Cria um array para armzenar o nome das colunas
                 String[] campos = new String[indice];
-                //Armazena na variável campos os nomes das colunas
+                //Armazena na variável campos os nomes das colunas                
                 for (int i = 0; i < indice; i++){
                     campos[i] = rsmd.getColumnName(i+1);
                 }
-                //Adiciona as colunas
-        	for(int i = 0; i < indice; i++){
-                    tabela.addColumn(campos[i]);	
-        	}
+                if(tabela.getColumnCount() == 0){
+                    //Adiciona as colunas
+                    for(int i = 0; i < indice; i++){
+                        tabela.addColumn(campos[i]);	
+                    }
+                }
         	Object row[] = new Object[indice];
                 Object dadosCampos[] = new Object[indice];
             while(rs.next()) {            	
@@ -218,6 +225,14 @@ public class ConexaoBanco {
             JOptionPane.showMessageDialog(null,"Ocorreu um erro  de SQL ao listar a tabela" + e.getMessage() + " \n Favor entrar em contato com administrador");        
         }catch (Exception e){
             JOptionPane.showMessageDialog(null,"Ocorreu um erro ao listar a tabela " + e.getMessage() + " \n Favor entrar em contato com administrador");
+        }finally{
+                try {
+                    rs.close();
+                    
+                } catch (SQLException ex) {
+                    Logger.getLogger(ConexaoBanco.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            
         }
     }
         
@@ -250,12 +265,6 @@ public class ConexaoBanco {
                 ComboItem cboItem = new ComboItem(id, nome);
                 combo.addItem(cboItem);
             }
-            combo.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                   
-                }
-            });
         }
         catch(SQLException e){  
             JOptionPane.showMessageDialog(null,"Ocorreu um erro  de SQL ao listar a combobox " + e.getMessage() + " \n Favor entrar em contato com administrador");        

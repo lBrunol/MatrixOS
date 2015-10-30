@@ -1,7 +1,7 @@
 package Core;
 import java.awt.*;  
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import javax.swing.*;  
 import javax.swing.text.JTextComponent;
 public class MontaInterfaces extends JFrame {
@@ -23,12 +23,16 @@ public class MontaInterfaces extends JFrame {
     */
     public MontaInterfaces(String tituloForm, String caminhoIcone) {          
         
+        URL iconURL = getClass().getResource("/imagens/favicon.png");
+        ImageIcon icon = new ImageIcon(iconURL);
+        
         //Faz com que ao clicar no fechar da janela a aplicação feche junto
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.getContentPane().setLayout(new GridBagLayout());
         this.setSize(600,600);
         this.setTitle(tituloForm);
-        this.centralize();
+        this.centralize();        
+        this.setIconImage(icon.getImage());        
         
         panelPrincipal = new JPanel();
         JPanel panelTopo = new JPanel();

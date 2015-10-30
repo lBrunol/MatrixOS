@@ -9,16 +9,15 @@ import java.awt.Component;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.MaskFormatter;
 
@@ -36,6 +35,7 @@ public class MetodosAuxiliares {
     public static final String MASCARA_CPF = "###.###.###-##";
     public static final String MASCARA_RG = "##.###.###-#";
     public static final String MASCARA_TELEFONE = "(##) ####-####";
+    public static final String MASCARA_CELULAR = "(##) #####-####";
     public static final String MASCARA_DATA = "##/##/####";
     public static final String MASCARA_CNPJ = "##.###.###/####-##";
     public static final String MASCARA_CEP = "#####-###";
@@ -215,10 +215,10 @@ public class MetodosAuxiliares {
         //Loop que itera sobre a lista
         for (Component C : lista){
             //Verifica se os tipos são de caixas de texto, se sim ele limpa os campos
-            if (C instanceof JTextField || C instanceof JTextArea || C instanceof JFormattedTextField){
+            if (C instanceof PTextField || C instanceof PFormattedTextField){
                 ((JTextComponent) C).setText(""); //abstract superclass
             //Verifica se é do tipo combobox se sim ele manda para o indice 0 da lista
-            }else if(C instanceof JComboBox){
+            }else if(C instanceof PComboBox){
                 ((JComboBox) C).setSelectedIndex(0); //abstract superclass
             }
             
@@ -241,18 +241,46 @@ public class MetodosAuxiliares {
         return false;        
     }
     
+    /**
+     * Função para evitar que os campos sejam gravados vazios no banco
+     * @param lista recebe uma lista de componentes 
+     * @return retorna false se houverem campos vazios e true se não houver
+     */    
     public boolean validaCampos(ArrayList<JComponent> lista){
         for (Component C : lista){
             //Verifica se os tipos são de caixas de texto, se sim ele limpa os campos
-            if (C instanceof PTextField){
-                if(((PTextField) C).isObrigatorio()){
-                    if("".equals(((PTextField) C).getText())){
+            if (C instanceof PFormattedTextField ){
+                if(((PFormattedTextField) C).isObrigatorio()){                    
+                    if(((PFormattedTextField) C).isEditValid() == false){
                         JOptionPane.showMessageDialog(null, "O campo " + C.getName()+ " não está preenchido corretamente ou está vazio");
                         return false;
                     }
                 }
-            }            
+            }else if (C instanceof PTextField){
+                if(((PTextField) C).isObrigatorio()){
+                    if((((PTextField) C).getText().trim().isEmpty())){
+                        JOptionPane.showMessageDialog(null, "O campo " + C.getName()+ " não está preenchido corretamente ou está vazio");
+                        return false;
+                    }
+                }
+            }else if (C instanceof PComboBox){
+                if(((PComboBox) C).isObrigatorio()){                    
+                    if(((PComboBox) C).getSelectedIndex() == 0){
+                        JOptionPane.showMessageDialog(null, "O campo " + C.getName()+ " não está preenchido corretamente ou está vazio");
+                        return false;
+                    }
+                }            
+            }           
         }
         return true;
+    }
+    
+    /**
+     * Retorna a data de hoje 
+     * @return retorna a data formatada como string
+     */
+    public String hoje(){
+        String hoje = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());        
+        return hoje;
     }
 }

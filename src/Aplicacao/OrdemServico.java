@@ -9,6 +9,8 @@ import Core.ComboItem;
 import Core.ConexaoBanco;
 import Core.MetodosAuxiliares;
 import Core.MontaInterfaces;
+import Core.PComboBox;
+import Core.PFormattedTextField;
 import Core.PTextField;
 import Core.PadraoFormulario;
 import java.awt.GridBagLayout;
@@ -26,18 +28,13 @@ import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 
@@ -51,36 +48,38 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
     MetodosAuxiliares auxiliar = new MetodosAuxiliares();
     //Instância da classe que monta a tela
     MontaInterfaces telaOS = new MontaInterfaces("Gerenciamento de Ordem de Serviço", "/imagens/os.png");
+    //Instância da classe de conexão com o banco
+    ConexaoBanco conexao = new ConexaoBanco();
     
     //Criação dos objetos, imprescindível criar ao menos um JPanel para servir de aba no formulário
-    private JTextField txtCodigo = new JTextField();
-    private JFormattedTextField txtDataAbertura = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
-    private JFormattedTextField txtDataFechamento = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
-    private JTextArea txtDescricaoOcorrencia = new JTextArea();
-    private JTextField txtValorTotal = new JTextField();
+    private PTextField txtCodigo = new PTextField();
+    private PFormattedTextField txtDataAbertura = new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
+    private PFormattedTextField txtDataFechamento = new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
+    private PTextField txtDescricaoOcorrencia = new PTextField();
+    private PTextField txtValorTotal = new PTextField();
 
     //Clientes
-    private JComboBox cboCliente = new JComboBox();
-    private JTextField txtEndereco = new PTextField();
-    private JTextField txtNumEndereco = new PTextField();
-    private JTextField txtComplemento = new PTextField();
-    private JFormattedTextField txtCEP = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CEP));
-    private JTextField txtBairro = new JTextField();
-    private JTextField txtCidade = new JTextField();
-    private JTextField txtUF = new JTextField();
-    private JFormattedTextField txtTelefone = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_TELEFONE));
-    private JFormattedTextField txtCPF = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CPF));
-    private JFormattedTextField txtRG = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_RG));
+    private PComboBox cboCliente = new PComboBox();
+    private PTextField txtEndereco = new PTextField();
+    private PTextField txtNumEndereco = new PTextField();
+    private PTextField txtComplemento = new PTextField();
+    private PFormattedTextField txtCEP = new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CEP));
+    private PTextField txtBairro = new PTextField();
+    private PTextField txtCidade = new PTextField();
+    private PTextField txtUF = new PTextField();
+    private PFormattedTextField txtTelefone = new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_TELEFONE));
+    private PFormattedTextField txtCPF = new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CPF));
+    private PFormattedTextField txtRG = new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_RG));
 
     //Funcionários
-    private JComboBox cboFuncionario = new JComboBox();
-    private JTextField txtCargo = new JTextField();
+    private PComboBox cboFuncionario = new PComboBox();
+    private PTextField txtCargo = new PTextField();
 
     //Serviços
-    private JComboBox cboServico = new JComboBox();
-    private JTextField txtValor = new JTextField();
-    private JTextField txtQtde = new JTextField();
-    private JTextArea txtDescricaoServico = new JTextArea();
+    private PComboBox cboServico = new PComboBox();
+    private PTextField txtValor = new PTextField();
+    private PTextField txtQtde = new PTextField();
+    private PTextField txtDescricaoServico = new PTextField();
 
     //Botões
     private JButton botCadastrar = new JButton();
@@ -101,9 +100,6 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
     private JPanel panelBotoesCadastro = new JPanel(new GridBagLayout());
     private JPanel panelBotoesAlteracao = new JPanel(new GridBagLayout());
 
-    //Instância da classe de conexão com o banco
-    ConexaoBanco conexao = new ConexaoBanco();
-
     //Atributos da classe relacionados ao banco
     private int intCodigoOS;
     private int intCodigoCliente;
@@ -116,20 +112,29 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
     private float fltValorTotal;
     private float fltValorDesconto;
     private float fltValorServico;
+    private Object DateUtils;
 
+    //Construtor
     public OrdemServico() {
+        
         this.iniciaComponentes();
-
+        this.atribuiIcones();
+        
+        telaOS.setTamanho(1000, 1000);
+        telaOS.setVisible(true);
+        
+        this.preencheCombos();
+        this.adicionaEventos();
+        
+        this.preencheTabela();
+        this.setaNomes();       
     }
-
+    //Método main
     public static void main(String args[]) {
         OrdemServico os = new OrdemServico();
     }
-
-    private void iniciaComponentes() {
-        
-        telaOS.setVisible(true);
-        telaOS.setTamanho(1000, 1000);
+    
+    private void iniciaComponentes() {        
 
         telaOS.addAbas(panelCadastro, "Cadastro");
         telaOS.addPanelBotoes(panelCadastro, panelBotoesCadastro);
@@ -139,14 +144,55 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         telaOS.addBotoes("Cadastrar", botCadastrar, panelBotoesCadastro);
         telaOS.addBotoes("Limpar", botLimpar, panelBotoesCadastro);
 
-        //Botões de alteração
-        panelBotoesAlteracao.setVisible(false);
-        panelBotoesCadastro.setVisible(true);
+        //Botões de alteração        
         telaOS.addBotoes("Faturar Nota Fiscal", botFaturarNotaFiscal, panelBotoesAlteracao);
         telaOS.addBotoes("Modo Inserir", botInserir, panelBotoesAlteracao);
         telaOS.addBotoes("Excluir Registro", botExcluir, panelBotoesAlteracao);
-        telaOS.addBotoes("Alterar Registro", botAlterarRegistro, panelBotoesAlteracao);
+        telaOS.addBotoes("Alterar Registro", botAlterarRegistro, panelBotoesAlteracao);        
 
+        //Adiciona os componentes na tela
+        telaOS.addLabelTitulo("Ordem de Serviço", panelCadastro);
+        telaOS.addQuatroComponentes("Código", txtCodigo, "Data de Abertura", txtDataAbertura, "Data de Fechamento", txtDataFechamento, "Valor Total", txtValorTotal, panelCadastro);
+        telaOS.addUmComponente("Descrição da Ocorrência*", txtDescricaoOcorrencia, panelCadastro);
+        telaOS.addLabelTitulo("Cliente", panelCadastro);
+        telaOS.addUmComponente("Selecione o cliente*", cboCliente, panelCadastro);
+        telaOS.addQuatroComponentes("Endereço", txtEndereco, "N°", txtNumEndereco, "Complemento", txtComplemento, "CEP", txtCEP, panelCadastro);
+        telaOS.addQuatroComponentes("Bairro", txtBairro, "Cidade", txtCidade, "UF ", txtUF, "Telefone", txtTelefone, panelCadastro);
+        telaOS.addDoisComponentes("CPF/CNPJ", txtCPF, "RG/IM", txtRG, panelCadastro);
+        telaOS.addLabelTitulo("Funcionário", panelCadastro);
+        telaOS.addDoisComponentes("Selecione o Funcionário*", cboFuncionario, "Cargo", txtCargo, panelCadastro);
+        telaOS.addLabelTitulo("Serviço", panelCadastro);
+        telaOS.addQuatroComponentes("Selecione o Serviço*", cboServico, "Valor", txtValor, "Quantidade*", txtQtde, "Descrição", txtDescricaoServico, panelCadastro);
+        telaOS.addAbas(panelConsulta, "Consulta");
+        telaOS.addTabela(tblOrdemServico, panelConsulta);
+        
+        //Deixa visível o panel de botões de cadastro
+        panelBotoesAlteracao.setVisible(false);
+        panelBotoesCadastro.setVisible(true);
+        
+        txtEndereco.setEnabled(false);
+        txtNumEndereco.setEnabled(false);
+        txtComplemento.setEnabled(false);
+        txtCEP.setEnabled(false);
+        txtBairro.setEnabled(false);
+        txtCidade.setEnabled(false);
+        txtUF.setEnabled(false);
+        txtTelefone.setEnabled(false);
+        txtCPF.setEnabled(false);
+        txtRG.setEnabled(false);
+        txtCargo.setEnabled(false);
+        txtValor.setEnabled(false);
+        txtDescricaoServico.setEnabled(false);
+        txtQtde.setEnabled(false);
+        txtDataAbertura.setEnabled(false);
+        txtValorTotal.setEnabled(false);
+        
+        //Formata os valores em moeda
+        txtDataAbertura.setText(auxiliar.hoje()); 
+        txtComplemento.setObrigatorio(false);
+    }
+    
+    private void atribuiIcones(){
         //Cria objetos do tipo icone para coloca-los nos botões
         Icon iconeCadastrar = new ImageIcon(getClass().getResource("/imagens/salvar.png"));
         Icon iconeExcluir = new ImageIcon(getClass().getResource("/imagens/excluir.png"));
@@ -162,53 +208,9 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         botFaturarNotaFiscal.setIcon(iconeFaturar);
         botInserir.setIcon(iconeInserir);
         botLimpar.setIcon(iconeLimpar);
-
-        //Adiciona eventos
-        botCadastrar.addActionListener(this);
-        botInserir.addActionListener(this);
-        botExcluir.addActionListener(this);
-        botLimpar.addActionListener(this);
-        txtQtde.addFocusListener(this);
-        txtQtde.addKeyListener(this);
-        botAlterarRegistro.addActionListener(this);
-
-        //Adiciona os componentes na tela
-        telaOS.addLabelTitulo("Ordem de Serviço", panelCadastro);
-        telaOS.addQuatroComponentes("Código", txtCodigo, "Data de Abertura", txtDataAbertura, "Data de Fechamento", txtDataFechamento, "Valor Total", txtValorTotal, panelCadastro);
-        telaOS.addUmComponente("Descrição da Ocorrência", txtDescricaoOcorrencia, panelCadastro);
-        telaOS.addLabelTitulo("Cliente", panelCadastro);
-        telaOS.addUmComponente("Selecione o cliente*", cboCliente, panelCadastro);
-        telaOS.addQuatroComponentes("Endereço", txtEndereco, "N°", txtNumEndereco, "Complemento", txtComplemento, "CEP", txtCEP, panelCadastro);
-        telaOS.addQuatroComponentes("Bairro", txtBairro, "Cidade", txtCidade, "UF ", txtUF, "Telefone", txtTelefone, panelCadastro);
-        telaOS.addDoisComponentes("CPF/CNPJ", txtCPF, "RG/IM", txtRG, panelCadastro);
-        telaOS.addLabelTitulo("Funcionário", panelCadastro);
-        telaOS.addDoisComponentes("Selecione o Funcionário*", cboFuncionario, "Cargo", txtCargo, panelCadastro);
-        telaOS.addLabelTitulo("Serviço", panelCadastro);
-        telaOS.addQuatroComponentes("Selecione o Serviço*", cboServico, "Valor", txtValor, "Quantidade", txtQtde, "Descrição", txtDescricaoServico, panelCadastro);
-        telaOS.addAbas(panelConsulta, "Consulta");
-        telaOS.addTabela(tblOrdemServico, panelConsulta);
-
-        //txtEndereco.setEnabled(false);
-        //txtNumEndereco.setEnabled(false);
-        //txtComplemento.setEnabled(false);
-        //txtCEP.setEnabled(false);
-        //txtBairro.setEnabled(false);
-        //txtCidade.setEnabled(false);
-        //txtUF.setEnabled(false);
-        //txtTelefone.setEnabled(false);
-        //txtCPF.setEnabled(false);
-        //txtRG.setEnabled(false);
-        //txtCargo.setEnabled(false);
-        //txtValor.setEnabled(false);
-        //txtDescricaoServico.setEnabled(false);
-        txtQtde.setEnabled(false);
-        this.setaNomes();
-        
-                    
-        conexao.preencheTabela(tabela, "SELECT ordCodigo Código, ordOcorrencia Ocorrência, ordDataAbertura, ordValorTotal Valor, cliNome, funNome FROM cliente INNER JOIN (funcionario INNER JOIN ordemServico ON funcionario.funMatricula = ordemServico.funMatricula ) ON cliente.cliCodigo = ordemServico.cliCodigo ORDER BY ordCodigo");
-        //Formata os valores em moeda
-        auxiliar.formataValorTabela(tblOrdemServico, 3);
-        
+    }
+    
+    private void preencheCombos(){
         //Preenche as combobox
         cboCliente.addItem("");
         cboFuncionario.addItem("");
@@ -217,6 +219,16 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         conexao.preencheCombo(cboCliente, "SELECT cliCodigo, cliNome FROM cliente");
         conexao.preencheCombo(cboFuncionario, "SELECT funMatricula, funNome FROM funcionario");
         conexao.preencheCombo(cboServico, "SELECT svcCodigo, svcNome FROM servicos");
+    }
+    
+    private void adicionaEventos(){
+        botCadastrar.addActionListener(this);
+        botInserir.addActionListener(this);
+        botExcluir.addActionListener(this);
+        botLimpar.addActionListener(this);
+        txtQtde.addFocusListener(this);
+        txtQtde.addKeyListener(this);
+        botAlterarRegistro.addActionListener(this);
         
         cboCliente.addActionListener(new ActionListener() {
             @Override
@@ -256,10 +268,10 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
                         JOptionPane.showMessageDialog(null, b.getCause());
                     }                
                     catch (SQLException b) {
-                        JOptionPane.showMessageDialog(null, b.getMessage() + ". Entre em contato com administrador do sistema.");
+                        JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
                     }
                     catch (Exception b) {
-                        JOptionPane.showMessageDialog(null,"erro" + b.getMessage());
+                        JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
                     }
                 }else{
                     txtEndereco.setText("");
@@ -284,15 +296,15 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
                     intMatricula = Integer.parseInt(comboItem.getId());
                     try {
                         ResultSet rs = conexao.executar("SELECT carDescricao FROM funcionario INNER JOIN cargos ON funcionario.carCodigo = cargos.carCodigo WHERE funcionario.funMatricula= " + intMatricula);
-                        rs.next();                  
-
+                        rs.next();                        
                         txtCargo.setText(rs.getString(1));
-             
-                    }catch (SQLException b) {
-                        JOptionPane.showMessageDialog(null, b.getMessage() + ". Entre em contato com administrador do sistema.");
+                        rs.close();
+                    }             
+                    catch (SQLException b) {
+                        JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
                     }
                     catch (Exception b) {
-                        JOptionPane.showMessageDialog(null,"erro" + b.getMessage());
+                        JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
                     }
                 }else{
                     txtCargo.setText("");
@@ -313,12 +325,13 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
                         txtValor.setText(rs.getString(1));
                         txtDescricaoServico.setText(rs.getString(2));
                         txtQtde.setEnabled(true);
-             
-                    }catch (SQLException b) {
-                        JOptionPane.showMessageDialog(null, b.getMessage() + ". Entre em contato com administrador do sistema.");
+                        rs.close();
+                    }             
+                    catch (SQLException b) {
+                        JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
                     }
                     catch (Exception b) {
-                        JOptionPane.showMessageDialog(null,"erro" + b.getMessage());
+                        JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
                     }
                 }else{
                     txtValor.setText("");
@@ -330,59 +343,252 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         });
         
         tblOrdemServico.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent me) {
-            JTable table =(JTable) me.getSource();
-            Point p = me.getPoint();
-            int row = table.rowAtPoint(p);
-            if (me.getClickCount() == 2) {
-                int intCodigoSelecionado;
-                intCodigoSelecionado = Integer.parseInt(tblOrdemServico.getValueAt(row, 0).toString());
-                try {
-                    ResultSet rs;
-                    rs = conexao.executar("SELECT * FROM ordemServico WHERE ordCodigo =" + intCodigoSelecionado);
-                    rs.next();                    
-                    txtCodigo.setText(rs.getString(1));
-                    txtDescricaoOcorrencia.setText(rs.getString(2));
-                    txtDataAbertura.setText(auxiliar.formataData(rs.getDate(3)));
-                    txtDataFechamento.setText(auxiliar.formataData(rs.getDate(4)));
-                    txtValorTotal.setText(auxiliar.formataValor(rs.getFloat(5)));
-                    cboFuncionario.setSelectedIndex(rs.getInt(7));
-                    cboCliente.setSelectedIndex(rs.getInt(8));                    
-                    
-                    rs = conexao.executar("SELECT * FROM servicosOS WHERE ordCodigo =" + intCodigoSelecionado);
-                    rs.next();
-                    cboServico.setSelectedIndex(rs.getInt(4));
-                    txtQtde.setText(rs.getString(2));
-                    
-                    mostraBotoesAlteracao();
-                    
-                } catch (SQLException e) {
-                    System.out.println(e.getMessage());
-                }                
-                telaOS.getTabbedPane().setSelectedIndex(0);
-                
+            @Override
+            public void mousePressed(MouseEvent me) {
+                              
+                if (me.getClickCount() == 2) {                    
+                    try {
+                        
+                        JTable table =(JTable) me.getSource();
+                        Point p = me.getPoint();  
+                        int row = table.rowAtPoint(p);
+                        int intCodigoSelecionado;
+                        intCodigoSelecionado = Integer.parseInt(tblOrdemServico.getValueAt(row, 0).toString());
+                        
+                        ResultSet rs;
+                        rs = conexao.executar("SELECT * FROM ordemServico WHERE ordCodigo =" + intCodigoSelecionado);
+                        rs.next();                    
+                        txtCodigo.setText(rs.getString(1));
+                        txtDescricaoOcorrencia.setText(rs.getString(2));
+                        txtDataAbertura.setText(auxiliar.formataData(rs.getDate(3)));
+                        txtDataFechamento.setText(auxiliar.formataData(rs.getDate(4)));
+                        txtValorTotal.setText(auxiliar.formataValor(rs.getFloat(5)));
+                        cboFuncionario.setSelectedIndex(rs.getInt(7));
+                        cboCliente.setSelectedIndex(rs.getInt(8));                    
+                        
+                        rs.close();
+                        
+                        rs = conexao.executar("SELECT * FROM servicosOS WHERE ordCodigo =" + intCodigoSelecionado);
+                        rs.next();
+                        cboServico.setSelectedIndex(rs.getInt(4));
+                        txtQtde.setText(rs.getString(2));
+
+                        mostraBotoesAlteracao();
+                        telaOS.getTabbedPane().setSelectedIndex(0);
+                        rs.close();
+                    }             
+                    catch (SQLException b) {
+                        JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
+                    }
+                    catch (Exception b) {
+                        JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
+                    }
+                }
             }
-        }
-
         });
+    } 
+
+    private void mostraBotoesAlteracao() {
+        panelBotoesAlteracao.setVisible(true);
+        panelBotoesCadastro.setVisible(false);
     }
 
-    public void mostraBotoesAlteracao() {
-            panelBotoesAlteracao.setVisible(true);
-            panelBotoesCadastro.setVisible(false);
-    }
-
-    public void mostraBotoesCadastro() {
-            panelBotoesAlteracao.setVisible(false);
-            panelBotoesCadastro.setVisible(true);
+    private void mostraBotoesCadastro() {
+        panelBotoesAlteracao.setVisible(false);
+        panelBotoesCadastro.setVisible(true);
     }
     
-    public void setaNomes(){
+    private void preencheTabela(){
+        try {
+            conexao.preencheTabela(tabela, "SELECT ordCodigo, ordOcorrencia, ordDataAbertura, ordValorTotal, cliNome, funNome FROM cliente INNER JOIN (funcionario INNER JOIN ordemServico ON funcionario.funMatricula = ordemServico.funMatricula ) ON cliente.cliCodigo = ordemServico.cliCodigo ORDER BY ordCodigo");
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getCause() + "\n" + e.getMessage());
+        }
+       //formataValoresTabela();
+    }
+    
+    private void setaNomes(){
         txtEndereco.setName("Endereço");
         txtNumEndereco.setName("Número do endereço");
         txtComplemento.setName("Complemento");
+        txtBairro.setName("Bairro");
+        txtCEP.setName("CEP");
+        txtCPF.setName("CPF");
+        txtCargo.setName("Cargo");
+        txtCidade.setName("Cidade");
+        txtCodigo.setName("Código");
+        txtDataAbertura.setName("Data de Abertura");
+        txtDataFechamento.setName("Data de Fechamento");
+        txtDescricaoOcorrencia.setName("Descrição da Ocorrência");
+        txtDescricaoServico.setName("Descrição do Serviço");
+        txtQtde.setName("Quantidade do serviço");
+        txtRG.setName("RG");
+        txtTelefone.setName("Telefone");
+        txtUF.setName("UF");
+        txtValor.setName("Valor do Serviço");
+        txtValorTotal.setName("Valor Total");     
+        cboCliente.setName("Cliente");
+        cboFuncionario.setName("Funcionário");
+        cboServico.setName("Serviço");
+    }
+    
+    private void formataValoresTabela(){
+         auxiliar.formataValorTabela(tblOrdemServico, 3);
+    }
+
+    //Métodos herdados da interface PadraoFormulario
+    @Override
+    public boolean cadastrar() {
+        if(auxiliar.validaCampos(telaOS.getListaComponentes())){ 
+            this.intCodigoOS = Integer.parseInt(txtCodigo.getText());
+            this.strDataAbertura = txtDataAbertura.getText();
+            this.strDataFechamento = txtDataFechamento.getText();
+            this.strOcorrencia =  txtDescricaoOcorrencia.getText();
+            //this.fltValorTotal = auxiliar.removeCaracteresFloat(txtValorTotal.getText());
+            this.fltValorTotal = auxiliar.calculaValorTotal(this.fltValorServico, this.intQtdeServico);
+            this.intQtdeServico = Integer.parseInt(txtQtde.getText());
+            //this.intCodigoServico = cboServico.getSelectedIndex();            
+            return true;
+            
+        }else{            
+           return false;
+        }
+    }
+
+    @Override
+    public boolean alterar() {
+        if(auxiliar.validaCampos(telaOS.getListaComponentes())){            
+            this.intCodigoOS = Integer.parseInt(txtCodigo.getText());
+            this.strDataAbertura = txtDataAbertura.getText();
+            this.strDataFechamento = txtDataFechamento.getText();
+            this.strOcorrencia =  txtDescricaoOcorrencia.getText();
+            //this.fltValorTotal = auxiliar.removeCaracteresFloat(txtValorTotal.getText());
+            this.fltValorTotal = auxiliar.calculaValorTotal(this.fltValorServico, this.intQtdeServico);
+            this.intQtdeServico = Integer.parseInt(txtQtde.getText());
+            ComboItem comboItem = (ComboItem) cboServico.getSelectedItem();
+            this.intCodigoServico = Integer.parseInt(comboItem.getId());
+            
+            comboItem = (ComboItem) cboCliente.getSelectedItem();
+            this.intCodigoCliente = Integer.parseInt(comboItem.getId());
+            
+            comboItem = (ComboItem) cboFuncionario.getSelectedItem();
+            this.intMatricula = Integer.parseInt(comboItem.getId());
+            return true;
+        }else{            
+           return false; 
+        }
+    }
+
+    @Override
+    public boolean deletar() {
+        if(JOptionPane.showConfirmDialog(null, "Deseja realmente excluir o registro?", "Confirmação", JOptionPane.YES_NO_OPTION) == 0){                                
+            return true;                       
+        }else{
+            return false;
+        }
+    }
+    
+    //Eventos
+    @Override
+    public void actionPerformed(ActionEvent botao) {
+        //Retorna qual o botão clicado e gera a ação
+        boolean ok ;
+        if (botao.getSource() == botCadastrar) {            
+            ok = cadastrar();
+            if(ok){	
+                try {
+                    String hoje = auxiliar.hoje();
+                    conexao.executaProcedure("INSERT_ORDEMSERVICO (" + this.intCodigoOS + ",'" + this.strOcorrencia + "','" + this.strDataAbertura + "', '" + this.strDataFechamento + "', " + this.fltValorTotal + ", " + this.fltValorDesconto + " , " + this.intMatricula + " , " + this.intCodigoCliente + " )");
+                    conexao.executaProcedure("INSERT_SERVICOSOS ('"+ hoje + "', " + this.intQtdeServico + ", " + this.intCodigoOS + ", " + this.intCodigoServico + ")");
+                    JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
+                    auxiliar.limpaCampos(telaOS.getListaComponentes());
+                    txtDataAbertura.setText(auxiliar.hoje());
+                    this.preencheTabela();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage());    
+                }                                    
+            }
+        }
+        if (botao.getSource() == botExcluir) {
+            ok = deletar();
+            if(ok){	
+                try {
+                    this.intCodigoOS = Integer.parseInt(txtCodigo.getText());
+                    conexao.executaProcedure("DELETE_SERVICOSOS(" + this.intCodigoOS + ")");
+                    conexao.executaProcedure("DELETE_ORDEMSERVICO(" + this.intCodigoOS + ")");
+                    JOptionPane.showMessageDialog(null, "Dados deletados com sucesso");
+                    auxiliar.limpaCampos(telaOS.getListaComponentes());
+                    txtDataAbertura.setText(auxiliar.hoje());
+                    this.mostraBotoesCadastro();
+                    this.preencheTabela();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage());    
+                }                                    
+            }           
+        }
+        if (botao.getSource() == botInserir) {
+            auxiliar.limpaCampos(telaOS.getListaComponentes());
+            this.mostraBotoesCadastro();
+        }
+        if (botao.getSource() == botLimpar) {            
+            auxiliar.limpaCampos(telaOS.getListaComponentes());
+        }
+        if (botao.getSource() == botAlterarRegistro) {            
+            ok = alterar();
+            if(ok){	
+                try {
+                    String hoje = auxiliar.hoje();
+                    conexao.executaProcedure("UPDATE_ORDEMSERVICO (" + this.intCodigoOS + ",'" + this.strOcorrencia + "','" + this.strDataAbertura + "', '" + this.strDataFechamento + "', " + this.fltValorTotal + ", " + this.fltValorDesconto + " , " + this.intMatricula + " , " + this.intCodigoCliente + " )");
+                    conexao.executaProcedure("UPDATE_SERVICOSOS('" + hoje + "', " + this.intQtdeServico + ", " + this.intCodigoOS + ", " + this.intCodigoServico + ")");
+                    JOptionPane.showMessageDialog(null, "Dados Alterados com sucesso");
+                    auxiliar.limpaCampos(telaOS.getListaComponentes());
+                    txtDataAbertura.setText(auxiliar.hoje());
+                    this.mostraBotoesCadastro();
+                    this.preencheTabela();
+                } catch (SQLException | HeadlessException e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage());    
+                }                                    
+            }
+        }
+    }  
+
+    @Override
+    public void focusLost(FocusEvent e) {
+        if(e.getSource() == txtQtde){
+            if(txtValor.getText().isEmpty() == false && txtQtde.getText().isEmpty() == false){                
+                
+                this.intQtdeServico = Integer.parseInt(txtQtde.getText());
+                this.fltValorServico = Integer.parseInt(txtValor.getText());
+                this.fltValorTotal = auxiliar.calculaValorTotal(this.fltValorServico, this.intQtdeServico);
+                String strValorTotal;           
+                strValorTotal = auxiliar.formataValor(this.fltValorTotal);
+                txtValorTotal.setText(strValorTotal);
+                
+            }else if(txtQtde.getText().isEmpty() == true && txtValor.getText().isEmpty() == false){            
+                txtValorTotal.setText("");
+            }            
+        }
     }    
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        char key = e.getKeyChar();
+        int k = key;
+        if(!auxiliar.apenasNumeros(k)){
+            e.consume();
+        }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -408,155 +614,9 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
     public void mouseExited(MouseEvent e) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
- 
-
-    @Override
-    public void actionPerformed(ActionEvent botao) {
-        //Retorna qual o botão clicado e gera a ação
-        boolean ok ;
-        if (botao.getSource() == botCadastrar) {            
-            ok = cadastrar();
-            if(ok){	
-                try {
-                    Calendar c = new GregorianCalendar();
-                    conexao.executaProcedure("INSERT_ORDEMSERVICO (" + this.intCodigoOS + ",'" + this.strOcorrencia + "','" + this.strDataAbertura + "', '" + this.strDataFechamento + "', " + this.fltValorTotal + ", " + this.fltValorDesconto + " , " + this.intMatricula + " , " + this.intCodigoCliente + " )");
-                    conexao.executaProcedure("INSERT_SERVICOSOS ('24/10/2015', " + this.intQtdeServico + ", " + this.intCodigoOS + ", " + this.intCodigoServico + ")");
-                    JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
-                    auxiliar.limpaCampos(telaOS.getListaComponentes());
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, e.getMessage());    
-                }                                    
-            }
-        }
-        if (botao.getSource() == botExcluir) {
-            ok = deletar();
-            if(ok){	
-                try {
-                    this.intCodigoOS = Integer.parseInt(txtCodigo.getText());
-                    System.out.println(this.intCodigoOS);
-                    conexao.executaProcedure("DELETE_SERVICOSOS(" + this.intCodigoOS + ")");
-                    conexao.executaProcedure("DELETE_ORDEMSERVICO(" + this.intCodigoOS + ")");
-                    JOptionPane.showMessageDialog(null, "Dados deletados com sucesso");
-                    auxiliar.limpaCampos(telaOS.getListaComponentes());
-                    this.mostraBotoesAlteracao();
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, e.getMessage());    
-                }                                    
-            }           
-        }
-        if (botao.getSource() == botInserir) {
-            auxiliar.limpaCampos(telaOS.getListaComponentes());
-            this.mostraBotoesCadastro();
-        }
-        if (botao.getSource() == botLimpar) {            
-            //auxiliar.limpaCampos(telaOS.getListaComponentes());
-            auxiliar.validaCampos(telaOS.getListaComponentes());
-        }
-        if (botao.getSource() == botAlterarRegistro) {            
-            ok = alterar();
-            if(ok){	
-                try {
-                    conexao.executaProcedure("UPDATE_ORDEMSERVICO (" + this.intCodigoOS + ",'" + this.strOcorrencia + "','" + this.strDataAbertura + "', '" + this.strDataFechamento + "', " + this.fltValorTotal + ", " + this.fltValorDesconto + " , " + this.intMatricula + " , " + this.intCodigoCliente + " )");
-                    conexao.executaProcedure("UPDATE_SERVICOSOS('24/10/2015', " + this.intQtdeServico + ", " + this.intCodigoOS + ", " + this.intCodigoServico + ")");
-                    JOptionPane.showMessageDialog(null, "Dados Alterados com sucesso");
-                    auxiliar.limpaCampos(telaOS.getListaComponentes());
-                    this.mostraBotoesCadastro();
-                } catch (SQLException | HeadlessException e) {
-                    JOptionPane.showMessageDialog(null, e.getMessage());    
-                }                                    
-            }
-        }
-    }    
-
-    @Override
-    public boolean cadastrar() {
-        if(cboCliente.getSelectedItem() == "" || cboFuncionario.getSelectedItem() == "" || cboServico.getSelectedItem() == "" || txtValorTotal.getText().isEmpty() || txtDataAbertura.getText().isEmpty() || txtDescricaoOcorrencia.getText().isEmpty() || txtCodigo.getText().isEmpty() || txtQtde.getText().isEmpty()){			
-            JOptionPane.showMessageDialog(null, "Preencha os campos corretamente");
-            return false;
-        }else{            
-            this.intCodigoOS = Integer.parseInt(txtCodigo.getText());
-            this.strDataAbertura = txtDataAbertura.getText();
-            this.strDataFechamento = txtDataFechamento.getText();
-            this.strOcorrencia =  txtDescricaoOcorrencia.getText();
-            this.fltValorTotal = auxiliar.removeCaracteresFloat(txtValorTotal.getText());
-            this.intQtdeServico = Integer.parseInt(txtQtde.getText());
-            this.intCodigoServico = cboServico.getSelectedIndex();            
-            return true;
-        }
-    }
-
-    @Override
-    public boolean alterar() {
-        if(cboCliente.getSelectedItem() == "" || cboFuncionario.getSelectedItem() == "" || cboServico.getSelectedItem() == "" || txtValorTotal.getText().isEmpty() || txtDataAbertura.getText().isEmpty() || txtDescricaoOcorrencia.getText().isEmpty() || txtCodigo.getText().isEmpty() || txtQtde.getText().isEmpty()){			
-            JOptionPane.showMessageDialog(null, "Preencha os campos corretamente");
-            return false;
-        }else{            
-            this.intCodigoOS = Integer.parseInt(txtCodigo.getText());
-            this.strDataAbertura = txtDataAbertura.getText();
-            this.strDataFechamento = txtDataFechamento.getText();
-            this.strOcorrencia =  txtDescricaoOcorrencia.getText();
-            this.fltValorTotal = auxiliar.removeCaracteresFloat(txtValorTotal.getText());
-            this.intCodigoCliente = cboCliente.getSelectedIndex();
-            this.intCodigoServico = cboServico.getSelectedIndex();
-            this.intMatricula = cboFuncionario.getSelectedIndex();
-            return true;
-        }
-    }
-
-    @Override
-    public boolean deletar() {
-        if(JOptionPane.showConfirmDialog(null, "Deseja realmente excluir o registro?", "Confirmação", JOptionPane.YES_NO_OPTION) == 0){                                
-            return true;                       
-        }else{
-            return false;
-        }
-    }
-
+    
     @Override
     public void focusGained(FocusEvent e) {
-        
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    @Override
-    public void focusLost(FocusEvent e) {
-        if(e.getSource() == txtQtde){
-            if(txtValor.getText().isEmpty() == false && txtQtde.getText().isEmpty() == false){                
-                
-                this.intQtdeServico = Integer.parseInt(txtQtde.getText());
-                this.fltValorServico = Integer.parseInt(txtValor.getText());
-                this.fltValorTotal = auxiliar.calculaValorTotal(this.fltValorServico, this.intQtdeServico);
-                String strValorTotal;           
-                strValorTotal = auxiliar.formataValor(this.fltValorTotal);
-                txtValorTotal.setText(strValorTotal);
-                
-            }else if(txtQtde.getText().isEmpty() == true && txtValor.getText().isEmpty() == false){            
-                txtValorTotal.setText("");
-            }            
-        }
-    }
-    
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-        char key = e.getKeyChar();
-        int k = key;  
-        //JOptionPane.showMessageDialog(null, k);
-        if(!auxiliar.apenasNumeros(k)){
-            e.consume();
-        }
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-       //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-        
-    
-
 }

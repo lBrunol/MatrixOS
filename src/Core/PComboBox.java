@@ -5,20 +5,20 @@
  */
 package Core;
 
-import javax.swing.JTextField;
+import javax.swing.JComboBox;
 
 /**
  *
  * @author CASA
  */
-public class PTextField extends JTextField {
+public class PComboBox extends JComboBox{
     
     private boolean obrigatorio = true;
     
-    public PTextField() {
+    public PComboBox(){
         super();
     }
-
+    
     /**
      * @return the OBRIGATORIO
      */
