@@ -27,7 +27,7 @@ public class MontaInterfaces extends JFrame {
         ImageIcon icon = new ImageIcon(iconURL);
         
         //Faz com que ao clicar no fechar da janela a aplicação feche junto
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        //this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.getContentPane().setLayout(new GridBagLayout());
         this.setSize(600,600);
         this.setTitle(tituloForm);

@@ -5,14 +5,17 @@
         <group>
             <file>file:/C:/Users/CASA/Documents/MatrixOS/trunk/src/Core/PFormattedTextField.java</file>
             <file>file:/C:/Users/CASA/Documents/MatrixOS/trunk/src/Aplicacao/TiposPagamento.java</file>
-            <file>file:/C:/Users/CASA/Documents/MatrixOS/trunk/src/Aplicacao/OrdemServico.java</file>
-            <file>file:/C:/Users/CASA/Documents/MatrixOS/trunk/src/Aplicacao/LancaPagamento.java</file>
             <file>file:/C:/Users/CASA/Documents/MatrixOS/trunk/src/Core/ConexaoBanco.java</file>
             <file>file:/C:/Users/CASA/Documents/MatrixOS/trunk/src/Aplicacao/Servicos.java</file>
+            <file>file:/C:/Users/CASA/Documents/MatrixOS/trunk/src/Core/MontaInterfaces.java</file>
             <file>file:/C:/Users/CASA/Documents/MatrixOS/trunk/src/Core/MetodosAuxiliares.java</file>
             <file>file:/C:/Users/CASA/Documents/MatrixOS/trunk/src/Aplicacao/Cliente.java</file>
-            <file>file:/C:/Users/CASA/Documents/MatrixOS/trunk/src/Aplicacao/Funcionario.java</file>
             <file>file:/C:/Users/CASA/Documents/MatrixOS/trunk/src/Aplicacao/CadastroDoEmitente.java</file>
+            <file>file:/C:/Users/CASA/Documents/MatrixOS/trunk/src/Aplicacao/Login.java</file>
+            <file>file:/C:/Users/CASA/Documents/MatrixOS/trunk/src/Aplicacao/OrdemServico.java</file>
+            <file>file:/C:/Users/CASA/Documents/MatrixOS/trunk/src/Aplicacao/LancaPagamento.java</file>
+            <file>file:/C:/Users/CASA/Documents/MatrixOS/trunk/src/Aplicacao/MenuPrincipal.java</file>
+            <file>file:/C:/Users/CASA/Documents/MatrixOS/trunk/src/Aplicacao/Funcionario.java</file>
         </group>
     </open-files>
 </project-private>
