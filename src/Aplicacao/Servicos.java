@@ -3,6 +3,7 @@ package Aplicacao;
 
 import Core.ConexaoBanco;
 import Core.MontaInterfaces;
+import Core.PTextField;
 import java.awt.GridBagLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -24,11 +25,11 @@ public class Servicos {
     private JPanel panelBotoes = new JPanel(new GridBagLayout());  
     
     //Caixas de texto
-    private JTextField txtCodigoServico = new JTextField();
-    private JTextField txtNome = new JTextField();
-    private JTextField txtValorHora= new JTextField();
-    private JTextField txtAliquota = new JTextField();
-    private JTextField txtDescricao = new JTextField();
+    private PTextField txtCodigoServico = new PTextField();
+    private PTextField txtNome = new PTextField();
+    private PTextField txtValorHora= new PTextField();
+    private PTextField txtAliquota = new PTextField();
+    private PTextField txtDescricao = new PTextField();
     
     //Botões
     private JButton botCadastrar = new JButton();

@@ -231,7 +231,6 @@ public class MetodosAuxiliares {
      * @return retorna verdadeiro se a tecla digita estiver na lista permitida e falso se não
      */
     public boolean apenasNumeros(int keycode){
-        System.out.println(keycode);
         int[] numeros = {48,49,50,51,52,53,54,55,56,57,127,10,8};
         for(int i = 0; i < numeros.length; i++){
             if(numeros[i] == keycode){

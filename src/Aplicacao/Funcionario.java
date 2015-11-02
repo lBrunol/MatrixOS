@@ -6,13 +6,13 @@
 package Aplicacao;
 import Core.ConexaoBanco;
 import Core.MontaInterfaces;
+import Core.PTextField;
 import java.awt.GridBagLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 /**
  *
@@ -25,10 +25,10 @@ public class Funcionario {
     private JPanel panelBotoes = new JPanel(new GridBagLayout());
     
     //Caixas de texto
-    private JTextField txtMatricula = new JTextField();
-    private JTextField txtNome = new JTextField();
-    private JTextField txtTelefone= new JTextField();
-    private JTextField txtCargo = new JTextField();
+    private PTextField txtMatricula = new PTextField();
+    private PTextField txtNome = new PTextField();
+    private PTextField txtTelefone= new PTextField();
+    private PTextField txtCargo = new PTextField();
     
     //Botões
     private JButton botCadastrar = new JButton();

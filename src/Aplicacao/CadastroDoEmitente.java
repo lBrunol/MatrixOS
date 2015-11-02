@@ -7,13 +7,13 @@ package Aplicacao;
 
 import Core.ConexaoBanco;
 import Core.MontaInterfaces;
+import Core.PTextField;
 import java.awt.GridBagLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -27,14 +27,14 @@ public class CadastroDoEmitente {
     private JPanel panelBotoes = new JPanel(new GridBagLayout());
     
     //Caixas de texto
-    private JTextField txtNomeFantasia = new JTextField();
-    private JTextField txtRazaoSocial = new JTextField();
-    private JTextField txtInscricaoMunicipal= new JTextField();
-    private JTextField txtInscricaoEstadual = new JTextField();
-    private JTextField txtCEP = new JTextField();
-    private JTextField txtEndereco= new JTextField();
-    private JTextField txtTelefone = new JTextField();
-    private JTextField txtEmail = new JTextField();
+    private PTextField txtNomeFantasia = new PTextField();
+    private PTextField txtRazaoSocial = new PTextField();
+    private PTextField txtInscricaoMunicipal= new PTextField();
+    private PTextField txtInscricaoEstadual = new PTextField();
+    private PTextField txtCEP = new PTextField();
+    private PTextField txtEndereco= new PTextField();
+    private PTextField txtTelefone = new PTextField();
+    private PTextField txtEmail = new PTextField();
     
     //Botões
     private JButton botCadastrar = new JButton();

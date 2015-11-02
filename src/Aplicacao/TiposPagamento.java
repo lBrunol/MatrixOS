@@ -7,6 +7,7 @@ package Aplicacao;
 
 import Core.ConexaoBanco;
 import Core.MontaInterfaces;
+import Core.PTextField;
 import java.awt.GridBagLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -27,8 +28,8 @@ public class TiposPagamento {
     private JPanel panelBotoes = new JPanel (new GridBagLayout());
 
     //caixas de texto
-    private JTextField txtCodigo = new JTextField();
-    private JTextField  txtDescricao = new JTextField();
+    private PTextField txtCodigo = new PTextField();
+    private PTextField  txtDescricao = new PTextField();
     
     //Botões
     private JButton botCadastrar = new JButton ();

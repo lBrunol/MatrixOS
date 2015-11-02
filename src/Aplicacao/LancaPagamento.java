@@ -8,14 +8,14 @@ package Aplicacao;
 import Core.ConexaoBanco;
 import Core.MetodosAuxiliares;
 import Core.MontaInterfaces;
+import Core.PFormattedTextField;
+import Core.PTextField;
 import java.awt.GridBagLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -31,10 +31,10 @@ public class LancaPagamento {
     private JPanel panelBotoes = new JPanel(new GridBagLayout());
     
     //Caixas de texto
-    private JTextField txtNumeroDocumento = new JTextField();
-    private JTextField txtDataVencimento = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
-    private JTextField txtDataPagamento = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
-    private JTextField txtValorPago = new JTextField();
+    private PTextField txtNumeroDocumento = new PTextField();
+    private PFormattedTextField txtDataVencimento = new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
+    private PFormattedTextField txtDataPagamento = new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
+    private PTextField txtValorPago = new PTextField();
     
     //Botões
     private JButton botSalvar = new JButton();
