@@ -5,10 +5,15 @@
  */
 package Aplicacao;
 
+
+
 import Core.ConexaoBanco;
 import Core.MetodosAuxiliares;
 import Core.MontaInterfaces;
 import java.awt.GridBagLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import javafx.scene.control.RadioButton;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -18,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JRadioButton;
 
 /**
  *
@@ -39,9 +45,6 @@ public class Cliente {
     private JTextField txtCodigo = new JTextField();
     private JTextField txtNome = new JTextField();
     private JTextField txtEndereco = new JTextField();
-    private JTextField txtCPF = new  JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CPF));
-    private JFormattedTextField txtRG = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_RG));
-    private JFormattedTextField txtCNPJ = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CNPJ));
     private JTextField txtBairro = new JTextField();
     private JTextField txtCidade = new JTextField();
     private JTextField txtDataCadastro  = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
@@ -52,6 +55,9 @@ public class Cliente {
     private JTextField txtTelefone = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_TELEFONE));
     private JTextField txtObservacao = new JTextField();
     private JTextField txtComplemento= new JTextField();
+    private JRadioButton rdbpf = new JRadioButton();
+    private JRadioButton rdbpj = new JRadioButton();
+   
   
     
     //Botões
@@ -64,13 +70,25 @@ public class Cliente {
     private JTable tblClientes = new JTable(tabela);
     
     
+    
+   
+    //construtor
     public Cliente(){
         this.iniciaComponentes();
+        
+       
+       
     }
     
     public static void main(String[] args){
         Cliente cli = new Cliente();
+        
+         //Instância do construtor Radio Button 
+          RadioButton rdb= new RadioButton();
+          
+        
     }
+    
     
     public void iniciaComponentes(){
         
@@ -102,12 +120,25 @@ public class Cliente {
         telaOS.addQuatroComponentes( "Bairro", txtBairro, "Complemento", txtComplemento,"Estado", cboEstado,"Cidade",txtCidade, panelCadastro);
         telaOS.addQuatroComponentes("CEP", txtCEP, "Telefone", txtTelefone, "Celular", txtCelular, "Data Cadastro", txtDataCadastro, panelCadastro);
         telaOS.addUmComponente("Observação",txtObservacao,panelCadastro);
+        
+        
+     
+        //aparece os radio button
+        //falta chamar os atributos das classes pf e pj.
+        //falta arrumar a seleção do radio, quando um aparece outro fica desativado.
+        telaOS.addDoisComponentes("Pessoa Física",rdbpf,"Pessoa Jurídica",rdbpj,panelCadastro);
+         
         telaOS.addTabela(tblClientes, panelConsulta);
         ConexaoBanco teste=new ConexaoBanco();
-        teste.preencheTabela(tabela, "select *from cliente");
+        teste.preencheTabela(tabela, "select * from cliente");
+        
+         
+       
+        
+      
 
         
     }
+   
 
-  
 }
