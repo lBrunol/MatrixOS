@@ -19,6 +19,11 @@ public class CliPessoaJuridica  {
      private MetodosAuxiliares auxiliar = new MetodosAuxiliares();
     
      //Caixas de texto
+     private String strRazaoSocial;
+     private int intIM;
+     private int intIE;
+     private String strNomeFantasia;
+     
     private JTextField txtRazaoSocial = new JTextField();
     private JTextField txtNomeFantasia = new JTextField();
     private JTextField txtIM = new JTextField();
@@ -113,6 +118,62 @@ public class CliPessoaJuridica  {
      */
     public void setTxtCNPJ(JFormattedTextField txtCNPJ) {
         this.txtCNPJ = txtCNPJ;
+    }
+
+    /**
+     * @return the strRazaoSocial
+     */
+    public String getStrRazaoSocial() {
+        return strRazaoSocial;
+    }
+
+    /**
+     * @param strRazaoSocial the strRazaoSocial to set
+     */
+    public void setStrRazaoSocial(String strRazaoSocial) {
+        this.strRazaoSocial = strRazaoSocial;
+    }
+
+    /**
+     * @return the intIM
+     */
+    public int getIntIM() {
+        return intIM;
+    }
+
+    /**
+     * @param intIM the intIM to set
+     */
+    public void setIntIM(int intIM) {
+        this.intIM = intIM;
+    }
+
+    /**
+     * @return the intIE
+     */
+    public int getIntIE() {
+        return intIE;
+    }
+
+    /**
+     * @param intIE the intIE to set
+     */
+    public void setIntIE(int intIE) {
+        this.intIE = intIE;
+    }
+
+    /**
+     * @return the strNomeFantasia
+     */
+    public String getStrNomeFantasia() {
+        return strNomeFantasia;
+    }
+
+    /**
+     * @param strNomeFantasia the strNomeFantasia to set
+     */
+    public void setStrNomeFantasia(String strNomeFantasia) {
+        this.strNomeFantasia = strNomeFantasia;
     }
     
     

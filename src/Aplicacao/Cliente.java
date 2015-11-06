@@ -10,7 +10,11 @@ package Aplicacao;
 import Core.ConexaoBanco;
 import Core.MetodosAuxiliares;
 import Core.MontaInterfaces;
+import Core.PFormattedTextField;
+import Core.PTextField;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import javafx.scene.control.RadioButton;
@@ -29,7 +33,7 @@ import javax.swing.JRadioButton;
  *
  * @author CASA
  */
-public class Cliente {
+public class Cliente implements ActionListener {
     //Instância da classe Métodos auxliares
     MetodosAuxiliares auxiliar = new MetodosAuxiliares();
     //Instância da classe que monta a tela
@@ -40,9 +44,12 @@ public class Cliente {
     private JPanel panelConsulta = new JPanel(new GridBagLayout());
     private JPanel panelCadastro = new JPanel(new GridBagLayout());
     private JPanel panelBotoes = new JPanel(new GridBagLayout());
+    private JPanel panelCliPF = new JPanel(new GridBagLayout());
+    private JPanel panelCliPJ = new JPanel(new GridBagLayout());
+    
     
     //Caixas de texto
-    private JTextField txtCodigo = new JTextField();
+    private PTextField txtCodigo = new PTextField();
     private JTextField txtNome = new JTextField();
     private JTextField txtEndereco = new JTextField();
     private JTextField txtBairro = new JTextField();
@@ -57,6 +64,17 @@ public class Cliente {
     private JTextField txtComplemento= new JTextField();
     private JRadioButton rdbpf = new JRadioButton();
     private JRadioButton rdbpj = new JRadioButton();
+    
+    //campos pj
+    private PTextField txtRazaoSocial = new PTextField();
+    private PTextField txtNomeFantasia = new PTextField();
+    private PTextField txtIM = new PTextField();
+    private PTextField txtIE = new PTextField();
+    private PFormattedTextField txtCNPJ = new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CNPJ));
+    
+    //CAMPOS Pf
+    private JTextField txtCPF = new  JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CPF));
+    private JFormattedTextField txtRG = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_RG));
    
   
     
@@ -76,6 +94,7 @@ public class Cliente {
     public Cliente(){
         this.iniciaComponentes();
         
+     
        
        
     }
@@ -84,7 +103,7 @@ public class Cliente {
         Cliente cli = new Cliente();
         
          //Instância do construtor Radio Button 
-          RadioButton rdb= new RadioButton();
+          //RadioButton rdb= new RadioButton();
           
         
     }
@@ -121,7 +140,21 @@ public class Cliente {
         telaOS.addQuatroComponentes("CEP", txtCEP, "Telefone", txtTelefone, "Celular", txtCelular, "Data Cadastro", txtDataCadastro, panelCadastro);
         telaOS.addUmComponente("Observação",txtObservacao,panelCadastro);
         
+        telaOS.addPanelComponentes(panelCadastro, panelCliPF);
+        telaOS.addPanelComponentes(panelCadastro, panelCliPJ);
         
+        panelCliPJ.setVisible(false);
+        rdbpf.setSelected(true);
+        
+        telaOS.addQuatroComponentes("CNPJ", txtCNPJ, "Razão Social", txtRazaoSocial, "IE", txtIE, "IM", txtIM, panelCliPJ);
+        
+        telaOS.addDoisComponentes("RG", txtRG, "CPF", txtCPF, panelCliPF);
+        
+        rdbpf.addActionListener(this);
+        rdbpj.addActionListener(this);
+        botCadastrar.addActionListener(this);
+        
+        cboEstado.addItem("São paulo");
      
         //aparece os radio button
         //falta chamar os atributos das classes pf e pj.
@@ -132,12 +165,54 @@ public class Cliente {
         ConexaoBanco teste=new ConexaoBanco();
         teste.preencheTabela(tabela, "select * from cliente");
         
-         
+         telaOS.setTamanho(1000, 1000);
        
         
       
 
         
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == botCadastrar){
+            if(auxiliar.validaCampos(telaOS.getListaComponentes())){                
+                
+            }
+        }
+        
+        if(e.getSource() == rdbpf){
+            rdbpj.setSelected(false);
+            panelCliPJ.setVisible(false);
+            panelCliPF.setVisible(true);
+            //txtRG.setVisible(true);
+            //txtCPF.setVisible(true);
+            //
+            //txtRazaoSocial.setObrigatorio(false);
+            //txtNomeFantasia.setObrigatorio(false);
+            //txtCNPJ.setObrigatorio(false);
+            //txtIM.setObrigatorio(false);
+            //txtIE.setObrigatorio(false);
+            
+            
+            
+        }
+        if(e.getSource() == rdbpj){
+            rdbpf.setSelected(false);
+            
+            panelCliPJ.setVisible(true);
+            panelCliPF.setVisible(false);
+            
+            //txtRG.setVisible(false);
+            //txtCPF.setVisible(false);
+            //
+            //txtRazaoSocial.setVisible(true);
+            //txtNomeFantasia.setVisible(true);
+            //txtCNPJ.setVisible(true);
+            //txtIM.setVisible(true);
+            //txtIE.setVisible(true);
+            
+        }
     }
    
 

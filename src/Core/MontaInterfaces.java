@@ -27,7 +27,7 @@ public class MontaInterfaces extends JFrame {
         ImageIcon icon = new ImageIcon(iconURL);
         
         //Faz com que ao clicar no fechar da janela a aplicação feche junto
-        //this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.getContentPane().setLayout(new GridBagLayout());
         this.setSize(600,600);
         this.setTitle(tituloForm);
@@ -211,30 +211,6 @@ public class MontaInterfaces extends JFrame {
         //scrollpane.add(componente, cons);
         this.getContentPane().add(scrollpane, cons);  
     }
-  
-    /** 
-    //* Adiciona um label e um componente horizontalmente. O componente ocupará todo o reto da tela 
-    //* @param label String que irá aparecer no label 
-    //* @param componente passar um componente para adição na janela, exemplo, JTextBox, JComboBox, JTextArea. 
-    //* @param panel onde os componentes serão adicionados
-    //*/  
-    //public void addAbas(String label, JScrollPane componente, JPanel panel) {  
-    //    GridBagConstraints cons = new GridBagConstraints();  
-    //    cons.fill = GridBagConstraints.NONE;  
-    //    cons.anchor = GridBagConstraints.NORTHWEST;  
-    //    cons.insets = new Insets(4,4,4,4);  
-    //    cons.weighty = 1;  
-    //    cons.gridheight = GridBagConstraints.REMAINDER;  
-    //      
-    //    cons.weightx = 0;  
-    //    cons.gridwidth = 1;  
-    //    panel.addAbas(new JLabel(label), cons);  
-    //      
-    //    cons.fill = GridBagConstraints.BOTH;  
-    //    cons.weightx = 1;  
-    //    cons.gridwidth = GridBagConstraints.REMAINDER;  
-    //    panel.addAbas(componente, cons);  
-    //}      
       
     /** 
     * Adiciona um label, um componente de edição, mais um label e outro componente de edição. Todos  
@@ -437,6 +413,22 @@ public class MontaInterfaces extends JFrame {
         cons.insets = new Insets(0, 0, 20, 0);
         cons.gridwidth = GridBagConstraints.REMAINDER;   
         aba.add(panelComBotoes, cons);
+        
+    }
+    
+    /**
+    * Adiciona um panel para os componentes, necessário para componentes que necessitam de alternar a visibilidade
+    * @param aba Aba em que o panel com os componentes ficarão
+    * @param panelComponentes panel onde os componentes ficarão
+    */    
+    public void addPanelComponentes(JPanel aba, JPanel panelComponentes){
+        GridBagConstraints cons = new GridBagConstraints();
+        
+        cons.insets = new Insets(4,4,4,4);           
+        cons.fill = GridBagConstraints.BOTH;  
+        cons.weightx = 1;  
+        cons.gridwidth = GridBagConstraints.REMAINDER;  
+        aba.add(panelComponentes, cons);
         
     }
     

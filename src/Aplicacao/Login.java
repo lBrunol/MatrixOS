@@ -180,10 +180,10 @@ public class Login extends javax.swing.JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == JButtonEntrar){
-            if(txtNomeUsuario.getText() == "" && txtSenhaUsuario.getText()== ""){
+            if(txtNomeUsuario.getText() == "" && txtSenhaUsuario.getText() == ""){
                 ConexaoBanco cn = new ConexaoBanco();
                 ResultSet rs;
-                //rs = cn.executar("SELECT usrNome, usrSenha")
+                rs = cn.executar("SELECT usrNome, usrSenha FROM usuarios WHERE usrNome ='" + txtNomeUsuario.getText() + "' AND usrSenha = '" + txtSenhaUsuario.getText() + "'");
             }
         }
     }
