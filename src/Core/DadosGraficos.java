@@ -11,13 +11,13 @@ package Core;
  */
 public class DadosGraficos {
     private int lenghtArrays = 1;
-    private double[] xi = new double[150];
-    private double[] xiExclusivos = new double[150];
-    private int[] fi = new int[150];
-    private double[] fri  =new double[150];
-    private double[] fa = new double[150];
-    private double[] fra = new double[150];
-    private double[] xifi = new double[150];
+    private double[] xi;
+    private double[] xiExclusivos;
+    private int[] fi;
+    private double[] fri;
+    private int[] fa;
+    private double[] fra;
+    private double[] xifi;
     private double somaFi = 0;
     private double somaXi = 0;
     private double somaXiFi = 0;    
@@ -28,41 +28,89 @@ public class DadosGraficos {
     
     public DadosGraficos(double[] xi){
         
-        this.lenghtArrays = xi.length;        
+        this.lenghtArrays = xi.length;
+      
+        this.xi = new double[lenghtArrays];
+        this.xiExclusivos = new double[lenghtArrays];
         
-        this.fi = this.calculaFi(this.ordenaXi(xi));
-        this.xiExclusivos = this.valoresExclusivosXi(xi);
+        //this.lenghtArrays = calculaComprimentoVetores(xiExclusivos);
         
-        for(int i = 0; i < fi.length; i++){
-            if(fi[i] == 0){
-                break;
-            }
-            System.out.println(fi[i]);        
-        }
+        this.fi = new int[lenghtArrays];
+        this.fri  =new double[lenghtArrays];
+        this.fa = new int[lenghtArrays];
+        this.fra = new double[lenghtArrays];
+        this.xifi = new double[lenghtArrays];
+        
+        this.xi = xi;        
+        this.fi = this.calculaFi(this.ordenaXi(this.xi));
+        this.xiExclusivos = this.valoresExclusivosXi(this.xi);
+        this.fa = this.calculaFa(fi);
+        this.fra = this.calculaFra(fa);
+        this.fri = this.calculaFri(fi);
+        this.xifi = this.calculaXiFi(xiExclusivos, fi);
+        this.somaXi = this.somaXi(this.xi);
+        this.somaFi = this.somaFi(this.fi);
+        this.somaXiFi = this.somaXiFi(xifi);
+        this.media = this.calculaMedia(somaXi, somaFi);
+        this.mediana = this.calculaMediana(somaFi, this.ordenaXi(this.xi));
+        
         
         for(int i = 0; i < xiExclusivos.length; i++){
             if(xiExclusivos[i] == 0){
                 break;
             }
-            System.out.println(xiExclusivos[i]);        
+            System.out.println("XI " + xiExclusivos[i]);        
         }
         
-        System.out.println(this.somaFi(fi));
-        System.out.println(this.somaXi(xi));
+        for(int i = 0; i < fi.length; i++){
+            if(fi[i] == 0){
+                break;
+            }
+            System.out.println("FI " + fi[i]);        
+        }
+        
+        for(int i = 0; i < fri.length; i++){
+            if(fri[i] == 0){
+                break;
+            }
+            System.out.println("FRI " + fri[i]);
+        }
+        
+        for(int i = 0; i < fa.length; i++){
+            if(fa[i] == 0){
+                break;
+            }
+            System.out.println("FA " + fa[i]);
+        }
+        
+        for(int i = 0; i < fra.length; i++){
+            if(fra[i] == 0){
+                break;
+            }
+            System.out.println("FRA " + fra[i]);
+        }
+        
+        for(int i = 0; i < xifi.length; i++){
+            if(xifi[i] == 0){
+                break;
+            }
+            System.out.println("XIFI " + xifi[i]);
+        }
+        
+        
+        
+        System.out.println("Soma XI " + this.somaXi);
+        System.out.println("Soma FI " + this.somaFi);
+        System.out.println("Soma XIFI " + this.somaXiFi);
+        System.out.println("MÉDIA " + this.media);
+        System.out.println("MEDIANA " + this.mediana);
     }
     
-    private double[] ordenaXi(double[] xi){
-        double[] xiReordenado;
-        xiReordenado = new double[150];
-        
-        xiReordenado = this.insertionSort(xi);
-        
-        return xiReordenado;
-    }
+    
     
     private int[] calculaFi(double[] xi){
         
-        int[] auxFi = new int[150];
+        int[] auxFi = new int[xi.length];
         
         /**
          * @aux recebe a quantidade de cada numero do xi   
@@ -95,6 +143,94 @@ public class DadosGraficos {
         
     }
     
+    private int[] calculaFa(int[] fi){
+        
+        int[] auxFa = new int[fi.length];
+        
+        for(int i=0; i < fi.length; i++){
+            if(i==0){
+                auxFa[0] = fi[0];                
+            }else{
+                if(fi[i] == 0){
+                    break;
+                }
+                auxFa[i] = fi[i] + auxFa[i-1];
+            }
+        }
+        
+        return auxFa;
+    }
+    
+    private double[] calculaFra(int[] fa){
+        
+        double[] auxFra = new double[fa.length];
+        double auxSomaFi = this.somaFi(fi);
+        
+        for (int i=0; i <fa.length; i++){
+            auxFra[i] = (fa[i]*100)/auxSomaFi;
+        }
+        
+        return auxFra;
+    }
+    
+    private double[] calculaFri(int[] fi){
+        
+        double[] auxFri = new double[fi.length];
+        double auxSomaFi = this.somaFi(fi);
+        
+        for (int i=0; i <fi.length; i++){
+            auxFri[i] = (fi[i]*100)/auxSomaFi;
+        }
+        
+        return auxFri;
+    }
+    
+    private double[] calculaXiFi (double[] xiExclusivos, int[] fi){
+        
+        double[] auxXiFi = new double[fi.length];
+        
+        for(int i=0; i < fi.length; i++){
+            auxXiFi[i] = xiExclusivos[i] * fi[i];
+        }
+        
+        return auxXiFi;
+    }
+    
+    private double calculaMedia (double somaXi, double somaFi){
+        double auxMedia;
+        
+        auxMedia = somaXi / somaFi;
+        
+        return auxMedia;
+    }
+    
+    private double calculaMediana (double somaFi, double[] xi){
+        int aux;
+        double posMediana, auxMediana;
+        boolean par;
+        
+        if(somaFi % 2 == 0){
+            par = true;
+        }else{
+            par = false;
+        }
+        
+        if(par== true){
+            posMediana = somaFi/2;
+            posMediana = Math.round(posMediana);
+            aux = (int) posMediana;
+            auxMediana = ((xi[aux -1 ]) + (xi[aux]))/2;
+        }else{
+            posMediana = (somaFi + 1)/2;
+            posMediana = Math.round(posMediana);
+            aux = (int) posMediana;
+            auxMediana = (xi[aux - 1])/2; 
+        }
+        
+        return auxMediana;
+    
+    }
+    
     private double somaXi(double[] xi){
         double somXi;
         
@@ -121,9 +257,33 @@ public class DadosGraficos {
         
     }
     
+    private double somaXiFi(double[] xifi){
+        double somXiFi;
+        
+        somXiFi = 0;
+        
+        for(int i = 0; i < xifi.length; i++){            
+            somXiFi = somXiFi + xifi[i];
+        }
+        
+        return somXiFi;
+        
+    }
+    
+    private int calculaComprimentoVetores(double [] xiExclusivos){
+        int i;
+        for(i = 0; i < xiExclusivos.length; i++){
+            if(xiExclusivos[i] == 0){
+                break;
+            }                   
+        }
+        
+        return i;
+    }
+    
     private double[] valoresExclusivosXi(double[] xi){
         
-        double[] valoresExclusivos = new double[150];
+        double[] valoresExclusivos = new double[xi.length];
         
         /**
          * @aux recebe a quantidade de cada numero do xi   
@@ -149,6 +309,15 @@ public class DadosGraficos {
         }
         
         return valoresExclusivos;
+    }
+    
+    private double[] ordenaXi(double[] xi){
+        double[] xiReordenado;
+        xiReordenado = new double[xi.length];
+        
+        xiReordenado = this.insertionSort(xi);
+        
+        return xiReordenado;
     }
     
     public double[] insertionSort(double[] input){
