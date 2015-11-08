@@ -5,9 +5,11 @@
  */
 package Core;
 
+import java.util.Arrays;
+
 /**
  *
- * @author CASA
+ * @author Bruno
  */
 public class DadosGraficos {
     private int lenghtArrays = 1;
@@ -23,7 +25,7 @@ public class DadosGraficos {
     private double somaXiFi = 0;    
     private double media;
     private double mediana;
-    private double[] x;
+    private double moda[];
 
     
     public DadosGraficos(double[] xi){
@@ -40,6 +42,7 @@ public class DadosGraficos {
         this.fa = new int[lenghtArrays];
         this.fra = new double[lenghtArrays];
         this.xifi = new double[lenghtArrays];
+        this.moda = new double[lenghtArrays];
         
         this.xi = xi;        
         this.fi = this.calculaFi(this.ordenaXi(this.xi));
@@ -53,6 +56,7 @@ public class DadosGraficos {
         this.somaXiFi = this.somaXiFi(xifi);
         this.media = this.calculaMedia(somaXi, somaFi);
         this.mediana = this.calculaMediana(somaFi, this.ordenaXi(this.xi));
+        this.moda = this.calculaModa(this.fi, this.xiExclusivos);
         
         
         for(int i = 0; i < xiExclusivos.length; i++){
@@ -104,6 +108,13 @@ public class DadosGraficos {
         System.out.println("Soma XIFI " + this.somaXiFi);
         System.out.println("MÉDIA " + this.media);
         System.out.println("MEDIANA " + this.mediana);
+        
+        for(int i = 0; i < moda.length; i++){
+            if(moda[i] == 0){
+                break;
+            }
+            System.out.println("MODA  " + moda[i]);
+        }
     }
     
     
@@ -231,6 +242,47 @@ public class DadosGraficos {
     
     }
     
+    private double[] calculaModa (int[] fi, double[] xiExclusivos){
+        
+        double auxModa[], indiceModa[];
+        int fiOrdenado[];
+        int j;
+        int valorMaximo;
+        Object result;
+        auxModa = new double[xiExclusivos.length];
+        indiceModa = new double [fi.length];
+        fiOrdenado = new int [fi.length];
+        
+        
+        j = 0;        
+        indiceModa[0] = -1;
+        
+        for(int i = 0; i < fi.length; i++){
+            if(fi[i] == 0){
+                break;
+            }
+            fiOrdenado = Arrays.copyOf(fi, i+1);
+        }        
+        
+        Arrays.sort(fiOrdenado);        
+       
+        valorMaximo = fiOrdenado[fiOrdenado.length - 1];
+        
+        for (int i = 0; i < fi.length; i++) {
+            if (fi[i] == valorMaximo) {
+                indiceModa[i] = i;
+            }
+        }
+        
+        for (int i =0; i < xiExclusivos.length; i++){            
+            if(indiceModa[i] == i){
+                auxModa[j] = xiExclusivos[i];
+                j++;
+            }
+        }        
+        return auxModa;
+    }
+    
     private double somaXi(double[] xi){
         double somXi;
         
@@ -334,34 +386,35 @@ public class DadosGraficos {
         }
         return input;
     }
-
-    /**
-     * @return the xi
-     */
-    public double[] getXi() {
-        return xi;
-    }
-
-    /**
-     * @param xi the xi to set
-     */
-    public void setXi(double[] xi) {
-        this.xi = xi;
-    }
-    
+   
     public static void main(String[] args){
-        double[] xii = new double[10];
-        xii[0] = 5;
-        xii[1] = 5;
-        xii[2] = 6;
-        xii[3] = 4;
-        xii[4] = 4;
-        xii[5] = 4;
-        xii[6] = 3;
-        xii[7] = 2;
-        xii[8] = 5;
-        xii[9] = 2;
+        double[] xii = new double[24];
         
-        DadosGraficos d = new DadosGraficos(xii);
+       xii[0] = 10;
+       xii[1] = 11;
+       xii[2] = 11;
+       xii[3] = 11;
+       xii[4] = 12;
+       xii[5] = 12;
+       xii[6] = 12;
+       xii[7] = 12;
+       xii[8] = 13;
+       xii[9] = 13;
+       xii[10] = 13;
+       xii[11] = 13;
+       xii[12] = 13;
+       xii[13] = 14;
+       xii[14] = 14;
+       xii[15] = 14;
+       xii[16] = 14;
+       xii[17] = 14;
+       xii[18] = 14;
+       xii[19] = 14;
+       xii[20] = 15;
+       xii[21] = 15;
+       xii[22] = 16;
+       xii[23] = 17;
+        
+       DadosGraficos d = new DadosGraficos(xii);
     }
 }
