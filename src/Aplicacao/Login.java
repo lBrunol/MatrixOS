@@ -9,6 +9,8 @@ import Core.ConexaoBanco;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -30,6 +32,8 @@ public class Login extends javax.swing.JFrame implements ActionListener {
             System.out.println(e.getMessage());
         }
         initComponents();
+        
+        
     }
 
     /**
@@ -72,6 +76,9 @@ public class Login extends javax.swing.JFrame implements ActionListener {
 
         JLabelLimpar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         JLabelLimpar.setText("LIMPAR");
+        
+        //Adiciona eventos
+        JButtonEntrar.addActionListener(this);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -156,13 +163,15 @@ public class Login extends javax.swing.JFrame implements ActionListener {
             java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Login().setVisible(true);
             }
         });
+
+        
     }
 
     // Variables declaration - do not modify                     
@@ -180,10 +189,31 @@ public class Login extends javax.swing.JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == JButtonEntrar){
-            if(txtNomeUsuario.getText() == "" && txtSenhaUsuario.getText() == ""){
-                ConexaoBanco cn = new ConexaoBanco();
-                ResultSet rs;
-                rs = cn.executar("SELECT usrNome, usrSenha FROM usuarios WHERE usrNome ='" + txtNomeUsuario.getText() + "' AND usrSenha = '" + txtSenhaUsuario.getText() + "'");
+            if(!"".equals(txtNomeUsuario.getText()) && !"".equals(txtSenhaUsuario.getText())){
+                try {
+                    ConexaoBanco cn = new ConexaoBanco();
+                    ResultSet rs;
+                    rs = cn.executar("SELECT count(usrNome) FROM usuarios WHERE usrNome ='" + txtNomeUsuario.getText().toLowerCase() + "' AND usrSenha = '" + txtSenhaUsuario.getText().toLowerCase() + "'");
+                    rs.next();
+                    if(rs.getInt(1) == 1) {
+                        aplicacao.MenuPrincipal menu = new MenuPrincipal();
+                        menu.setVisible(true);
+                        txtNomeUsuario.setText("");
+                        txtSenhaUsuario.setText("");
+                        dispose();
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Usuário ou senha inválido");
+                        txtNomeUsuario.setText("");
+                        txtSenhaUsuario.setText("");
+                    }
+                    
+                } catch (SQLException error) {
+                    JOptionPane.showMessageDialog(null, "Ocorreu um erro com banco de dados. " + error.getMessage());
+                } catch (Exception error) {
+                    JOptionPane.showMessageDialog(null, "Ocorreu um erro. " + error.getMessage());
+                }               
+            }else{
+                JOptionPane.showMessageDialog(null, "Preencha os campos corretamente");
             }
         }
     }

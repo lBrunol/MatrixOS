@@ -11,8 +11,15 @@ package Core;
  */
 public interface PadraoFormulario {
     
+    public void iniciaComponentes();
+    public void atribuiIcones();
+    public void preencheCombos();
+    public void adicionaEventos();
+    public void preencheTabela();
+    public void setaNomes();
+    public void mostraBotoesAlteracao();
+    public void mostraBotoesCadastro();
     public boolean cadastrar();
     public boolean alterar();
-    public boolean deletar();  
-    
+    public boolean deletar();
 }

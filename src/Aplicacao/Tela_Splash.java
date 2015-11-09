@@ -46,7 +46,7 @@ public class Tela_Splash extends JWindow {
                     try {
 
                         barraDeProgresso.setValue(progress);
-                        sleep(80);
+                        sleep(30);
                     } catch (InterruptedException e1) {
                         e1.printStackTrace();
                     }
@@ -57,7 +57,7 @@ public class Tela_Splash extends JWindow {
 
         }.start();
 
-        Thread.sleep(9500);
+        Thread.sleep(3500);
 
         this.setVisible(false);
 
@@ -65,6 +65,8 @@ public class Tela_Splash extends JWindow {
 
     public static void main(String[]args) throws InterruptedException {
         new Tela_Splash();
+        aplicacao.Login telaLogin = new aplicacao.Login();
+        telaLogin.setVisible(true);
          
     }
 

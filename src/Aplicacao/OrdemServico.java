@@ -14,7 +14,6 @@ import Core.PFormattedTextField;
 import Core.PTextField;
 import Core.PadraoFormulario;
 import java.awt.GridBagLayout;
-import java.awt.HeadlessException;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -90,7 +89,7 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
     DefaultTableModel tabela = new DefaultTableModel();
 
     //Tabela
-    private JTable tblOrdemServico = new JTable(tabela);
+    private JTable tblOrdemServico = new JTable(tabela){public boolean isCellEditable(int row,int column){return false;}};
 
     //Panels (Abas)
     private JPanel panelConsulta = new JPanel(new GridBagLayout());
@@ -110,7 +109,6 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
     private float fltValorTotal;
     private float fltValorDesconto;
     private float fltValorServico;
-    private Object DateUtils;
 
     //Construtor
     public OrdemServico() {
@@ -132,7 +130,8 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         OrdemServico os = new OrdemServico();
     }
     
-    private void iniciaComponentes() {        
+    @Override
+    public void iniciaComponentes() {        
 
         telaOS.addAbas(panelCadastro, "Cadastro");
         telaOS.addPanelBotoes(panelCadastro, panelBotoesCadastro);
@@ -190,7 +189,8 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         txtComplemento.setObrigatorio(false);
     }
     
-    private void atribuiIcones(){
+    @Override
+    public void atribuiIcones(){
         //Cria objetos do tipo icone para coloca-los nos botões
         Icon iconeCadastrar = new ImageIcon(getClass().getResource("/imagens/salvar.png"));
         Icon iconeExcluir = new ImageIcon(getClass().getResource("/imagens/excluir.png"));
@@ -208,7 +208,8 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         botLimpar.setIcon(iconeLimpar);
     }
     
-    private void preencheCombos(){
+    @Override
+    public void preencheCombos(){
         //Preenche as combobox
         cboCliente.addItem("");
         cboFuncionario.addItem("");
@@ -219,7 +220,8 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         conexao.preencheCombo(cboServico, "SELECT svcCodigo, svcNome FROM servicos");
     }
     
-    private void adicionaEventos(){
+    @Override
+    public void adicionaEventos(){
         botCadastrar.addActionListener(this);
         botInserir.addActionListener(this);
         botExcluir.addActionListener(this);
@@ -387,18 +389,21 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         });
     } 
 
-    private void mostraBotoesAlteracao() {
+    @Override
+    public void mostraBotoesAlteracao() {
         panelBotoesAlteracao.setVisible(true);
         panelBotoesCadastro.setVisible(false);
     }
 
-    private void mostraBotoesCadastro() {
+    @Override
+    public void mostraBotoesCadastro() {
         panelBotoesAlteracao.setVisible(false);
         panelBotoesCadastro.setVisible(true);
         txtDataAbertura.setText(auxiliar.hoje());
     }
     
-    private void preencheTabela(){
+    @Override
+    public void preencheTabela(){
         try {
             conexao.preencheTabela(tabela, "SELECT ordCodigo, ordOcorrencia, ordDataAbertura, ordValorTotal, cliNome, funNome FROM cliente INNER JOIN (funcionario INNER JOIN ordemServico ON funcionario.funMatricula = ordemServico.funMatricula ) ON cliente.cliCodigo = ordemServico.cliCodigo ORDER BY ordCodigo");            
             
@@ -408,7 +413,8 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
        formataValoresTabela();
     }
     
-    private void setaNomes(){
+    @Override
+    public void setaNomes(){
         txtEndereco.setName("Endereço");
         txtNumEndereco.setName("Número do endereço");
         txtComplemento.setName("Complemento");
@@ -509,8 +515,11 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
                     auxiliar.limpaCampos(telaOS.getListaComponentes());
                     txtDataAbertura.setText(auxiliar.hoje());
                     this.preencheTabela();
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, e.getMessage());    
+                }catch (SQLException b) {
+                    JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
+                }
+                catch (Exception b) {
+                    JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
                 }                                    
             }
         }
@@ -525,8 +534,11 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
                     txtDataAbertura.setText(auxiliar.hoje());
                     this.mostraBotoesCadastro();
                     this.preencheTabela();
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, e.getMessage());    
+                }catch (SQLException b) {
+                    JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
+                }
+                catch (Exception b) {
+                    JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
                 }                                    
             }           
         }
@@ -549,8 +561,11 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
                     txtDataAbertura.setText(auxiliar.hoje());
                     this.mostraBotoesCadastro();
                     this.preencheTabela();
-                } catch (SQLException | HeadlessException e) {
-                    JOptionPane.showMessageDialog(null, e.getMessage());    
+                }catch (SQLException b) {
+                    JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
+                }
+                catch (Exception b) {
+                    JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
                 }                                    
             }
         }
