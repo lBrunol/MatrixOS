@@ -17,9 +17,7 @@ public class CliPessoaFisica {
      //Instância da classe Métodos auxliares
      private MetodosAuxiliares auxiliar = new MetodosAuxiliares();
     
-     //Caixas de texto
-     private JTextField txtCPF = new  JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CPF));
-     private JFormattedTextField txtRG = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_RG));
+    
 
     public void cadastrarPF(){}
     public void alterarPF(){}
@@ -43,35 +41,6 @@ public class CliPessoaFisica {
      * 
      * 
      */
-    public JTextField getTxtCPF() {
-        return txtCPF;
-    }
-
-    /**
-     * @param txtCPF the txtCPF to set
-     */
-    public void setTxtCPF(JTextField txtCPF) {
-        this.txtCPF = txtCPF;
-    }
-
-    /**
-     * @return the txtRG
-     */
-    public JFormattedTextField getTxtRG() {
-        return txtRG;
-    }
-
-    /**
-     * @param txtRG the txtRG to set
-     */
-    public void setTxtRG(JFormattedTextField txtRG) {
-        this.txtRG = txtRG;
-    }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-     
-    
-        
-    
          
 
 }
