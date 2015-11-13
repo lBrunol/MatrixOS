@@ -5,7 +5,6 @@
  */
 package Aplicacao;
 
-import Core.ComboItem;
 import Core.ConexaoBanco;
 import Core.MetodosAuxiliares;
 import Core.MontaInterfaces;
@@ -28,11 +27,11 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 /**
  *
- * @author Renan
+ * @author Bruno
  */
-public class TiposPagamento implements PadraoFormulario, ActionListener {
+public class Cargos implements PadraoFormulario, ActionListener {
     MetodosAuxiliares auxiliar = new MetodosAuxiliares();
-    MontaInterfaces telaTiposPagamento = new MontaInterfaces("Gerenciamento de Tipos de Pagamento", "/imagens/icone-tipos-pagamento.png");
+    MontaInterfaces telaCargos = new MontaInterfaces("Gerenciamento de Cargos", "/imagens/icone-cargos-mid.png");
     ConexaoBanco conexao = new ConexaoBanco();
     
     //Panels
@@ -54,18 +53,18 @@ public class TiposPagamento implements PadraoFormulario, ActionListener {
     
     //Tabela
     DefaultTableModel tabela = new DefaultTableModel();
-    private JTable tblTiposPagamento = new JTable(tabela){public boolean isCellEditable(int row,int column){return false;}};
+    private JTable tblCargos = new JTable(tabela){public boolean isCellEditable(int row,int column){return false;}};
     
     //Atributos da classe relacionados ao banco
     private int intCodigo;
     private String strDescricao;
     
-    public TiposPagamento() {
+    public Cargos() {
         this.iniciaComponentes();
         this.atribuiIcones();
         
-        telaTiposPagamento.setTamanho(600, 650);
-        telaTiposPagamento.setVisible(true);
+        telaCargos.setTamanho(600, 650);
+        telaCargos.setVisible(true);
         
         this.preencheCombos();
         this.adicionaEventos();
@@ -74,28 +73,28 @@ public class TiposPagamento implements PadraoFormulario, ActionListener {
         this.setaNomes();
     }
     public static void main (String[]args){
-        TiposPagamento tp = new TiposPagamento();
+        Cargos cg = new Cargos();
     }
     
     public void iniciaComponentes(){
         
-        telaTiposPagamento.addAbas(panelCadastro, "Cadastro");
-        telaTiposPagamento.addAbas(panelConsulta, "Consulta");
-        telaTiposPagamento.addPanelBotoes(panelCadastro, panelBotoesCadastro);
-        telaTiposPagamento.addPanelBotoes(panelCadastro, panelBotoesAlteracao);
+        telaCargos.addAbas(panelCadastro, "Cadastro");
+        telaCargos.addAbas(panelConsulta, "Consulta");
+        telaCargos.addPanelBotoes(panelCadastro, panelBotoesCadastro);
+        telaCargos.addPanelBotoes(panelCadastro, panelBotoesAlteracao);
        
-        telaTiposPagamento.addBotoes("Cadastrar", botCadastrar, panelBotoesCadastro);
-        telaTiposPagamento.addBotoes("Limpar", botLimpar, panelBotoesCadastro);
-        telaTiposPagamento.addBotoes("Modo Inserir", botInserir, panelBotoesAlteracao);
-        telaTiposPagamento.addBotoes("Excluir Registro", botExcluir, panelBotoesAlteracao);
-        telaTiposPagamento.addBotoes("Alterar Registro", botAlterarRegistro, panelBotoesAlteracao); 
+        telaCargos.addBotoes("Cadastrar", botCadastrar, panelBotoesCadastro);
+        telaCargos.addBotoes("Limpar", botLimpar, panelBotoesCadastro);
+        telaCargos.addBotoes("Modo Inserir", botInserir, panelBotoesAlteracao);
+        telaCargos.addBotoes("Excluir Registro", botExcluir, panelBotoesAlteracao);
+        telaCargos.addBotoes("Alterar Registro", botAlterarRegistro, panelBotoesAlteracao); 
         
-        telaTiposPagamento.addLabelTitulo("Tipo de Pagamento", panelCadastro);
+        telaCargos.addLabelTitulo("Cargos", panelCadastro);
         
-        telaTiposPagamento.addUmComponente("Descrição", txtDescricao, panelCadastro);
-        telaTiposPagamento.addTabela(tblTiposPagamento, panelConsulta);
+        telaCargos.addUmComponente("Descrição", txtDescricao, panelCadastro);
+        telaCargos.addTabela(tblCargos, panelConsulta);
         
-        conexao.preencheTabela(tabela, "select *from tipospagamento");
+        conexao.preencheTabela(tabela, "select *from cargos");
         
         panelBotoesAlteracao.setVisible(false);
         panelBotoesCadastro.setVisible(true);
@@ -129,7 +128,7 @@ public class TiposPagamento implements PadraoFormulario, ActionListener {
         botLimpar.addActionListener(this);
         botAlterarRegistro.addActionListener(this);
         
-        tblTiposPagamento.addMouseListener(new MouseAdapter() {
+        tblCargos.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent me) {                              
                 if (me.getClickCount() == 2) {                    
@@ -138,15 +137,15 @@ public class TiposPagamento implements PadraoFormulario, ActionListener {
                         JTable table =(JTable) me.getSource();
                         Point p = me.getPoint();  
                         int row = table.rowAtPoint(p);
-                        intCodigo = Integer.parseInt(tblTiposPagamento.getValueAt(row, 0).toString());
+                        intCodigo = Integer.parseInt(tblCargos.getValueAt(row, 0).toString());
                         
                         ResultSet rs;
-                        rs = conexao.executar("SELECT * FROM tipospagamento WHERE tpaCodigo =" + intCodigo);
+                        rs = conexao.executar("SELECT * FROM cargos WHERE carCodigo =" + intCodigo);
                         rs.next();                    
                         txtDescricao.setText(rs.getString(2));                
                         
                         mostraBotoesAlteracao();
-                        telaTiposPagamento.getTabbedPane().setSelectedIndex(0);
+                        telaCargos.getTabbedPane().setSelectedIndex(0);
                         rs.close();
                     }             
                     catch (SQLException b) {
@@ -163,7 +162,7 @@ public class TiposPagamento implements PadraoFormulario, ActionListener {
     @Override
     public void preencheTabela() {
         try {
-            conexao.preencheTabela(tabela, "select tpaCodigo, tpaDescricao FROM tiposPagamento ORDER BY tpaCodigo");            
+            conexao.preencheTabela(tabela, "select carCodigo, carDescricao FROM cargos ORDER BY carCodigo");            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
         }
@@ -188,7 +187,7 @@ public class TiposPagamento implements PadraoFormulario, ActionListener {
 
     @Override
     public boolean cadastrar() {
-        if(auxiliar.validaCampos(telaTiposPagamento.getListaComponentes())){ 
+        if(auxiliar.validaCampos(telaCargos.getListaComponentes())){ 
             this.strDescricao = txtDescricao.getText();
             return true;            
         }else{            
@@ -198,7 +197,7 @@ public class TiposPagamento implements PadraoFormulario, ActionListener {
 
     @Override
     public boolean alterar() {
-        if(auxiliar.validaCampos(telaTiposPagamento.getListaComponentes())){ 
+        if(auxiliar.validaCampos(telaCargos.getListaComponentes())){ 
             this.strDescricao = txtDescricao.getText();
             return true;            
         }else{            
@@ -223,9 +222,9 @@ public class TiposPagamento implements PadraoFormulario, ActionListener {
             if(ok){	
                 try {
                     ResultSet rs;
-                    conexao.executaProcedure("INSERT_TIPOSPAGAMENTO ('" + this.strDescricao + "' )");
+                    conexao.executaProcedure("INSERT_CARGOS ('" + this.strDescricao + "' )");
                     JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
-                    auxiliar.limpaCampos(telaTiposPagamento.getListaComponentes());
+                    auxiliar.limpaCampos(telaCargos.getListaComponentes());
                     this.preencheTabela();
                 }catch (SQLException b) {
                     JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
@@ -239,9 +238,9 @@ public class TiposPagamento implements PadraoFormulario, ActionListener {
             ok = deletar();
             if(ok){	
                 try {
-                    conexao.executaProcedure("DELETE_TIPOSPAGAMENTO(" + this.intCodigo + ")");
+                    conexao.executaProcedure("DELETE_CARGOS(" + this.intCodigo + ")");
                     JOptionPane.showMessageDialog(null, "Dados deletados com sucesso");
-                    auxiliar.limpaCampos(telaTiposPagamento.getListaComponentes());
+                    auxiliar.limpaCampos(telaCargos.getListaComponentes());
                     this.mostraBotoesCadastro();
                     this.preencheTabela();
                 }catch (SQLException b) {
@@ -253,19 +252,19 @@ public class TiposPagamento implements PadraoFormulario, ActionListener {
             }           
         }
         if (botao.getSource() == botInserir) {
-            auxiliar.limpaCampos(telaTiposPagamento.getListaComponentes());
+            auxiliar.limpaCampos(telaCargos.getListaComponentes());
             this.mostraBotoesCadastro();
         }
         if (botao.getSource() == botLimpar) {
-            auxiliar.limpaCampos(telaTiposPagamento.getListaComponentes());
+            auxiliar.limpaCampos(telaCargos.getListaComponentes());
         }
         if (botao.getSource() == botAlterarRegistro) {            
             ok = alterar();
             if(ok){	
                 try {
-                    conexao.executaProcedure("UPDATE_TIPOSPAGAMENTO (" + this.intCodigo + ",'" + this.strDescricao + "')");
+                    conexao.executaProcedure("UPDATE_CARGOS (" + this.intCodigo + ",'" + this.strDescricao + "')");
                     JOptionPane.showMessageDialog(null, "Dados Alterados com sucesso");
-                    auxiliar.limpaCampos(telaTiposPagamento.getListaComponentes());
+                    auxiliar.limpaCampos(telaCargos.getListaComponentes());
                     this.mostraBotoesCadastro();
                     this.preencheTabela();
                 }catch (SQLException b) {

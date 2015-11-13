@@ -185,8 +185,8 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         txtValorTotal.setEnabled(false);
         
         //Formata os valores em moeda
-        txtDataAbertura.setText(auxiliar.hoje()); 
-        txtComplemento.setObrigatorio(false);
+        txtDataAbertura.setText(auxiliar.hoje());
+        txtDataFechamento.setObrigatorio(false);
     }
     
     @Override

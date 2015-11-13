@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import oracle.jdbc.OracleTypes;
 
 public class ConexaoBanco {
 
@@ -252,6 +253,31 @@ public class ConexaoBanco {
             desconectar();
         }
     }
+    
+    public ResultSet executaProcedureSelect (){
+        try {
+            conectar();
+            CallableStatement cs = c.prepareCall("{? = call cta()}");
+
+            //Registra o parâmetro para retorna da função
+            cs.registerOutParameter(1, OracleTypes.CURSOR);
+
+            cs.execute();
+
+            //Converte o resultado em um resultset
+            ResultSet rs = (ResultSet)cs.getObject(1);
+          
+            return rs;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally{
+            desconectar();
+        }       
+        return null;
+    }
+    
+    
+    
     
     public void preencheCombo(final JComboBox combo, String sql){
         ResultSet rs;

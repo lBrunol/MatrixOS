@@ -6,16 +6,16 @@
 package Aplicacao;
 
 import Core.ConexaoBanco;
+import Core.MetodosAuxiliares;
 import Core.MontaInterfaces;
 import Core.PTextField;
 import Core.PadraoFormulario;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -23,72 +23,58 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author CASA
  */
-public class CadastroDoEmitente implements PadraoFormulario, ActionListener {
+public class ConfirmaNotaFiscal implements PadraoFormulario, ActionListener {
+    
+    MetodosAuxiliares auxiliar = new MetodosAuxiliares();
+    MontaInterfaces telaConfirmaNotaFiscal = new MontaInterfaces("Confirmar dados para Nota Fiscal", "/imagens/nota-fiscal-eletronica.png");
+    ConexaoBanco conexao = new ConexaoBanco();
     
     //Panels
     private JPanel panelCadastro = new JPanel(new GridBagLayout());
     private JPanel panelBotoes = new JPanel(new GridBagLayout());
-    
-    //Caixas de texto
-    private PTextField txtNomeFantasia = new PTextField();
+
+    //caixas de texto
+    private PTextField txtCNPJCPFEmitente = new PTextField();
+    private PTextField txtIM = new PTextField();
     private PTextField txtRazaoSocial = new PTextField();
-    private PTextField txtInscricaoMunicipal= new PTextField();
-    private PTextField txtInscricaoEstadual = new PTextField();
-    private PTextField txtCEP = new PTextField();
-    private PTextField txtEndereco= new PTextField();
-    private PTextField txtTelefone = new PTextField();
+    private PTextField txtEnderecoEmitente = new PTextField();
+    private PTextField txtMunicipioEmitente = new PTextField();
+    private PTextField txtUfEmitente = new PTextField();
+    private PTextField txtCNPJCPFTomador = new PTextField();
+    private PTextField txtRazaoSocialTomador = new PTextField();
+    private PTextField txtIMTomador = new PTextField();
+    private PTextField txtEnderecoTomador = new PTextField();
+    private PTextField txtMunicipioTomador = new PTextField();
+    private PTextField txtUfTomador = new PTextField();
     private PTextField txtEmail = new PTextField();
+    private PTextField txtValorTotal = new PTextField();
+    private PTextField txtCodigoServico = new PTextField();
+    private PTextField txtOutrasInformacoes = new PTextField();
+    private JRadioButton rdbVista = new JRadioButton();
+    private JRadioButton rdbBoleto = new JRadioButton();
+    private JRadioButton rdbCartao = new JRadioButton();
+    private PTextField txtQuantidadeDias = new PTextField();
+    private PTextField txtBandeira = new PTextField();
+    private PTextField txtNumeroCartao = new PTextField();
+    private PTextField txtSSN = new PTextField();
+    private PTextField txtNomeTitular  = new PTextField();
+    private PTextField txtParcelas = new PTextField();
     
     //Botões
-    private JButton botCadastrar = new JButton();
-    private JButton botExcluir = new JButton();
-    private JButton botLimpar = new JButton();
+    private JButton botFaturarNotaFiscal = new JButton();
+    private JButton botCancelar = new JButton(); 
+   
+    //Atributos da classe relacionados ao banco
+    private int intCodigo;
+    private String strDescricao;
     
-    //Tabela
-    DefaultTableModel tabela = new DefaultTableModel();
-    private JTable tblCadastroDoEmitente = new JTable(tabela);
+    public ConfirmaNotaFiscal(int codigoOS){
     
-    
-    public CadastroDoEmitente(){
-        this.iniciaComponentes();
     }
-    
-    public static void main(String[] args){
-        CadastroDoEmitente emitente = new CadastroDoEmitente();
-    }
-    
-    public void iniciaComponentes(){
-        
-        //Instância da classe monta interfaces, passei o nome do formulário e o caminho onde a imagem dele está
-        MontaInterfaces telaOS = new MontaInterfaces("Cadastro do Emitente", "/imagens/dados-emitente.png");
-        //Deixei a janela visível
-        telaOS.setVisible(true);        
-        //Adicionei as abas com o método addAbas e o panel para os botões com o método addPanelBotoes
-        telaOS.addAbas(panelCadastro, "Cadastro");
-        telaOS.addPanelBotoes(panelCadastro, panelBotoes);
-        
-        //Adicionei os botões dentro do panelBotoes
-        telaOS.addBotoes("Cadastrar", botCadastrar, panelBotoes);
-        telaOS.addBotoes("Excluir", botExcluir, panelBotoes);
-        telaOS.addBotoes("Limpar", botLimpar, panelBotoes);
-        
-        //Criei objetos do tipo icone com o caminho do icone para coloca-los nos botões 
-        Icon iconeCadastrar = new ImageIcon(getClass().getResource("/imagens/salvar.png"));
-        Icon iconeExcluir = new ImageIcon(getClass().getResource("/imagens/excluir.png"));
-        Icon iconeLimpar = new ImageIcon(getClass().getResource("/imagens/limpar.png"));
-        
-        //Seta os icones dos bortões
-        botCadastrar.setIcon(iconeCadastrar);
-        botExcluir.setIcon(iconeExcluir);
-        botLimpar.setIcon(iconeLimpar);
-        
-        //Adiciona os componentes na tela
-        telaOS.addLabelTitulo("Cliente", panelCadastro);
-        telaOS.addDoisComponentes("Nome Fantasia", txtNomeFantasia, "Razão Social", txtRazaoSocial, panelCadastro);
-        telaOS.addQuatroComponentes("Inscrição Municipal", txtInscricaoMunicipal, "Inscrição Estadual", txtInscricaoEstadual, "CEP", txtCEP, "Endereço", txtEndereco, panelCadastro);
-        telaOS.addDoisComponentes("Telefone", txtTelefone, "E-mail", txtEmail, panelCadastro);
 
-        
+    @Override
+    public void iniciaComponentes() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

@@ -54,10 +54,9 @@ public class Usuario {
     public void iniciaComponentes(){
         
         //Instância da classe monta interfaces, passei o nome do usuario e o caminho onde a imagem dele está
-        MontaInterfaces telaUsuario = new MontaInterfaces("Usuários", "/imagens/adiciona.png");
+        MontaInterfaces telaUsuario = new MontaInterfaces("Usuários", "/imagens/adicionar.png");
         
-        //Deixei a janela visível
-        telaUsuario.setVisible(true); 
+         
         
         //Adicionei as abas com o método addAbas e o panel para os botões com o método addPanelBotoes
         telaUsuario.addAbas(panelAlteracao, "Alteração");
@@ -76,15 +75,17 @@ public class Usuario {
         botExcluir.setIcon(iconeExcluir);
         
         //Adiciona os componentes na tela
-        telaUsuario.addLabelTitulo("Usuários", panelCadastro);
+        telaUsuario.addLabelTitulo("Usuários", panelAlteracao);
        
-        telaUsuario.addUmComponente("Nome", txtNome);
-        telaUsuario.addDoisComponente("Senha",txtSenha, "Administrador", chkAdministrador, panelCadastro);
+        telaUsuario.addUmComponente("Nome", txtNome, panelAlteracao);
+        telaUsuario.addDoisComponentes("Senha",txtSenha, "Administrador", chkAdministrador, panelAlteracao);
      
          
         telaUsuario.addTabela(tblUsuario, panelConsulta);
         ConexaoBanco teste=new ConexaoBanco();
-        teste.preencheTabela(tabela, "select * from usuario");
+        teste.preencheTabela(tabela, "select * from usuarios");
+        //Deixei a janela visível
+        telaUsuario.setVisible(true);
         
     }
 }

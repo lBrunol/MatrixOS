@@ -32,7 +32,7 @@ public class Funcionario implements PadraoFormulario, ActionListener{
     MontaInterfaces telaFuncionario = new MontaInterfaces("Gerenciamento de Funcionários", "/imagens/funcionario-form.png");
     ConexaoBanco conexao = new ConexaoBanco();
     
-     //Panels
+    //Panels
     private JPanel panelConsulta = new JPanel(new GridBagLayout());
     private JPanel panelCadastro = new JPanel(new GridBagLayout());
     private JPanel panelBotoesCadastro = new JPanel(new GridBagLayout());
@@ -79,7 +79,7 @@ public class Funcionario implements PadraoFormulario, ActionListener{
         Funcionario fun = new Funcionario();
     }
     
-    public void iniciaComponentes(){        
+    public void iniciaComponentes(){       
         
         telaFuncionario.addAbas(panelCadastro, "Cadastro");
         telaFuncionario.addAbas(panelConsulta, "Consulta");
@@ -197,11 +197,8 @@ public class Funcionario implements PadraoFormulario, ActionListener{
                         txtTelefone.setText(rs.getString(3));
                         cboCargo.setSelectedIndex(rs.getInt(4));                    
                         
-                        rs.close();
-
                         mostraBotoesAlteracao();
                         telaFuncionario.getTabbedPane().setSelectedIndex(0);
-                        //tblFuncionario.getSelectionModel().setSelectionInterval(0,0);
                         rs.close();
                     }             
                     catch (SQLException b) {
@@ -246,7 +243,6 @@ public class Funcionario implements PadraoFormulario, ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent botao) {
-        //Retorna qual o botão clicado e gera a ação
         boolean ok ;
         if (botao.getSource() == botCadastrar) {            
             ok = cadastrar();
@@ -286,14 +282,13 @@ public class Funcionario implements PadraoFormulario, ActionListener{
             auxiliar.limpaCampos(telaFuncionario.getListaComponentes());
             this.mostraBotoesCadastro();
         }
-        if (botao.getSource() == botLimpar) {            
+        if (botao.getSource() == botLimpar) {
             auxiliar.limpaCampos(telaFuncionario.getListaComponentes());
         }
         if (botao.getSource() == botAlterarRegistro) {            
             ok = alterar();
             if(ok){	
                 try {
-                    String hoje = auxiliar.hoje();
                     conexao.executaProcedure("UPDATE_FUNCIONARIO (" + this.intMatricula + ",'" + this.strNome + "', " + this.intTelefone + ", " + this.intCodigoCargo + " )");
                     JOptionPane.showMessageDialog(null, "Dados Alterados com sucesso");
                     auxiliar.limpaCampos(telaFuncionario.getListaComponentes());
