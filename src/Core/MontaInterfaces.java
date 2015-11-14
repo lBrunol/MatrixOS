@@ -502,6 +502,8 @@ public class MontaInterfaces extends JFrame {
             
         }
     }
+    
+    
 
     /**
      * @return the listaComponentes

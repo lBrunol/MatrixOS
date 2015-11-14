@@ -16,12 +16,15 @@ public class CliPessoaFisica {
    
      //Instância da classe Métodos auxliares
      private MetodosAuxiliares auxiliar = new MetodosAuxiliares();
+     private int cliRg;
+     private int cliCpf;
     
     
 
     public void cadastrarPF(){}
     public void alterarPF(){}
     public void excluirPF(){}
+
     /**
      * @return the auxiliar
      */
@@ -37,10 +40,31 @@ public class CliPessoaFisica {
     }
 
     /**
-     * @return the txtCPF
-     * 
-     * 
+     * @return the cliRg
      */
-         
+    public int getCliRg() {
+        return cliRg;
+    }
 
+    /**
+     * @param cliRg the cliRg to set
+     */
+    public void setCliRg(int cliRg) {
+        this.cliRg = cliRg;
+    }
+
+    /**
+     * @return the cliCpf
+     */
+    public int getCliCpf() {
+        return cliCpf;
+    }
+
+    /**
+     * @param cliCpf the cliCpf to set
+     */
+    public void setCliCpf(int cliCpf) {
+        this.cliCpf = cliCpf;
+    }
 }
+   

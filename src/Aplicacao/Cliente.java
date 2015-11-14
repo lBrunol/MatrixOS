@@ -7,6 +7,7 @@ package Aplicacao;
 
 
 
+import Core.ComboItem;
 import Core.ConexaoBanco;
 import Core.MetodosAuxiliares;
 import Core.MontaInterfaces;
@@ -15,14 +16,12 @@ import Core.PTextField;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import javafx.scene.control.RadioButton;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -33,11 +32,28 @@ import javax.swing.JRadioButton;
  *
  * @author CASA
  */
-public class Cliente implements ActionListener {
+public class Cliente implements ActionListener{
     //Instância da classe Métodos auxliares
     MetodosAuxiliares auxiliar = new MetodosAuxiliares();
     //Instância da classe que monta a tela
     MontaInterfaces telaOS = new MontaInterfaces("Gerenciamento de Clientes", "/imagens/clientes.png");
+    ConexaoBanco conexao = new ConexaoBanco();
+    
+    //Atributos da classe relacionados ao banco
+    private int cliCod;
+    private String cliNome;
+    private String cliEndereco;
+    private String cliComplemento;
+    private String cliBairro;
+    private int cliCep;
+    private String cliCidade;
+    private String cliEstado;
+    private int cliTelefone;
+    private int cliCelular;
+    private String cliEmail;
+    private String cliDataCadastro;
+    private String cliObersavacao;
+    
     
     
     //Panels
@@ -46,6 +62,9 @@ public class Cliente implements ActionListener {
     private JPanel panelBotoes = new JPanel(new GridBagLayout());
     private JPanel panelCliPF = new JPanel(new GridBagLayout());
     private JPanel panelCliPJ = new JPanel(new GridBagLayout());
+    private JPanel panelBotoesCadastro = new JPanel(new GridBagLayout());
+    
+
     
     
     //Caixas de texto
@@ -65,14 +84,14 @@ public class Cliente implements ActionListener {
     private JRadioButton rdbpf = new JRadioButton();
     private JRadioButton rdbpj = new JRadioButton();
     
-    //campos pj
+    //Campos para Cliente Jurídico
     private PTextField txtRazaoSocial = new PTextField();
     private PTextField txtNomeFantasia = new PTextField();
     private PTextField txtIM = new PTextField();
     private PTextField txtIE = new PTextField();
     private PFormattedTextField txtCNPJ = new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CNPJ));
     
-    //CAMPOS Pf
+    //Campos para Cliente Físico
     private JTextField txtCPF = new  JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CPF));
     private JFormattedTextField txtRG = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_RG));
    
@@ -86,30 +105,28 @@ public class Cliente implements ActionListener {
     //Tabela
     DefaultTableModel tabela = new DefaultTableModel();
     private JTable tblClientes = new JTable(tabela);
-    
-    
-    
    
     //construtor
-    public Cliente(){
-        this.iniciaComponentes();
+    public  Cliente(){
         
-     
-       
+        this.iniciaComponentes();
+        telaOS.setTamanho(1000, 1000);
+        telaOS.setVisible(true);
+               
        
     }
     
     public static void main(String[] args){
         Cliente cli = new Cliente();
+       
         
-         //Instância do construtor Radio Button 
-          //RadioButton rdb= new RadioButton();
-          
+        
+      
         
     }
     
     
-    public void iniciaComponentes(){
+    public  void iniciaComponentes(){
         
       
         //Deixei a janela visível
@@ -127,10 +144,11 @@ public class Cliente implements ActionListener {
         Icon iconeCadastrar = new ImageIcon(getClass().getResource("/imagens/salvar.png"));
         Icon iconeExcluir = new ImageIcon(getClass().getResource("/imagens/excluir.png"));
         
-        //Seta os icones dos bortões
+        //Seta os icones dos botões
         botCadastrar.setIcon(iconeCadastrar);
         botExcluir.setIcon(iconeExcluir);
         
+       
         //Adiciona os componentes na tela
         telaOS.addLabelTitulo("Cliente", panelCadastro);
        
@@ -140,36 +158,70 @@ public class Cliente implements ActionListener {
         telaOS.addQuatroComponentes("CEP", txtCEP, "Telefone", txtTelefone, "Celular", txtCelular, "Data Cadastro", txtDataCadastro, panelCadastro);
         telaOS.addUmComponente("Observação",txtObservacao,panelCadastro);
         
+        //Troca de botões do radio
         telaOS.addPanelComponentes(panelCadastro, panelCliPF);
         telaOS.addPanelComponentes(panelCadastro, panelCliPJ);
         
         panelCliPJ.setVisible(false);
         rdbpf.setSelected(true);
         
+        //Campos para PJ
         telaOS.addQuatroComponentes("CNPJ", txtCNPJ, "Razão Social", txtRazaoSocial, "IE", txtIE, "IM", txtIM, panelCliPJ);
-        
+        //Campos para PF
         telaOS.addDoisComponentes("RG", txtRG, "CPF", txtCPF, panelCliPF);
         
         rdbpf.addActionListener(this);
         rdbpj.addActionListener(this);
         botCadastrar.addActionListener(this);
         
-        cboEstado.addItem("São paulo");
-     
-        //aparece os radio button
-        //falta chamar os atributos das classes pf e pj.
-        //falta arrumar a seleção do radio, quando um aparece outro fica desativado.
+         //THIS IS CALLED: GAMBIARRA !!!
+        
+        cboEstado.addItem("");
+        cboEstado.addItem("Acre");                             
+        cboEstado.addItem("Alagoas");
+        cboEstado.addItem("Amapá");
+        cboEstado.addItem("Amazonas");
+        cboEstado.addItem("Bahia");
+        cboEstado.addItem("Ceará");
+        cboEstado.addItem("Distrito Federal");
+        cboEstado.addItem("Espírito Santo");
+        cboEstado.addItem("Goiás");
+        cboEstado.addItem("Maranhão");
+        cboEstado.addItem("Mato Grosso");                             
+        cboEstado.addItem("Mato Grosso do Sul");
+        cboEstado.addItem("Minas Gerais");
+        cboEstado.addItem("Pará");
+        cboEstado.addItem("Paraíba");
+        cboEstado.addItem("Paraná");
+        cboEstado.addItem("Pernambuco");
+        cboEstado.addItem("Piauí");
+        cboEstado.addItem("Rio de Janeiro");
+        cboEstado.addItem("Rio Grande do Norte");
+        cboEstado.addItem("Rio Grande do Sul");                             
+        cboEstado.addItem("Rondônia");
+        cboEstado.addItem("Roraima");
+        cboEstado.addItem("Santa Catarina");
+        cboEstado.addItem("São Paulo");
+        cboEstado.addItem("Sergipe");
+        cboEstado.addItem("Tocantins"); 
+        
+       /* cboEstado = new javax.swing.JComboBox(); 
+    
+        cboEstado.setFont(new java.awt.Font("Dialog", 1, 16)); 
+        cboEstado.addItem(new javax.swing.DefaultComboBoxModel(new String[] { "", "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MG", "MS", "MT", "PA", "PB", "PE", "PI", "PR", "RJ", "RN", "RO", "RS", "SC", "SE", "SP", "TO" })); 
+        cboEstado.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED)); */
+        
+        
+              
+        
+       //Botão Radio Button
         telaOS.addDoisComponentes("Pessoa Física",rdbpf,"Pessoa Jurídica",rdbpj,panelCadastro);
          
         telaOS.addTabela(tblClientes, panelConsulta);
         ConexaoBanco teste=new ConexaoBanco();
         teste.preencheTabela(tabela, "select * from cliente");
         
-         telaOS.setTamanho(1000, 1000);
-       
-        
-      
-
+            
         
     }
 
@@ -214,6 +266,97 @@ public class Cliente implements ActionListener {
             
         }
     }
+          
+        public void setaNomes(){
+            txtCodigo.setName("Código");
+            txtNome.setName("Nome");
+            txtEndereco.setName("Endereço");
+            txtBairro.setName("Bairro");
+            txtCidade.setName("Cidade");
+            txtDataCadastro.setName("Data de Cadastro");
+            
+           
+            cboEstado.setName("Estado");
+            txtEmail.setName("Email");
+            txtCEP.setName("CEP");
+            txtCelular.setName("Celular");
+            txtTelefone.setName("Telefone");
+            txtObservacao.setName("Observação");
+            txtComplemento.setName("Complemento");
+        }
+        
+         private void formataValoresTabela(){
+         auxiliar.formataValorTabela(tblClientes, 3);
+          }
+        
+          //Para tratar os combobox
+     public void preencheCombos(){
+        //Preenche as combobox
+        cboEstado.addItem("");
+        conexao.preencheCombo(cboEstado, "SELECT cliCodigo, cliEstado FROM cliente");
+    }
+    public boolean Cadastrar(){
+    if(auxiliar.validaCampos(telaOS.getListaComponentes())){ 
+            this.cliCod = Integer.parseInt(txtCodigo.getText());
+            this.cliNome= txtNome.getText();
+            this.cliEndereco= txtEndereco.getText();
+            this.cliBairro= txtBairro.getText();
+            this.cliCidade= txtCidade.getText();
+            this.cliDataCadastro=  txtDataCadastro.getText();
+            
+            ComboItem comboItem = (ComboItem) cboEstado.getSelectedItem();
+            this.cliCod= Integer.parseInt(comboItem.getId());
+            
+            this.cliEmail=  txtEmail.getText();
+            this.cliCep = Integer.parseInt(txtCEP.getText());
+            this.cliCelular = Integer.parseInt(txtCelular.getText());
+            this.cliTelefone = Integer.parseInt(txtTelefone.getText());
+            this.cliObersavacao = txtObservacao.getText();
+            this.cliComplemento = txtComplemento.getText();
+          
+          
+            return true;
+            
+        }else{            
+           return false;
+        }
+    }
+    
+     
+    public boolean alterar() {
+        if(auxiliar.validaCampos(telaOS.getListaComponentes())){            
+            //this.intCodigoOS = intCodigoOS;
+            this.cliCod = Integer.parseInt(txtCodigo.getText());
+            this.cliNome = txtNome.getText();
+            this.cliEndereco= txtEndereco.getText();
+            this.cliBairro =  txtBairro.getText();
+            this.cliCidade =  txtCidade.getText();
+            this.cliDataCadastro =  txtDataCadastro.getText();
+          //this.cliEstado =  cboEstado.getText();
+            this.cliEmail =  txtEmail.getText();
+            this.cliCep = Integer.parseInt(txtCEP.getText());
+            this.cliCelular = Integer.parseInt(txtCelular.getText());
+            this.cliTelefone = Integer.parseInt(txtTelefone.getText());
+            this.cliObersavacao= txtObservacao.getText();
+            this.cliComplemento= txtComplemento.getText();
+            
+            ComboItem comboItem = (ComboItem) cboEstado.getSelectedItem();
+            this.cliCod = Integer.parseInt(comboItem.getId());
+          
+           
+            return true;
+        }else{            
+           return false; 
+        }
+    }
    
+     public boolean deletar() {
+        if(JOptionPane.showConfirmDialog(null, "Deseja realmente excluir o registro?", "Confirmação", JOptionPane.YES_NO_OPTION) == 0){                                
+            return true;                       
+        }else{
+            return false;
+        }
+    }
+     
 
 }

@@ -413,31 +413,31 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
        formataValoresTabela();
     }
     
-    @Override
-    public void setaNomes(){
-        txtEndereco.setName("Endereço");
-        txtNumEndereco.setName("Número do endereço");
-        txtComplemento.setName("Complemento");
-        txtBairro.setName("Bairro");
-        txtCEP.setName("CEP");
-        txtCPF.setName("CPF");
-        txtCargo.setName("Cargo");
-        txtCidade.setName("Cidade");
-        txtCodigo.setName("Código");
-        txtDataAbertura.setName("Data de Abertura");
-        txtDataFechamento.setName("Data de Fechamento");
-        txtDescricaoOcorrencia.setName("Descrição da Ocorrência");
-        txtDescricaoServico.setName("Descrição do Serviço");
-        txtQtde.setName("Quantidade do serviço");
-        txtRG.setName("RG");
-        txtTelefone.setName("Telefone");
-        txtUF.setName("UF");
-        txtValor.setName("Valor do Serviço");
-        txtValorTotal.setName("Valor Total");     
-        cboCliente.setName("Cliente");
-        cboFuncionario.setName("Funcionário");
-        cboServico.setName("Serviço");
-    }
+        @Override
+        public void setaNomes(){
+            txtEndereco.setName("Endereço");
+            txtNumEndereco.setName("Número do endereço");
+            txtComplemento.setName("Complemento");
+            txtBairro.setName("Bairro");
+            txtCEP.setName("CEP");
+            txtCPF.setName("CPF");
+            txtCargo.setName("Cargo");
+            txtCidade.setName("Cidade");
+            txtCodigo.setName("Código");
+            txtDataAbertura.setName("Data de Abertura");
+            txtDataFechamento.setName("Data de Fechamento");
+            txtDescricaoOcorrencia.setName("Descrição da Ocorrência");
+            txtDescricaoServico.setName("Descrição do Serviço");
+            txtQtde.setName("Quantidade do serviço");
+            txtRG.setName("RG");
+            txtTelefone.setName("Telefone");
+            txtUF.setName("UF");
+            txtValor.setName("Valor do Serviço");
+            txtValorTotal.setName("Valor Total");     
+            cboCliente.setName("Cliente");
+            cboFuncionario.setName("Funcionário");
+            cboServico.setName("Serviço");
+        }
     
     private void formataValoresTabela(){
          auxiliar.formataValorTabela(tblOrdemServico, 3);

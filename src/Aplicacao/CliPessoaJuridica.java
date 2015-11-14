@@ -24,12 +24,83 @@ public class CliPessoaJuridica  {
      private int intIE;
      private String strNomeFantasia;
      
-  
-   
+     
 
+ 
+ 
     public void cadastrarPJ(){}
     public void alterarPJ(){}
     public void excluirPJ(){}
+
+    /**
+     * @return the auxiliar
+     */
+    public MetodosAuxiliares getAuxiliar() {
+        return auxiliar;
+    }
+
+    /**
+     * @param auxiliar the auxiliar to set
+     */
+    public void setAuxiliar(MetodosAuxiliares auxiliar) {
+        this.auxiliar = auxiliar;
+    }
+
+    /**
+     * @return the strRazaoSocial
+     */
+    public String getStrRazaoSocial() {
+        return strRazaoSocial;
+    }
+
+    /**
+     * @param strRazaoSocial the strRazaoSocial to set
+     */
+    public void setStrRazaoSocial(String strRazaoSocial) {
+        this.strRazaoSocial = strRazaoSocial;
+    }
+
+    /**
+     * @return the intIM
+     */
+    public int getIntIM() {
+        return intIM;
+    }
+
+    /**
+     * @param intIM the intIM to set
+     */
+    public void setIntIM(int intIM) {
+        this.intIM = intIM;
+    }
+
+    /**
+     * @return the intIE
+     */
+    public int getIntIE() {
+        return intIE;
+    }
+
+    /**
+     * @param intIE the intIE to set
+     */
+    public void setIntIE(int intIE) {
+        this.intIE = intIE;
+    }
+
+    /**
+     * @return the strNomeFantasia
+     */
+    public String getStrNomeFantasia() {
+        return strNomeFantasia;
+    }
+
+    /**
+     * @param strNomeFantasia the strNomeFantasia to set
+     */
+    public void setStrNomeFantasia(String strNomeFantasia) {
+        this.strNomeFantasia = strNomeFantasia;
+    }
     
     
 

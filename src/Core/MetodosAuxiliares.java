@@ -282,4 +282,6 @@ public class MetodosAuxiliares {
         String hoje = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());        
         return hoje;
     }
+    
+  
 }
