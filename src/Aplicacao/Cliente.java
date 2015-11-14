@@ -16,6 +16,8 @@ import Core.PTextField;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -99,8 +101,10 @@ public class Cliente implements ActionListener{
     
     //Botões
     private JButton botCadastrar = new JButton();
+    private JButton botLimpar = new JButton();
+    private JButton botInserir = new JButton();
     private JButton botExcluir = new JButton();
-    private JButton botAlterar = new JButton();
+    private JButton botAlterarRegistro = new JButton();
     
     //Tabela
     DefaultTableModel tabela = new DefaultTableModel();
@@ -109,19 +113,21 @@ public class Cliente implements ActionListener{
     //construtor
     public  Cliente(){
         
-        this.iniciaComponentes();
         telaOS.setTamanho(1000, 1000);
-        telaOS.setVisible(true);
+        telaOS.setVisible(true); 
+        
+        this.atribuiIcones();
+        this.iniciaComponentes();
+        this.preencheCombos();
+        this.setaNomes(); 
+        
                
        
     }
-    
+    //Método Main
     public static void main(String[] args){
         Cliente cli = new Cliente();
-       
-        
-        
-      
+         
         
     }
     
@@ -143,10 +149,16 @@ public class Cliente implements ActionListener{
         //Criei objetos do tipo icone com o caminho do icone para coloca-los nos botões 
         Icon iconeCadastrar = new ImageIcon(getClass().getResource("/imagens/salvar.png"));
         Icon iconeExcluir = new ImageIcon(getClass().getResource("/imagens/excluir.png"));
+        Icon iconeInserir = new ImageIcon(getClass().getResource("/imagens/adicionar.png"));
+        Icon iconeAlterar= new ImageIcon(getClass().getResource("/imagens/alterar.png"));
+        Icon iconeLimpar = new ImageIcon(getClass().getResource("/imagens/limpar.png"));
         
         //Seta os icones dos botões
         botCadastrar.setIcon(iconeCadastrar);
         botExcluir.setIcon(iconeExcluir);
+        botInserir.setIcon(iconeInserir);
+        botAlterarRegistro.setIcon(iconeAlterar);
+        botLimpar.setIcon(iconeLimpar);
         
        
         //Adiciona os componentes na tela
@@ -172,7 +184,12 @@ public class Cliente implements ActionListener{
         
         rdbpf.addActionListener(this);
         rdbpj.addActionListener(this);
+        
         botCadastrar.addActionListener(this);
+        botExcluir.addActionListener(this);
+        botInserir.addActionListener(this);
+        botAlterarRegistro.addActionListener(this);
+        botLimpar.addActionListener(this);
         
          //THIS IS CALLED: GAMBIARRA !!!
         
@@ -221,7 +238,7 @@ public class Cliente implements ActionListener{
         ConexaoBanco teste=new ConexaoBanco();
         teste.preencheTabela(tabela, "select * from cliente");
         
-            
+        
         
     }
 
@@ -288,8 +305,24 @@ public class Cliente implements ActionListener{
          private void formataValoresTabela(){
          auxiliar.formataValorTabela(tblClientes, 3);
           }
-        
-          //Para tratar os combobox
+       public void atribuiIcones() {
+        Icon iconeCadastrar = new ImageIcon(getClass().getResource("/imagens/salvar.png"));
+        Icon iconeExcluir = new ImageIcon(getClass().getResource("/imagens/excluir.png"));
+        Icon iconeAlterar = new ImageIcon(getClass().getResource("/imagens/alterar.png"));
+        Icon iconeInserir = new ImageIcon(getClass().getResource("/imagens/adicionar.png"));
+        Icon iconeLimpar = new ImageIcon(getClass().getResource("/imagens/limpar.png"));
+
+
+       //Seta os icones dos botões
+        botAlterarRegistro.setIcon(iconeAlterar);
+        botCadastrar.setIcon(iconeCadastrar);
+        botExcluir.setIcon(iconeExcluir);
+        botInserir.setIcon(iconeInserir);
+        botLimpar.setIcon(iconeLimpar);
+    }
+
+          
+     //Para tratar os combobox
      public void preencheCombos(){
         //Preenche as combobox
         cboEstado.addItem("");
@@ -358,5 +391,26 @@ public class Cliente implements ActionListener{
         }
     }
      
+     
+     
+         public void adicionaEventos() {
+        botCadastrar.addActionListener(this);
+        botInserir.addActionListener(this);
+        botExcluir.addActionListener(this);
+        botLimpar.addActionListener(this);
+        botAlterarRegistro.addActionListener(this);
+        
+        cboEstado.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(cboEstado.getSelectedItem() != ""){
+                    ComboItem comboItem = (ComboItem) cboEstado.getSelectedItem();
+                    cliCod= Integer.parseInt(comboItem.getId());                    
+                }
+            }
+        });
+        
+      }
+           
 
 }

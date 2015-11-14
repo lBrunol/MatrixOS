@@ -119,11 +119,8 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         telaOS.setTamanho(1000, 1000);
         telaOS.setVisible(true);
         
-        this.preencheCombos();
-        this.adicionaEventos();
+      
         
-        this.preencheTabela();
-        this.setaNomes();       
     }
     //Método main
     public static void main(String args[]) {
