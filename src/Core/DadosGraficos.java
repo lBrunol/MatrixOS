@@ -19,7 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import java.awt.GridLayout;
-
+import java.lang.reflect.Modifier;
 
 /**
  *
@@ -31,7 +31,7 @@ public class DadosGraficos extends JFrame {
     JTable tabela;
     JScrollPane barraRolagem;
     private DefaultTableModel modelo = new DefaultTableModel();
-    
+
     String[] colunas = {"Xi", "Fi", "Fri", "Fa", "Fra", "XiFi"};
 
     private int lenghtArrays = 1;
@@ -51,6 +51,9 @@ public class DadosGraficos extends JFrame {
 //test
 
     public DadosGraficos(double[] xi) {
+
+        criaJTable();
+	criaJanela();
         
         this.lenghtArrays = 101;
 
@@ -135,13 +138,13 @@ public class DadosGraficos extends JFrame {
             }
             System.out.println("MODA  " + moda[i]);
         }
-        
+
         Object[][] obj;
         obj = new Object[fi.length][6];
         obj = this.getDados();
-        
-        for(int i = 0; i < fi.length; i++){
-            for(int j=0; j < 6; j++){
+
+        for (int i = 0; i < fi.length; i++) {
+            for (int j = 0; j < 6; j++) {
                 System.out.println(obj[i][j]);
             }
         }
@@ -403,18 +406,23 @@ public class DadosGraficos extends JFrame {
         return input;
     }
 
+    public DadosGraficos() {
+		
+	}
+    
+    
     public void criaJanela() {
-        painelFundo = new JPanel();
-        painelFundo.setLayout(new GridLayout(1, 1));
-        tabela = new JTable(getDados(), colunas);
         barraRolagem = new JScrollPane(tabela);
-        painelFundo.add(barraRolagem);
+        painelFundo = new JPanel();
+        painelFundo.setLayout(new BorderLayout());
+        painelFundo.add(BorderLayout.CENTER, barraRolagem);
         getContentPane().add(painelFundo);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(500, 120);
+        setSize(500, 320);
         setVisible(true);
+
     }
-/*
+
     private void criaJTable() {
         tabela = new JTable(modelo);
         modelo.addColumn("XI");
@@ -431,50 +439,55 @@ public class DadosGraficos extends JFrame {
         pesquisar(modelo);
     }
 
-    public static void pesquisar(DefaultTableModel modelo) {
+    public void pesquisar(DefaultTableModel modelo) {
         modelo.setNumRows(0);
-        //ContatoDao dao = new ContatoDao();
-        //for (Contato c : dao.getContatos()) {
-        //   modelo.addRow(new Object[]{c.getId(), c.getNome(), c.getTelefone(), c.getEmail()});
-        //}
-
-    }*/
-    
-    public double[] getDadosXi(){     
         
+        int i, j;
+        Object dados[][]=getDados();
+        
+        for (i = 0; i < fi.length; i++) {
+            if(dados[i][0]!="0"){
+           modelo.addRow(new Object[]{dados[i][0], dados[i][1], dados[i][2], dados[i][3], dados[i][4], dados[i][5]});
+        
+            }
+        }
+
+    }
+
+    public double[] getDadosXi() {
+
         ConexaoBanco cn = new ConexaoBanco();
         double dadosXi[];
         double xiSelect[];
         dadosXi = new double[100];
         int i;
-        ResultSet rs;        
+        ResultSet rs;
         rs = cn.executar("SELECT ordValorTotal FROM ordemServico WHERE ROWNUM < 100 ORDER BY ordValorTotal DESC");
         i = 0;
-        try {            
-            while(rs.next()){       
+        try {
+            while (rs.next()) {
                 dadosXi[i] = rs.getDouble(1);
                 i++;
-            } 
-        }catch (SQLException e) {
-                e.printStackTrace();
-        }    
-        
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         xiSelect = new double[i];
-        for(i=0; i < xiSelect.length; i++){
+        for (i = 0; i < xiSelect.length; i++) {
             xiSelect[i] = dadosXi[i];
         }
-        
+
         return xiSelect;
     }
-    
-    
-    public Object[][] getDados(){
+
+    public Object[][] getDados() {
         Object dados[][];
         dados = new Object[fi.length][6];
-        int i,j;
-        
-        for(i = 0; i < fi.length; i++){
-            for(j=0; j < 6; j++){
+        int i, j;
+
+        for (i = 0; i < fi.length; i++) {
+            for (j = 0; j < 6; j++) {
                 dados[i][0] = xiExclusivos[i];
                 dados[i][1] = fi[i];
                 dados[i][2] = fri[i];
@@ -482,11 +495,9 @@ public class DadosGraficos extends JFrame {
                 dados[i][4] = fra[i];
                 dados[i][5] = xifi[i];
             }
-        }        
+        }
         return dados;
     }
-
-    
 
     public static void main(String[] args) {
         double[] xii = new double[24];
@@ -517,6 +528,6 @@ public class DadosGraficos extends JFrame {
         xii[23] = 17;
 
         DadosGraficos d = new DadosGraficos(xii);
-        d.criaJanela();
+        d.setVisible(true);
     }
 }
