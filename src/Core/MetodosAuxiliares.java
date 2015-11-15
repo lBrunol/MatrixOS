@@ -142,6 +142,8 @@ public class MetodosAuxiliares {
         valor = valor.replaceAll("\\|?", "");  
         // Remove todas \ da string       
         valor = valor.replaceAll("\\\\?", "");
+        // Remove todas / da string       
+        valor = valor.replaceAll("/?", "");
         // Remove todas espaço da string       
         valor = valor.replaceAll(" ?", "");
         

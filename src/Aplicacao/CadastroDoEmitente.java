@@ -8,6 +8,7 @@ package Aplicacao;
 import Core.ConexaoBanco;
 import Core.MetodosAuxiliares;
 import Core.MontaInterfaces;
+import Core.PFormattedTextField;
 import Core.PTextField;
 import Core.PadraoFormulario;
 import java.awt.GridBagLayout;
@@ -44,11 +45,11 @@ public class CadastroDoEmitente implements PadraoFormulario, ActionListener {
     //Caixas de texto
     private PTextField txtRazaoSocial = new PTextField();
     private PTextField txtNomeFantasia = new PTextField();
-    private PTextField txtCNPJ = new PTextField();
+    private PFormattedTextField txtCNPJ = new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CNPJ));
     private PTextField txtEndereco= new PTextField();
     private PTextField txtBairro= new PTextField();
-    private PTextField txtCEP = new PTextField();
-    private PTextField txtTelefone = new PTextField();
+    private PFormattedTextField txtCEP = new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CEP));
+    private PFormattedTextField txtTelefone = new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_TELEFONE));
     private PTextField txtMunicipio = new PTextField();
     private PTextField txtUF = new PTextField();
     
@@ -65,14 +66,15 @@ public class CadastroDoEmitente implements PadraoFormulario, ActionListener {
     
     //Caixas de texto
     private int intCodigo;
-    private String strNomeFantasia;
     private String strRazaoSocial;
-    private int intInscricaoMunicipal;
-    private int intInscricaoEstadual;
-    private int intCEP;
+    private String strNomeFantasia;
+    private long logCNPJ;
     private String strEndereco;
+    private String strBairro;
+    private int intCEP;
     private int intTelefone;
-    private String strEmail;
+    private String strMunicipio;
+    private String strUF;
     
     public CadastroDoEmitente(){
         this.iniciaComponentes();
@@ -106,11 +108,11 @@ public class CadastroDoEmitente implements PadraoFormulario, ActionListener {
         telaEmitente.addBotoes("Alterar Registro", botAlterarRegistro, panelBotoesAlteracao);        
         
         telaEmitente.addLabelTitulo("Emitente", panelCadastro);
+        
         telaEmitente.addDoisComponentes("Nome Fantasia", txtNomeFantasia, "Razão Social", txtRazaoSocial, panelCadastro);
         telaEmitente.addQuatroComponentes("CNPJ", txtCNPJ, "Endereço", txtEndereco, "Bairro", txtBairro, "CEP", txtCEP, panelCadastro);
-        telaEmitente.addDoisComponentes("Munícipio", txtMunicipio, "Telefone", txtTelefone, panelCadastro);
-        
-        conexao.preencheTabela(tabela, "select *from dadosEmitente");
+        telaEmitente.addDoisComponentes("Município", txtMunicipio, "Telefone", txtTelefone, panelCadastro);
+        telaEmitente.addTabela(tblEmitente, panelConsulta);
         
         panelBotoesAlteracao.setVisible(false);
         panelBotoesCadastro.setVisible(true);
@@ -160,15 +162,14 @@ public class CadastroDoEmitente implements PadraoFormulario, ActionListener {
                         ResultSet rs;
                         rs = conexao.executar("SELECT * FROM dadosEmitente WHERE demCodigo =" + intCodigo);
                         rs.next();                    
-                        txtRazaoSocial.setText(rs.getString(2));
                         
                         txtRazaoSocial.setText(rs.getString(2));
                         txtNomeFantasia.setText(rs.getString(3));
-                        txtCNPJ.setText(auxiliar.removeCaracteresString(rs.getString(4)));
+                        txtCNPJ.setText(rs.getString(4));
                         txtEndereco.setText(rs.getString(5));
                         txtBairro.setText(rs.getString(6));
-                        txtCEP.setText(auxiliar.removeCaracteresString(rs.getString(7)));
-                        txtTelefone.setText(auxiliar.removeCaracteresString(rs.getString(8)));
+                        txtCEP.setText(rs.getString(7));
+                        txtTelefone.setText(rs.getString(8));
                         txtMunicipio.setText(rs.getString(9));
                         txtUF.setText(rs.getString(10));
                         
@@ -189,42 +190,144 @@ public class CadastroDoEmitente implements PadraoFormulario, ActionListener {
 
     @Override
     public void preencheTabela() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            conexao.preencheTabela(tabela, "select demCodigo, demNomeFantasia, demEndereco, demUF FROM dadosEmitente ORDER BY demCodigo");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
+        }
     }
 
     @Override
     public void setaNomes() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        txtRazaoSocial.setName("Razão Social");
+        txtNomeFantasia.setName("Nome Fantasia");
+        txtCNPJ.setName("CNPJ");
+        txtEndereco.setName("Endereço");
+        txtBairro.setName("Bairro");
+        txtCEP.setName("CEP");
+        txtTelefone.setName("Telefone");
+        txtMunicipio.setName("Município");
+        txtUF.setName("UF");
     }
 
     @Override
     public void mostraBotoesAlteracao() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        panelBotoesAlteracao.setVisible(true);
+        panelBotoesCadastro.setVisible(false);
     }
 
     @Override
     public void mostraBotoesCadastro() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        panelBotoesAlteracao.setVisible(false);
+        panelBotoesCadastro.setVisible(true);
     }
 
     @Override
     public boolean cadastrar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(auxiliar.validaCampos(telaEmitente.getListaComponentes())){
+            this.strNomeFantasia = txtNomeFantasia.getText();
+            this.strRazaoSocial = txtRazaoSocial.getText();
+            this.logCNPJ = Long.parseLong(auxiliar.removeCaracteresString(txtCNPJ.getText()));
+            this.strEndereco = txtEndereco.getText();
+            this.strBairro = txtBairro.getText();
+            this.intCEP = Integer.parseInt(auxiliar.removeCaracteresString(txtCEP.getText()));
+            this.intTelefone = Integer.parseInt(auxiliar.removeCaracteresString(txtTelefone.getText()));
+            this.strMunicipio = txtMunicipio.getText();
+            this.strUF = "SP";
+            return true;            
+        }else{            
+           return false;
+        }
     }
 
     @Override
     public boolean alterar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(auxiliar.validaCampos(telaEmitente.getListaComponentes())){
+            this.strNomeFantasia = txtNomeFantasia.getText();
+            this.strRazaoSocial = txtRazaoSocial.getText();
+            this.logCNPJ = Long.parseLong(auxiliar.removeCaracteresString(txtCNPJ.getText()));
+            this.strEndereco = txtEndereco.getText();
+            this.strBairro = txtBairro.getText();
+            this.intCEP = Integer.parseInt(auxiliar.removeCaracteresString(txtCEP.getText()));
+            this.intTelefone = Integer.parseInt(auxiliar.removeCaracteresString(txtTelefone.getText()));
+            this.strMunicipio = txtMunicipio.getText();
+            this.strUF = "SP";
+            return true;            
+        }else{            
+           return false;
+        }
     }
 
     @Override
     public boolean deletar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(JOptionPane.showConfirmDialog(null, "Deseja realmente excluir o registro?", "Confirmação", JOptionPane.YES_NO_OPTION) == 0){
+            return true;                       
+        }else{
+            return false;
+        }
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void actionPerformed(ActionEvent botao) {
+        boolean ok ;
+        if (botao.getSource() == botCadastrar) {            
+            ok = cadastrar();
+            if(ok){	
+                try {
+                    ResultSet rs;
+                    conexao.executaProcedure("INSERT_DADOSEMITENTE ('" + this.strRazaoSocial + "', '" + this.strNomeFantasia + "' , " + this.logCNPJ + ", '" + this.strEndereco + "' , '" + this.strBairro + "' , " + this.intCEP + ", " + this.intTelefone + " , '" + this.strMunicipio + "', '" + this.strUF + "' )");
+                    JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
+                    auxiliar.limpaCampos(telaEmitente.getListaComponentes());
+                    this.preencheTabela();
+                }catch (SQLException b) {
+                    JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
+                }
+                catch (Exception b) {
+                    JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
+                }                                    
+            }
+        }
+        if (botao.getSource() == botExcluir) {
+            ok = deletar();
+            if(ok){	
+                try {
+                    conexao.executaProcedure("DELETE_DADOSEMITENTE(" + this.intCodigo + ")");
+                    JOptionPane.showMessageDialog(null, "Dados deletados com sucesso");
+                    auxiliar.limpaCampos(telaEmitente.getListaComponentes());
+                    this.mostraBotoesCadastro();
+                    this.preencheTabela();
+                }catch (SQLException b) {
+                    JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
+                }
+                catch (Exception b) {
+                    JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
+                }                                    
+            }           
+        }
+        if (botao.getSource() == botInserir) {
+            auxiliar.limpaCampos(telaEmitente.getListaComponentes());
+            this.mostraBotoesCadastro();
+        }
+        if (botao.getSource() == botLimpar) {
+            auxiliar.limpaCampos(telaEmitente.getListaComponentes());          
+        }
+        if (botao.getSource() == botAlterarRegistro) {            
+            ok = alterar();
+            if(ok){	
+                try {
+                    conexao.executaProcedure("UPDATE_DADOSEMITENTE (" + this.intCodigo + ",'" + this.strRazaoSocial + "', '" + this.strNomeFantasia + "' , " + this.logCNPJ + ", '" + this.strEndereco + "' , '" + this.strBairro + "' , " + this.intCEP + ", " + this.intTelefone + " , '" + this.strMunicipio + "', '" + this.strUF + "' )");
+                    JOptionPane.showMessageDialog(null, "Dados Alterados com sucesso");
+                    auxiliar.limpaCampos(telaEmitente.getListaComponentes());
+                    this.mostraBotoesCadastro();
+                    this.preencheTabela();
+                }catch (SQLException b) {
+                    JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
+                }
+                catch (Exception b) {
+                    JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
+                }                                    
+            }
+        }
     }
     
 }

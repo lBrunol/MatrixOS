@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package aplicacao;
+package Aplicacao;
 
 import Core.ConexaoBanco;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
@@ -32,7 +34,9 @@ public class Login extends javax.swing.JFrame implements ActionListener {
             System.out.println(e.getMessage());
         }
         initComponents();
-        
+        txtNomeUsuario.setText("bruno");
+        txtSenhaUsuario.setText("123");
+        centralize();
         
     }
 
@@ -137,6 +141,16 @@ public class Login extends javax.swing.JFrame implements ActionListener {
         pack();
     }// </editor-fold>                        
 
+    public void centralize() {	
+        Dimension T = Toolkit.getDefaultToolkit().getScreenSize();
+
+        Dimension J = getSize();
+
+        if (J.height > T.height) setSize(J.width,T.height); 
+        if (J.width > T.width) setSize(T.width,J.height); 
+
+        setLocation((T.width - J.width )/2,(T.height-J.height)/2);
+    }    
     /**
      * @param args the command line arguments
      */
@@ -167,10 +181,9 @@ public class Login extends javax.swing.JFrame implements ActionListener {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Login().setVisible(true);
+                new Login().setVisible(true);                
             }
-        });
-
+        });        
         
     }
 
@@ -196,7 +209,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                     rs = cn.executar("SELECT count(usrNome) FROM usuarios WHERE usrNome ='" + txtNomeUsuario.getText().toLowerCase() + "' AND usrSenha = '" + txtSenhaUsuario.getText().toLowerCase() + "'");
                     rs.next();
                     if(rs.getInt(1) == 1) {
-                        aplicacao.MenuPrincipal menu = new MenuPrincipal();
+                        Aplicacao.MenuPrincipal menu = new MenuPrincipal();
                         menu.setVisible(true);
                         txtNomeUsuario.setText("");
                         txtSenhaUsuario.setText("");

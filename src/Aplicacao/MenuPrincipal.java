@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package aplicacao;
+package Aplicacao;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.SwingUtilities;
@@ -12,9 +14,9 @@ import javax.swing.UIManager;
 
 /**
  *
- * @author Maria Juliana
+ * @author CASA
  */
-public class MenuPrincipal extends javax.swing.JFrame implements ActionListener{
+public class MenuPrincipal extends javax.swing.JFrame implements ActionListener {
 
     /**
      * Creates new form MenuPrincipal
@@ -27,6 +29,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener{
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
+        centralize();
         initComponents();
     }
 
@@ -38,6 +41,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener{
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         txtGerenciamento = new javax.swing.JLabel();
         JButtonOrdemdeServico = new javax.swing.JButton();
@@ -46,7 +50,6 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener{
         JButtonServiços = new javax.swing.JButton();
         JButtonNotasFiscais = new javax.swing.JButton();
         JButtonBackupeRestauracao = new javax.swing.JButton();
-        JButtonRelatorioOrdemdeServico = new javax.swing.JButton();
         JButtonEmitente = new javax.swing.JButton();
         JButtonCliente = new javax.swing.JButton();
         JButtonAjuda = new javax.swing.JButton();
@@ -54,6 +57,18 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener{
         JButtonLogoff = new javax.swing.JButton();
         txtLogoff = new javax.swing.JLabel();
         JButtonRelatorioContasaReceber = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        JButtonOrdemdeServico1 = new javax.swing.JButton();
+        JButtonOrdemdeServico2 = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         JMenuUsuarios = new javax.swing.JMenu();
         JMenuCriacaoUsuarios = new javax.swing.JMenuItem();
@@ -61,57 +76,277 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener{
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Menu Principal - Matrix OS");
+        setMaximumSize(new java.awt.Dimension(617, 768));
+        setMinimumSize(new java.awt.Dimension(617, 768));
+        setSize(new java.awt.Dimension(617, 768));
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
         txtGerenciamento.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        txtGerenciamento.setText("Gerenciamento");
+        txtGerenciamento.setText("Menu Principal - MatrixOS");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.ipadx = 50;
+        gridBagConstraints.ipady = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(13, 10, 0, 0);
+        getContentPane().add(txtGerenciamento, gridBagConstraints);
 
-        JButtonOrdemdeServico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/os.png"))); // NOI18N
+        JButtonOrdemdeServico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/icone-tipos-pagamento.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 9;
+        gridBagConstraints.gridheight = 7;
+        gridBagConstraints.ipadx = 127;
+        gridBagConstraints.ipady = 101;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(28, 29, 0, 0);
+        getContentPane().add(JButtonOrdemdeServico, gridBagConstraints);
 
-        JButtonContasaReceber.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/contas-receber-2.png"))); // NOI18N
-        JButtonContasaReceber.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JButtonContasaReceberActionPerformed(evt);
-            }
-        });
+        JButtonContasaReceber.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/contas-receber-low.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.ipadx = 67;
+        gridBagConstraints.ipady = 16;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(27, 11, 0, 0);
+        getContentPane().add(JButtonContasaReceber, gridBagConstraints);
 
         JButtonFuncionario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/funcionario.png"))); // NOI18N
-        JButtonFuncionario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JButtonFuncionarioActionPerformed(evt);
-            }
-        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.ipadx = 55;
+        gridBagConstraints.ipady = 18;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(11, 8, 0, 0);
+        getContentPane().add(JButtonFuncionario, gridBagConstraints);
 
         JButtonServiços.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/servicos.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.ipadx = 65;
+        gridBagConstraints.ipady = 30;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 8, 0, 0);
+        getContentPane().add(JButtonServiços, gridBagConstraints);
 
-        JButtonNotasFiscais.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/nota-fiscal-eletronica-s-f.png"))); // NOI18N
-        JButtonNotasFiscais.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JButtonNotasFiscaisActionPerformed(evt);
-            }
-        });
+        JButtonNotasFiscais.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/nota-fiscal-eletronica-low.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.ipadx = 67;
+        gridBagConstraints.ipady = 16;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(4, 10, 0, 0);
+        getContentPane().add(JButtonNotasFiscais, gridBagConstraints);
 
-        JButtonBackupeRestauracao.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/icone-backup-menor.png"))); // NOI18N
-
-        JButtonRelatorioOrdemdeServico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/relatorio.png"))); // NOI18N
+        JButtonBackupeRestauracao.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/icone-cargos-mid.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 22;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 27;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 8;
+        gridBagConstraints.ipady = -14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 20, 0, 20);
+        getContentPane().add(JButtonBackupeRestauracao, gridBagConstraints);
 
         JButtonEmitente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/dados-emitente-low.png"))); // NOI18N
-        JButtonEmitente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JButtonEmitenteActionPerformed(evt);
-            }
-        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 22;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 27;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 38;
+        gridBagConstraints.ipady = 16;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(29, 20, 0, 20);
+        getContentPane().add(JButtonEmitente, gridBagConstraints);
 
         JButtonCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/clientes.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.ipadx = 54;
+        gridBagConstraints.ipady = 45;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(11, 11, 0, 0);
+        getContentPane().add(JButtonCliente, gridBagConstraints);
 
-        JButtonAjuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/botao-ajuda.gif"))); // NOI18N
+        JButtonAjuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/botao-ajuda.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 22;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = -17;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 34, 0, 0);
+        getContentPane().add(JButtonAjuda, gridBagConstraints);
 
         txtAjuda.setText("Ajuda");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 22;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 44, 0, 0);
+        getContentPane().add(txtAjuda, gridBagConstraints);
 
         JButtonLogoff.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/logoff.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 34;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 14;
+        gridBagConstraints.ipady = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 0);
+        getContentPane().add(JButtonLogoff, gridBagConstraints);
 
         txtLogoff.setText("Logoff");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 46;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipadx = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 4, 0, 0);
+        getContentPane().add(txtLogoff, gridBagConstraints);
 
         JButtonRelatorioContasaReceber.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/relatorio.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridwidth = 8;
+        gridBagConstraints.ipadx = 87;
+        gridBagConstraints.ipady = 76;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(13, 34, 0, 0);
+        getContentPane().add(JButtonRelatorioContasaReceber, gridBagConstraints);
+
+        jLabel1.setText("Clientes");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 100, 0, 0);
+        getContentPane().add(jLabel1, gridBagConstraints);
+
+        jLabel2.setText("Serviços");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 57, 0, 0);
+        getContentPane().add(jLabel2, gridBagConstraints);
+
+        jLabel3.setText("Ordens de Serviço");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 14;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 5, 0, 0);
+        getContentPane().add(jLabel3, gridBagConstraints);
+
+        jLabel4.setText("Funcionários");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 58, 0, 0);
+        getContentPane().add(jLabel4, gridBagConstraints);
+
+        jLabel5.setText("Consulta Contas a Receber");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(4, 30, 0, 0);
+        getContentPane().add(jLabel5, gridBagConstraints);
+
+        jLabel6.setText("Consulta de Notas Fiscais");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 30, 0, 0);
+        getContentPane().add(jLabel6, gridBagConstraints);
+
+        jLabel7.setText("Emitente");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 22;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth = 13;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 58, 0, 0);
+        getContentPane().add(jLabel7, gridBagConstraints);
+
+        jLabel8.setText("Cargos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 22;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(3, 59, 0, 0);
+        getContentPane().add(jLabel8, gridBagConstraints);
+
+        JButtonOrdemdeServico1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/os.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 12;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 37;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.ipadx = 54;
+        gridBagConstraints.ipady = 45;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(11, 5, 0, 20);
+        getContentPane().add(JButtonOrdemdeServico1, gridBagConstraints);
+
+        JButtonOrdemdeServico2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/os.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 12;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 37;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.ipadx = 54;
+        gridBagConstraints.ipady = 45;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(11, 5, 0, 20);
+        getContentPane().add(JButtonOrdemdeServico2, gridBagConstraints);
+
+        jLabel9.setText("Variável Discreta - Valores totais das Ordens de Serviço");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 17;
+        gridBagConstraints.gridwidth = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 19, 27, 0);
+        getContentPane().add(jLabel9, gridBagConstraints);
+
+        jLabel10.setText("Tipos de Pagamento");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 54, 0, 0);
+        getContentPane().add(jLabel10, gridBagConstraints);
 
         JMenuUsuarios.setText("Usuários");
 
@@ -125,123 +360,30 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener{
 
         setJMenuBar(jMenuBar1);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(11, 11, 11)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(JButtonContasaReceber, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(JButtonCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 215, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(JButtonNotasFiscais, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(JButtonBackupeRestauracao, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(JButtonEmitente, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(JButtonServiços, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(JButtonFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(JButtonOrdemdeServico, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(JButtonRelatorioContasaReceber, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(JButtonRelatorioOrdemdeServico, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 136, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(txtGerenciamento, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(JButtonAjuda, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(txtAjuda)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(JButtonLogoff)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(txtLogoff, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(JButtonLogoff, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtLogoff))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(JButtonAjuda)
-                                    .addComponent(txtGerenciamento, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtAjuda)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(JButtonOrdemdeServico, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(JButtonCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(JButtonFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(JButtonServiços, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(JButtonEmitente, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(JButtonBackupeRestauracao, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(JButtonContasaReceber, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(JButtonNotasFiscais, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 14, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(JButtonRelatorioContasaReceber, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(JButtonRelatorioOrdemdeServico, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(15, Short.MAX_VALUE))
-        );
-
         pack();
         
         JButtonOrdemdeServico.addActionListener(this);
+        JButtonOrdemdeServico1.addActionListener(this);
         JButtonContasaReceber.addActionListener(this);
         JButtonFuncionario.addActionListener(this); 
         JButtonServiços.addActionListener(this); 
         JButtonNotasFiscais.addActionListener(this); 
         JButtonBackupeRestauracao.addActionListener(this); 
-        JButtonRelatorioOrdemdeServico.addActionListener(this);
         JButtonEmitente.addActionListener(this); 
         JButtonCliente.addActionListener(this); 
-        JButtonAjuda.addActionListener(this); 
-        
-    }// </editor-fold>                        
+        JButtonAjuda.addActionListener(this);
+    }// </editor-fold>         
+    
+    public void centralize() {	
+        Dimension T = Toolkit.getDefaultToolkit().getScreenSize();
 
-    private void JButtonContasaReceberActionPerformed(java.awt.event.ActionEvent evt) {                                                      
-        // TODO add your handling code here:
-    }                                                     
+        Dimension J = getSize();
 
-    private void JButtonNotasFiscaisActionPerformed(java.awt.event.ActionEvent evt) {                                                    
-        // TODO add your handling code here:
-    }                                                   
+        if (J.height > T.height) setSize(J.width,T.height); 
+        if (J.width > T.width) setSize(T.width,J.height); 
 
-    private void JButtonFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {                                                   
-        // TODO add your handling code here:
-    }                                                  
-
-    private void JButtonEmitenteActionPerformed(java.awt.event.ActionEvent evt) {                                                
-        // TODO add your handling code here:
-    }                                               
+        setLocation((T.width - J.width )/2,(T.height-J.height)/2);
+    }
 
     /**
      * @param args the command line arguments
@@ -288,18 +430,29 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener{
     private javax.swing.JButton JButtonLogoff;
     private javax.swing.JButton JButtonNotasFiscais;
     private javax.swing.JButton JButtonOrdemdeServico;
+    private javax.swing.JButton JButtonOrdemdeServico1;
+    private javax.swing.JButton JButtonOrdemdeServico2;
     private javax.swing.JButton JButtonRelatorioContasaReceber;
-    private javax.swing.JButton JButtonRelatorioOrdemdeServico;
     private javax.swing.JButton JButtonServiços;
     private javax.swing.JMenuItem JMenuAlteracaoUsuarios;
     private javax.swing.JMenuItem JMenuCriacaoUsuarios;
     private javax.swing.JMenu JMenuUsuarios;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JLabel txtAjuda;
     private javax.swing.JLabel txtGerenciamento;
     private javax.swing.JLabel txtLogoff;
-    // End of variables declaration                   
-
+    // End of variables declaration      
+    
     @Override
     public void actionPerformed(ActionEvent botao) {
          if (botao.getSource() == JButtonCliente) {             
@@ -312,10 +465,14 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener{
              Aplicacao.Funcionario fun = new Aplicacao.Funcionario();
          }else if(botao.getSource() == JButtonNotasFiscais){
              Aplicacao.ConsultaNotaFiscal not = new Aplicacao.ConsultaNotaFiscal();
-         }else if(botao.getSource() == JButtonOrdemdeServico){
+         }else if(botao.getSource() == JButtonOrdemdeServico1){
              Aplicacao.OrdemServico os = new Aplicacao.OrdemServico();
+         }else if(botao.getSource() == JButtonOrdemdeServico){
+             Aplicacao.TiposPagamento tpa = new Aplicacao.TiposPagamento();
+         }else if(botao.getSource() == JButtonBackupeRestauracao){
+             Aplicacao.Cargos car = new Aplicacao.Cargos();
          }else if(botao.getSource() == JButtonServiços){
              Aplicacao.Servicos svc = new Aplicacao.Servicos();
          }
-    }
+    }    
 }

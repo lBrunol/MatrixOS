@@ -65,7 +65,7 @@ public class Tela_Splash extends JWindow {
 
     public static void main(String[]args) throws InterruptedException {
         new Tela_Splash();
-        aplicacao.Login telaLogin = new aplicacao.Login();
+        Aplicacao.Login telaLogin = new Aplicacao.Login();
         telaLogin.setVisible(true);
          
     }
