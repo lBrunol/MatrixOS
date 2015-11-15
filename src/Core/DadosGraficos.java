@@ -18,6 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import java.awt.GridLayout;
+
 
 /**
  *
@@ -29,6 +31,8 @@ public class DadosGraficos extends JFrame {
     JTable tabela;
     JScrollPane barraRolagem;
     private DefaultTableModel modelo = new DefaultTableModel();
+    
+    String[] colunas = {"Xi", "Fi", "Fri", "Fa", "Fra", "XiFi"};
 
     private int lenghtArrays = 1;
     private double[] xi;
@@ -400,17 +404,17 @@ public class DadosGraficos extends JFrame {
     }
 
     public void criaJanela() {
-        barraRolagem = new JScrollPane(tabela);
         painelFundo = new JPanel();
-        painelFundo.setLayout(new BorderLayout());
-        painelFundo.add(BorderLayout.CENTER, barraRolagem);
+        painelFundo.setLayout(new GridLayout(1, 1));
+        tabela = new JTable(getDados(), colunas);
+        barraRolagem = new JScrollPane(tabela);
+        painelFundo.add(barraRolagem);
         getContentPane().add(painelFundo);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(500, 320);
+        setSize(500, 120);
         setVisible(true);
-
     }
-
+/*
     private void criaJTable() {
         tabela = new JTable(modelo);
         modelo.addColumn("XI");
@@ -434,7 +438,7 @@ public class DadosGraficos extends JFrame {
         //   modelo.addRow(new Object[]{c.getId(), c.getNome(), c.getTelefone(), c.getEmail()});
         //}
 
-    }
+    }*/
     
     public double[] getDadosXi(){     
         
@@ -513,6 +517,6 @@ public class DadosGraficos extends JFrame {
         xii[23] = 17;
 
         DadosGraficos d = new DadosGraficos(xii);
-        //d.criaJanela();
+        d.criaJanela();
     }
 }
