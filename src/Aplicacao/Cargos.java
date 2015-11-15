@@ -257,6 +257,14 @@ public class Cargos implements PadraoFormulario, ActionListener {
         }
         if (botao.getSource() == botLimpar) {
             auxiliar.limpaCampos(telaCargos.getListaComponentes());
+            //try {
+            //    ResultSet rs;
+            //rs = conexao.executaProcedureSelect();
+            //rs.next();
+            //txtDescricao.setText(rs.getString(2));
+            //    
+            //} catch (Exception e) {
+            //}            
         }
         if (botao.getSource() == botAlterarRegistro) {            
             ok = alterar();

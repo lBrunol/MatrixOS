@@ -74,7 +74,13 @@ public class ConfirmaNotaFiscal implements PadraoFormulario, ActionListener {
 
     @Override
     public void iniciaComponentes() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        telaConfirmaNotaFiscal.addAbas(panelCadastro, "Cadastro");
+        telaConfirmaNotaFiscal.addPanelBotoes(panelCadastro, panelBotoes);
+       
+        telaConfirmaNotaFiscal.addBotoes("Cadastrar", botFaturarNotaFiscal, panelBotoes);
+        telaConfirmaNotaFiscal.addBotoes("Limpar", botCancelar, panelBotoes);
+        
+        telaConfirmaNotaFiscal.addLabelTitulo("Confirmar Nota Fiscal", panelCadastro);
     }
 
     @Override

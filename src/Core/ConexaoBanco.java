@@ -257,10 +257,11 @@ public class ConexaoBanco {
     public ResultSet executaProcedureSelect (){
         try {
             conectar();
-            CallableStatement cs = c.prepareCall("{? = call cta()}");
+            CallableStatement cs = c.prepareCall("{? = call consulta_servicos(?)}");
 
             //Registra o parâmetro para retorna da função
             cs.registerOutParameter(1, OracleTypes.CURSOR);
+            cs.setInt(2,1);
 
             cs.execute();
 

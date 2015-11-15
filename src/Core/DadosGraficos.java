@@ -10,6 +10,8 @@ import java.awt.GridLayout;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -45,8 +47,8 @@ public class DadosGraficos extends JFrame {
 //test
 
     public DadosGraficos(double[] xi) {
-
-        this.lenghtArrays = xi.length;
+        
+        this.lenghtArrays = 101;
 
         this.xi = new double[lenghtArrays];
         this.xiExclusivos = new double[lenghtArrays];
@@ -59,7 +61,8 @@ public class DadosGraficos extends JFrame {
         this.xifi = new double[lenghtArrays];
         this.moda = new double[lenghtArrays];
 
-        this.xi = xi;
+        //this.xi = xi;
+        this.xi = this.getDadosXi();
         this.fi = this.calculaFi(this.ordenaXi(this.xi));
         this.xiExclusivos = this.valoresExclusivosXi(this.xi);
         this.fa = this.calculaFa(fi);
@@ -127,6 +130,16 @@ public class DadosGraficos extends JFrame {
                 break;
             }
             System.out.println("MODA  " + moda[i]);
+        }
+        
+        Object[][] obj;
+        obj = new Object[fi.length][6];
+        obj = this.getDados();
+        
+        for(int i = 0; i < fi.length; i++){
+            for(int j=0; j < 6; j++){
+                System.out.println(obj[i][j]);
+            }
         }
     }
 
@@ -332,17 +345,6 @@ public class DadosGraficos extends JFrame {
 
     }
 
-    private int calculaComprimentoVetores(double[] xiExclusivos) {
-        int i;
-        for (i = 0; i < xiExclusivos.length; i++) {
-            if (xiExclusivos[i] == 0) {
-                break;
-            }
-        }
-
-        return i;
-    }
-
     private double[] valoresExclusivosXi(double[] xi) {
 
         double[] valoresExclusivos = new double[xi.length];
@@ -427,11 +429,57 @@ public class DadosGraficos extends JFrame {
 
     public static void pesquisar(DefaultTableModel modelo) {
         modelo.setNumRows(0);
-        ContatoDao dao = new ContatoDao();
-        for (Contato c : dao.getContatos()) {
-           modelo.addRow(new Object[]{c.getId(), c.getNome(), c.getTelefone(), c.getEmail()});
-        }
+        //ContatoDao dao = new ContatoDao();
+        //for (Contato c : dao.getContatos()) {
+        //   modelo.addRow(new Object[]{c.getId(), c.getNome(), c.getTelefone(), c.getEmail()});
+        //}
 
+    }
+    
+    public double[] getDadosXi(){     
+        
+        ConexaoBanco cn = new ConexaoBanco();
+        double dadosXi[];
+        double xiSelect[];
+        dadosXi = new double[100];
+        int i;
+        ResultSet rs;        
+        rs = cn.executar("SELECT ordValorTotal FROM ordemServico WHERE ROWNUM < 100 ORDER BY ordValorTotal DESC");
+        i = 0;
+        try {            
+            while(rs.next()){       
+                dadosXi[i] = rs.getDouble(1);
+                i++;
+            } 
+        }catch (SQLException e) {
+                e.printStackTrace();
+        }    
+        
+        xiSelect = new double[i];
+        for(i=0; i < xiSelect.length; i++){
+            xiSelect[i] = dadosXi[i];
+        }
+        
+        return xiSelect;
+    }
+    
+    
+    public Object[][] getDados(){
+        Object dados[][];
+        dados = new Object[fi.length][6];
+        int i,j;
+        
+        for(i = 0; i < fi.length; i++){
+            for(j=0; j < 6; j++){
+                dados[i][0] = xiExclusivos[i];
+                dados[i][1] = fi[i];
+                dados[i][2] = fri[i];
+                dados[i][3] = fa[i];
+                dados[i][4] = fra[i];
+                dados[i][5] = xifi[i];
+            }
+        }        
+        return dados;
     }
 
     
@@ -465,6 +513,6 @@ public class DadosGraficos extends JFrame {
         xii[23] = 17;
 
         DadosGraficos d = new DadosGraficos(xii);
-        d.criaJanela();
+        //d.criaJanela();
     }
 }
