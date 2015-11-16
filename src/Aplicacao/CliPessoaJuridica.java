@@ -28,10 +28,7 @@ public class CliPessoaJuridica  {
 
  
  
-    public void cadastrarPJ(){}
-    public void alterarPJ(){}
-    public void excluirPJ(){}
-
+ 
     /**
      * @return the auxiliar
      */

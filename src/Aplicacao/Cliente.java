@@ -7,6 +7,7 @@ package Aplicacao;
 
 
 
+
 import Core.ComboItem;
 import Core.ConexaoBanco;
 import Core.MetodosAuxiliares;
@@ -124,10 +125,11 @@ public class Cliente implements ActionListener{
                
        
     }
+    
+    
     //Método Main
     public static void main(String[] args){
-        Cliente cli = new Cliente();
-         
+        Cliente cli = new Cliente();    
         
     }
     
@@ -346,8 +348,17 @@ public class Cliente implements ActionListener{
             this.cliTelefone = Integer.parseInt(txtTelefone.getText());
             this.cliObersavacao = txtObservacao.getText();
             this.cliComplemento = txtComplemento.getText();
-          
-          
+            
+            CliPessoaFisica pf = new CliPessoaFisica();
+             pf.setCliCpf(Integer.parseInt(txtCPF.getText()));
+             pf.setCliRg(Integer.parseInt(txtRG.getText()));
+             
+            CliPessoaJuridica pj =new CliPessoaJuridica();
+             pj.setIntIE(Integer.parseInt(txtIE.getText()));
+             pj.setIntIM(Integer.parseInt(txtIM.getText()));
+             pj.setStrNomeFantasia(txtNomeFantasia.getText());
+             pj.setStrRazaoSocial(txtRazaoSocial.getText());
+           
             return true;
             
         }else{            
@@ -372,6 +383,18 @@ public class Cliente implements ActionListener{
             this.cliTelefone = Integer.parseInt(txtTelefone.getText());
             this.cliObersavacao= txtObservacao.getText();
             this.cliComplemento= txtComplemento.getText();
+            
+              
+            CliPessoaFisica pf = new CliPessoaFisica();
+             pf.setCliCpf(Integer.parseInt(txtCPF.getText()));
+             pf.setCliRg(Integer.parseInt(txtRG.getText()));
+             
+            CliPessoaJuridica pj =new CliPessoaJuridica();
+             pj.setIntIE(Integer.parseInt(txtIE.getText()));
+             pj.setIntIM(Integer.parseInt(txtIM.getText()));
+             pj.setStrNomeFantasia(txtNomeFantasia.getText());
+             pj.setStrRazaoSocial(txtRazaoSocial.getText());
+           
             
             ComboItem comboItem = (ComboItem) cboEstado.getSelectedItem();
             this.cliCod = Integer.parseInt(comboItem.getId());

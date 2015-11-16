@@ -16,14 +16,11 @@ public class CliPessoaFisica {
    
      //Instância da classe Métodos auxliares
      private MetodosAuxiliares auxiliar = new MetodosAuxiliares();
+     
      private int cliRg;
      private int cliCpf;
     
     
-
-    public void cadastrarPF(){}
-    public void alterarPF(){}
-    public void excluirPF(){}
 
     /**
      * @return the auxiliar
