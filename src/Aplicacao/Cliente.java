@@ -426,6 +426,8 @@ public class Cliente implements ActionListener{
         botLimpar.addActionListener(this);
         botAlterarRegistro.addActionListener(this);
         
+        
+        
          }
         
         
