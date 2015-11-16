@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -372,6 +373,8 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         JButtonEmitente.addActionListener(this); 
         JButtonCliente.addActionListener(this); 
         JButtonAjuda.addActionListener(this);
+        JButtonRelatorioContasaReceber.addActionListener(this);
+        JButtonNotasFiscais.addActionListener(this);
     }// </editor-fold>         
     
     public void centralize() {	
@@ -456,15 +459,18 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
     @Override
     public void actionPerformed(ActionEvent botao) {
          if (botao.getSource() == JButtonCliente) {             
-             Aplicacao.Cliente c = new Aplicacao.Cliente();             
+             //Aplicacao.Cliente c = new Aplicacao.Cliente();
+             JOptionPane.showMessageDialog(null,"Em construção");
          }else if(botao.getSource() == JButtonContasaReceber){
-             Aplicacao.ConsultaContasReceber cons = new Aplicacao.ConsultaContasReceber();
+             //Aplicacao.ConsultaContasReceber cons = new Aplicacao.ConsultaContasReceber();
+             JOptionPane.showMessageDialog(null,"Em construção");
          }else if(botao.getSource() == JButtonEmitente){
              Aplicacao.CadastroDoEmitente emi = new Aplicacao.CadastroDoEmitente();
          }else if(botao.getSource() == JButtonFuncionario){
              Aplicacao.Funcionario fun = new Aplicacao.Funcionario();
          }else if(botao.getSource() == JButtonNotasFiscais){
-             Aplicacao.ConsultaNotaFiscal not = new Aplicacao.ConsultaNotaFiscal();
+             //Aplicacao.ConsultaNotaFiscal not = new Aplicacao.ConsultaNotaFiscal();
+             JOptionPane.showMessageDialog(null,"Em construção"); 
          }else if(botao.getSource() == JButtonOrdemdeServico1){
              Aplicacao.OrdemServico os = new Aplicacao.OrdemServico();
          }else if(botao.getSource() == JButtonOrdemdeServico){
@@ -473,6 +479,9 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
              Aplicacao.Cargos car = new Aplicacao.Cargos();
          }else if(botao.getSource() == JButtonServiços){
              Aplicacao.Servicos svc = new Aplicacao.Servicos();
+         }else if(botao.getSource() == JButtonRelatorioContasaReceber){
+            JOptionPane.showMessageDialog(null,"Em construção");             
+            //Aplicacao.Servicos svc = new Aplicacao.Servicos();
          }
     }    
 }

@@ -9,6 +9,10 @@ import Core.ConexaoBanco;
 import Core.MetodosAuxiliares;
 import Core.MontaInterfaces;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -19,24 +23,25 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JComboBox;
 import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Fabiano
  */
-public class ConsultaContasReceber {
-    //Instância da classe Métodos auxliares
+public class ConsultaContasReceber implements ActionListener {
     MetodosAuxiliares auxiliar = new MetodosAuxiliares();
+    MontaInterfaces telaConsultaContas = new MontaInterfaces("Consulta Contas a Receber", "/imagens/contas-receber-2.png");
+    ConexaoBanco conexao = new ConexaoBanco();
     
     //Panels
     private JPanel panelConsulta = new JPanel(new GridBagLayout());
     private JPanel panelBotoesConsulta = new JPanel(new GridBagLayout());
     
-    //Caixas de texto
+    //Caixas de texto    
+    private JTextField txtCodigo = new JTextField();
     private JTextField txtCliente = new JTextField();
-    private JTextField txtDataInicial = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
-    private JCheckBox  chkEntreDatas = new JCheckBox("EntreDatas",false); 
-    private JTextField txtDataFinal = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
+    private JTextField txtData = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
     private JComboBox cboStatus = new JComboBox();
     
     //Tabela
@@ -45,40 +50,64 @@ public class ConsultaContasReceber {
     
     //Botões
     private JButton botLancaPagamento = new JButton();
-    private JButton botGerarRelatorio = new JButton();
+    private JButton botPesquisar = new JButton();
+    
+    //Select
+    private String dataemissao = "data emissão";
+    private String query = "SELECT contasReceber.ctrCodigo as Código, cliente.cliNome as Nome, cliente.cliEndereco as Endereço, contasReceber.ctrDataEmissao as '" + dataemissao + "', contasReceber.ctrDataVencimento, contasReceber.ctrValorEmitido , contasReceber.ctrDataPagamento, contasReceber.ctrDesconto as Desconto, contasReceber.ctrJuros as Juros, contasReceber.ctrValorPago, tiposPagamento.tpaDescricao, notaFiscal.notCodigo FROM ((((tiposPagamento INNER JOIN contasReceber ON tiposPagamento.tpaCodigo = contasReceber.tpaCodigo) INNER JOIN notaFiscal ON contasReceber.notCodigo = notaFiscal.notCodigo) INNER JOIN ordemServico ON notaFiscal.ordCodigo = ordemServico.ordCodigo) INNER JOIN cliente ON ordemServico.cliCodigo = cliente.cliCodigo)";
     
     public ConsultaContasReceber(){
         this.iniciaComponentes();
+        this.atribuiIcones();
+        this.preencheTabela();
+        
+        telaConsultaContas.setVisible(true);
+        telaConsultaContas.setTamanho(1000, 1000);
     }
+    
      public static void main(String[] args){
         ConsultaContasReceber ccr = new ConsultaContasReceber();
     }
-    //Adiciona os componentes na tela
+
     public void iniciaComponentes(){
-        
-        //Instância da classe monta interfaces, passei o nome do formulário e o caminho onde a imagem dele está
-        MontaInterfaces telaOS = new MontaInterfaces("Consulta Contas a Receber", "/imagens/contas-receber-2.png");
-       
-        //Deixei a janela visível
-        telaOS.setVisible(true);        
-        
-        //Adicionei as abas com o método addAbas e o panel para os botões com o método addPanelBotoes
-        //Adiciona os componentes na tela
-        telaOS.addAbas(panelConsulta, "Consulta");
-        telaOS.addPanelBotoes(panelConsulta,panelBotoesConsulta);
-        telaOS.addBotoes("Lançar Pagamento", botLancaPagamento, panelBotoesConsulta);
-        telaOS.addBotoes("Gerar Relatório", botGerarRelatorio, panelBotoesConsulta); 
-        telaOS.addCincoComponentes("Cliente", txtCliente, "Data Inicial", txtDataInicial,"Entre Datas",chkEntreDatas,"DataFinal",txtDataFinal,"Status",cboStatus,panelConsulta);
-        telaOS.addTabela(tblConsultaContasReceber,panelConsulta);
-        ConexaoBanco teste=new ConexaoBanco();
-        teste.preencheTabela(tabela, "select *from contasreceber");
-        
-        //Cria objetos do tipo icone para coloca-los nos botões
-        Icon iconeLancaPagamento = new ImageIcon(getClass().getResource("/imagens/lancar-pagamento.png"));
-        Icon iconeGerarRelatorio = new ImageIcon(getClass().getResource("/imagens/relatorio.png"));
-        
-        //Seta os icones dos botões
+        telaConsultaContas.addAbas(panelConsulta, "Consulta");
+        telaConsultaContas.addPanelBotoes(panelConsulta, panelBotoesConsulta);
+        telaConsultaContas.addBotoes("Lançar Pagamento", botLancaPagamento, panelBotoesConsulta);
+        telaConsultaContas.addBotoes("Buscar", botPesquisar, panelBotoesConsulta); 
+        telaConsultaContas.addQuatroComponentes("Código", txtCodigo, "Cliente", txtCliente, "Data", txtData, "Status",cboStatus,panelConsulta);
+        telaConsultaContas.addTabela(tblConsultaContasReceber,panelConsulta);       
+    }
+    
+    public void atribuiIcones() {
+         Icon iconeLancaPagamento = new ImageIcon(getClass().getResource("/imagens/lancar-pagamento.png"));
+        Icon iconePesquisar = new ImageIcon(getClass().getResource("/imagens/pesquisar.png"));
+
         botLancaPagamento.setIcon(iconeLancaPagamento);
-        botGerarRelatorio.setIcon(iconeGerarRelatorio);
+        botPesquisar.setIcon(iconePesquisar);
+    }
+    
+    public void preencheTabela() {
+        try {
+            conexao.preencheTabela(tabela, query);            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent botao) {
+        if(botao.getSource() == botPesquisar){
+            try {
+                ResultSet rs;
+                rs = conexao.executar("select * from USUARIOS");
+                rs.next();
+                
+            }catch (SQLException b) {
+                JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
+            }
+            catch (Exception b) {
+                JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
+            }        
+        }
     }
 }

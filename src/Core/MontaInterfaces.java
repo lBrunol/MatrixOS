@@ -38,10 +38,7 @@ public class MontaInterfaces extends JFrame {
         JPanel panelTopo = new JPanel();
         JPanel panelAbas = new JPanel();
         tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-        JLabel lblTitulo = new JLabel (tituloForm);
-        
-        
-        
+        JLabel lblTitulo = new JLabel (tituloForm);        
         
         //Seta o gerenciador de layouts dos containers
         panelPrincipal.setLayout(new GridBagLayout());

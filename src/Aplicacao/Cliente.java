@@ -42,20 +42,21 @@ public class Cliente implements ActionListener{
     //Instância da classe Métodos auxliares
     MetodosAuxiliares auxiliar = new MetodosAuxiliares();
     //Instância da classe que monta a tela
-    MontaInterfaces telaOS = new MontaInterfaces("Gerenciamento de Clientes", "/imagens/clientes.png");
+    MontaInterfaces telaCliente = new MontaInterfaces("Gerenciamento de Clientes", "/imagens/clientes.png");
     ConexaoBanco conexao = new ConexaoBanco();
     
     //Atributos da classe relacionados ao banco
     private int cliCod;
     private String cliNome;
     private String cliEndereco;
+    private int cliNumEndereco;
     private String cliComplemento;
     private String cliBairro;
     private int cliCep;
     private String cliCidade;
     private String cliEstado;
-    private int cliTelefone;
-    private int cliCelular;
+    private long cliTelefone;
+    private long cliCelular;
     private String cliEmail;
     private String cliDataCadastro;
     private String cliObersavacao;
@@ -113,12 +114,15 @@ public class Cliente implements ActionListener{
     //Tabela
     DefaultTableModel tabela = new DefaultTableModel();
     private JTable tblClientes = new JTable(tabela);
+    
+    //
+    private boolean rdbSelecionado = true;
    
     //construtor
     public  Cliente(){
         
-        telaOS.setTamanho(1000, 1000);
-        telaOS.setVisible(true); 
+        telaCliente.setTamanho(1000, 1000);
+        telaCliente.setVisible(true); 
         
         this.atribuiIcones();
         this.iniciaComponentes();
@@ -141,15 +145,15 @@ public class Cliente implements ActionListener{
         
       
         //Deixei a janela visível
-        telaOS.setVisible(true);        
+        telaCliente.setVisible(true);        
         //Adicionei as abas com o método addAbas e o panel para os botões com o método addPanelBotoes
-        telaOS.addAbas(panelCadastro, "Cadastro");
-        telaOS.addAbas(panelConsulta, "Consulta");
-        telaOS.addPanelBotoes(panelCadastro, panelBotoes);
+        telaCliente.addAbas(panelCadastro, "Cadastro");
+        telaCliente.addAbas(panelConsulta, "Consulta");
+        telaCliente.addPanelBotoes(panelCadastro, panelBotoes);
         
         //Adicionei os botões dentro do panelBotoes
-        telaOS.addBotoes("Cadastrar", botCadastrar, panelBotoes);
-        telaOS.addBotoes("Limpar", botExcluir, panelBotoes);
+        telaCliente.addBotoes("Cadastrar", botCadastrar, panelBotoes);
+        telaCliente.addBotoes("Limpar", botExcluir, panelBotoes);
         
         //Criei objetos do tipo icone com o caminho do icone para coloca-los nos botões 
         Icon iconeCadastrar = new ImageIcon(getClass().getResource("/imagens/salvar.png"));
@@ -167,25 +171,25 @@ public class Cliente implements ActionListener{
         
        
         //Adiciona os componentes na tela
-        telaOS.addLabelTitulo("Cliente", panelCadastro);
+        telaCliente.addLabelTitulo("Cliente", panelCadastro);
        
-        telaOS.addDoisComponentes("Codigo", txtCodigo,"Nome",txtNome,panelCadastro);
-        telaOS.addUmComponente("Endereço",txtEndereco,panelCadastro);
-        telaOS.addQuatroComponentes( "Bairro", txtBairro, "Complemento", txtComplemento,"Estado", cboEstado,"Cidade",txtCidade, panelCadastro);
-        telaOS.addQuatroComponentes("CEP", txtCEP, "Telefone", txtTelefone, "Celular", txtCelular, "Data Cadastro", txtDataCadastro, panelCadastro);
-        telaOS.addUmComponente("Observação",txtObservacao,panelCadastro);
+        telaCliente.addDoisComponentes("Codigo", txtCodigo,"Nome",txtNome,panelCadastro);
+        telaCliente.addUmComponente("Endereço",txtEndereco,panelCadastro);
+        telaCliente.addQuatroComponentes( "Bairro", txtBairro, "Complemento", txtComplemento,"Estado", cboEstado,"Cidade",txtCidade, panelCadastro);
+        telaCliente.addQuatroComponentes("CEP", txtCEP, "Telefone", txtTelefone, "Celular", txtCelular, "Data Cadastro", txtDataCadastro, panelCadastro);
+        telaCliente.addUmComponente("Observação",txtObservacao,panelCadastro);
         
         //Troca de botões do radio
-        telaOS.addPanelComponentes(panelCadastro, panelCliPF);
-        telaOS.addPanelComponentes(panelCadastro, panelCliPJ);
+        telaCliente.addPanelComponentes(panelCadastro, panelCliPF);
+        telaCliente.addPanelComponentes(panelCadastro, panelCliPJ);
         
         panelCliPJ.setVisible(false);
         rdbpf.setSelected(true);
         
         //Campos para PJ
-        telaOS.addQuatroComponentes("CNPJ", txtCNPJ, "Razão Social", txtRazaoSocial, "IE", txtIE, "IM", txtIM, panelCliPJ);
+        telaCliente.addQuatroComponentes("CNPJ", txtCNPJ, "Razão Social", txtRazaoSocial, "IE", txtIE, "IM", txtIM, panelCliPJ);
         //Campos para PF
-        telaOS.addDoisComponentes("RG", txtRG, "CPF", txtCPF, panelCliPF);
+        telaCliente.addDoisComponentes("RG", txtRG, "CPF", txtCPF, panelCliPF);
         
         rdbpf.addActionListener(this);
         rdbpj.addActionListener(this);
@@ -237,9 +241,9 @@ public class Cliente implements ActionListener{
               
         
        //Botão Radio Button
-        telaOS.addDoisComponentes("Pessoa Física",rdbpf,"Pessoa Jurídica",rdbpj,panelCadastro);
+        telaCliente.addDoisComponentes("Pessoa Física",rdbpf,"Pessoa Jurídica",rdbpj,panelCadastro);
          
-        telaOS.addTabela(tblClientes, panelConsulta);
+        telaCliente.addTabela(tblClientes, panelConsulta);
         ConexaoBanco teste=new ConexaoBanco();
         teste.preencheTabela(tabela, "select * from cliente");
         
@@ -248,44 +252,78 @@ public class Cliente implements ActionListener{
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == botCadastrar){
-            if(auxiliar.validaCampos(telaOS.getListaComponentes())){                
-                
+    public void actionPerformed(ActionEvent botao) {
+        if (botao.getSource() == botCadastrar) { 
+            boolean ok ;
+            ok = Cadastrar();
+            if(ok){	
+                try {
+                    ResultSet rs;
+                    conexao.executaProcedure("INSERT_CLIENTE ('" + this.cliNome + "', '" + this.cliEndereco + "', 10, '" + this.cliComplemento + "', '" + cliBairro + "' , " + cliCep + ", '" + this.cliCidade + "' , 'SP', " + this.cliTelefone + ", " + this.cliCelular + ", 'teste@teste', '" + auxiliar.hoje() + "', '" + this.cliObersavacao + "', 'F')");
+                    
+                    
+                    if(rdbSelecionado){
+                        CliPessoaFisica pf = new CliPessoaFisica();
+                        pf.setCliCpf(Long.parseLong(auxiliar.removeCaracteresString(txtCPF.getText())));
+                        pf.setCliRg(Integer.parseInt(auxiliar.removeCaracteresString(txtRG.getText())));
+
+                        rs = conexao.executar("SELECT MAX(cliCodigo) FROM cliente");
+                        rs.next();
+                        pf.setCliCodigo(rs.getInt(1));
+                        ok = pf.cadastrar();
+                        if(ok){
+                            JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
+                        }
+                    }
+                                      
+                    
+                    auxiliar.limpaCampos(telaCliente.getListaComponentes());
+                    
+                }catch (SQLException b) {
+                    JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
+                }
+                catch (Exception b) {
+                    JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
+                }                                    
             }
         }
         
-        if(e.getSource() == rdbpf){
+        if(botao.getSource() == rdbpf){
             rdbpj.setSelected(false);
+            rdbpf.setSelected(true);
             panelCliPJ.setVisible(false);
             panelCliPF.setVisible(true);
-            //txtRG.setVisible(true);
-            //txtCPF.setVisible(true);
-            //
-            //txtRazaoSocial.setObrigatorio(false);
-            //txtNomeFantasia.setObrigatorio(false);
-            //txtCNPJ.setObrigatorio(false);
-            //txtIM.setObrigatorio(false);
-            //txtIE.setObrigatorio(false);
+            txtRG.setVisible(true);
+            txtCPF.setVisible(true);
+
+            txtRazaoSocial.setObrigatorio(false);
+            txtNomeFantasia.setObrigatorio(false);
+            txtCNPJ.setObrigatorio(false);
+            txtIM.setObrigatorio(false);
+            txtIE.setObrigatorio(false);
+            
+            rdbSelecionado = true;
             
             
             
         }
-        if(e.getSource() == rdbpj){
+        if(botao.getSource() == rdbpj){
             rdbpf.setSelected(false);
+            rdbpj.setSelected(true);
             
             panelCliPJ.setVisible(true);
             panelCliPF.setVisible(false);
             
-            //txtRG.setVisible(false);
-            //txtCPF.setVisible(false);
-            //
-            //txtRazaoSocial.setVisible(true);
-            //txtNomeFantasia.setVisible(true);
-            //txtCNPJ.setVisible(true);
-            //txtIM.setVisible(true);
-            //txtIE.setVisible(true);
+            txtRG.setVisible(false);
+            txtCPF.setVisible(false);
             
+            txtRazaoSocial.setVisible(true);
+            txtNomeFantasia.setVisible(true);
+            txtCNPJ.setVisible(true);
+            txtIM.setVisible(true);
+            txtIE.setVisible(true);
+            
+            rdbSelecionado = false;
         }
     }
           
@@ -334,7 +372,7 @@ public class Cliente implements ActionListener{
         conexao.preencheCombo(cboEstado, "SELECT cliCodigo, cliEstado FROM cliente");
     }
     public boolean Cadastrar(){
-    if(auxiliar.validaCampos(telaOS.getListaComponentes())){ 
+    if(auxiliar.validaCampos(telaCliente.getListaComponentes())){ 
             this.cliCod = Integer.parseInt(txtCodigo.getText());
             this.cliNome= txtNome.getText();
             this.cliEndereco= txtEndereco.getText();
@@ -342,25 +380,24 @@ public class Cliente implements ActionListener{
             this.cliCidade= txtCidade.getText();
             this.cliDataCadastro=  txtDataCadastro.getText();
             
-            ComboItem comboItem = (ComboItem) cboEstado.getSelectedItem();
-            this.cliCod= Integer.parseInt(comboItem.getId());
+            
+            //ComboItem comboItem = (ComboItem) cboEstado.getSelectedItem();
+            //this.cliCod= Integer.parseInt(comboItem.getId());
             
             this.cliEmail=  txtEmail.getText();
-            this.cliCep = Integer.parseInt(txtCEP.getText());
-            this.cliCelular = Integer.parseInt(txtCelular.getText());
-            this.cliTelefone = Integer.parseInt(txtTelefone.getText());
+            this.cliCep = Integer.parseInt(auxiliar.removeCaracteresString(txtCEP.getText()));
+            this.cliCelular = Long.parseLong(auxiliar.removeCaracteresString(txtCelular.getText()));
+            this.cliTelefone = Long.parseLong(auxiliar.removeCaracteresString(txtTelefone.getText()));
             this.cliObersavacao = txtObservacao.getText();
             this.cliComplemento = txtComplemento.getText();
             
-            CliPessoaFisica pf = new CliPessoaFisica();
-             pf.setCliCpf(Integer.parseInt(txtCPF.getText()));
-             pf.setCliRg(Integer.parseInt(txtRG.getText()));
+            
              
-            CliPessoaJuridica pj =new CliPessoaJuridica();
-             pj.setIntIE(Integer.parseInt(txtIE.getText()));
-             pj.setIntIM(Integer.parseInt(txtIM.getText()));
-             pj.setStrNomeFantasia(txtNomeFantasia.getText());
-             pj.setStrRazaoSocial(txtRazaoSocial.getText());
+            //CliPessoaJuridica pj =new CliPessoaJuridica();
+             //pj.setIntIE(Integer.parseInt(txtIE.getText()));
+             //pj.setIntIM(Integer.parseInt(txtIM.getText()));
+             //pj.setStrNomeFantasia(txtNomeFantasia.getText());
+             //pj.setStrRazaoSocial(txtRazaoSocial.getText());
            
             return true;
             
@@ -371,7 +408,7 @@ public class Cliente implements ActionListener{
     
      
     public boolean alterar() {
-        if(auxiliar.validaCampos(telaOS.getListaComponentes())){            
+        if(auxiliar.validaCampos(telaCliente.getListaComponentes())){            
             //this.intCodigoOS = intCodigoOS;
             this.cliCod = Integer.parseInt(txtCodigo.getText());
             this.cliNome = txtNome.getText();
