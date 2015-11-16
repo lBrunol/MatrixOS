@@ -19,6 +19,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -30,6 +32,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JRadioButton;
+import javax.swing.text.DefaultFormatterFactory;
 
 /**
  *
@@ -416,24 +419,16 @@ public class Cliente implements ActionListener{
      
      
      
-         public void adicionaEventos() {
+       public void adicionaEventos() {
         botCadastrar.addActionListener(this);
         botInserir.addActionListener(this);
         botExcluir.addActionListener(this);
         botLimpar.addActionListener(this);
         botAlterarRegistro.addActionListener(this);
         
-        cboEstado.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(cboEstado.getSelectedItem() != ""){
-                    ComboItem comboItem = (ComboItem) cboEstado.getSelectedItem();
-                    cliCod= Integer.parseInt(comboItem.getId());                    
-                }
-            }
-        });
+         }
+        
         
       }
            
 
-}
