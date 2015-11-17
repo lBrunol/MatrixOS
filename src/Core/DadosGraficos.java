@@ -8,6 +8,7 @@ package Core;
 import java.util.Arrays;
 import java.awt.GridLayout;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
@@ -19,6 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.lang.reflect.Modifier;
 
 /**
@@ -148,8 +150,8 @@ public class DadosGraficos extends JFrame {
             }
         }
         
-        criaJTable();
-	criaJanela();
+        //criaJTable();
+	//criaJanela();
     }
 
     private int[] calculaFi(double[] xi) {
@@ -420,9 +422,24 @@ public class DadosGraficos extends JFrame {
         painelFundo.add(BorderLayout.CENTER, barraRolagem);
         getContentPane().add(painelFundo);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(500, 320);
+        setSize(600, 320);
+        setTitle("Variável Discreta - Valores totais das Ordens de Serviço");
+        centralize();
         setVisible(true);
 
+    }
+    
+    /** 
+    * centraliza a janela na tela 
+    */    
+    private void centralize() {	
+        Dimension T = Toolkit.getDefaultToolkit().getScreenSize();		
+        Dimension J = getSize();
+
+        if (J.height > T.height) setSize(J.width,T.height); 
+        if (J.width > T.width) setSize(T.width,J.height); 
+
+        setLocation((T.width - J.width )/2,(T.height-J.height)/2);
     }
 
     private void criaJTable() {
@@ -448,10 +465,11 @@ public class DadosGraficos extends JFrame {
         Object dados[][]=getDados();
         
         for (i = 0; i < fi.length; i++) {
-            if(dados[i][0]!="0"){
-           modelo.addRow(new Object[]{dados[i][0], dados[i][1], dados[i][2], dados[i][3], dados[i][4], dados[i][5]});
-        
+            if("0.0".equals(dados[i][0].toString())){
+                break;
             }
+            modelo.addRow(new Object[]{dados[i][0], dados[i][1], dados[i][2], dados[i][3], dados[i][4], dados[i][5]});        
+            
         }
 
     }
