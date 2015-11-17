@@ -1,7 +1,5 @@
 package Core;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -43,6 +41,9 @@ public class ConexaoBanco {
         this.senha = "fanbno022";
         this.usuario = "system";
         this.host = "localhost";
+        
+        //this.senha = "Tiger";
+        //this.usuario = "Scott";
     }
    
     /**
@@ -56,6 +57,7 @@ public class ConexaoBanco {
         String nomeServidor = this.host;
         String numeroPorta = "1521";
         String servico    = "xe";
+        //String servico    = "BD11G";
         String userName   = this.usuario;
         String passName   = this.senha;
         String url = "jdbc:oracle:thin:@"+nomeServidor + ":" + numeroPorta + ":" + servico; 
@@ -64,23 +66,18 @@ public class ConexaoBanco {
             this.c = DriverManager.getConnection(url,userName, passName);            
             estaConectado = true;
         } catch( SQLException e ) {
-            //System.out.println(e.getMessage());
         	JOptionPane.showMessageDialog(null, e.getMessage());
             estaConectado = false;
         } catch ( ClassNotFoundException e ) {
-            //System.out.println(e.getMessage());
         	JOptionPane.showMessageDialog(null, e.getMessage());
             estaConectado = false;
         } catch ( InstantiationException e ) {
-            //System.out.println(e.getMessage());
         	JOptionPane.showMessageDialog(null, e.getMessage());
             estaConectado = false;
         } catch ( IllegalAccessException e ) {
-            //System.out.println(e.getMessage());
         	JOptionPane.showMessageDialog(null, e.getMessage());
             estaConectado = false;
         }
-        //JOptionPane.showMessageDialog(null, "Conectado");
         return estaConectado;
     }
    

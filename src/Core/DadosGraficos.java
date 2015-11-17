@@ -52,8 +52,7 @@ public class DadosGraficos extends JFrame {
 
     public DadosGraficos(double[] xi) {
 
-        criaJTable();
-	criaJanela();
+        
         
         this.lenghtArrays = 101;
 
@@ -148,6 +147,9 @@ public class DadosGraficos extends JFrame {
                 System.out.println(obj[i][j]);
             }
         }
+        
+        criaJTable();
+	criaJanela();
     }
 
     private int[] calculaFi(double[] xi) {
@@ -466,6 +468,7 @@ public class DadosGraficos extends JFrame {
         i = 0;
         try {
             while (rs.next()) {
+                System.out.println(rs.getDouble(1));                
                 dadosXi[i] = rs.getDouble(1);
                 i++;
             }

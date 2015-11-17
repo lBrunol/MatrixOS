@@ -54,7 +54,7 @@ public class Usuario {
     public void iniciaComponentes(){
         
         //Instância da classe monta interfaces, passei o nome do usuario e o caminho onde a imagem dele está
-        MontaInterfaces telaUsuario = new MontaInterfaces("Usuários", "/imagens/adicionar.png");
+        MontaInterfaces telaUsuario = new MontaInterfaces("Gerenciamento de Usuários", "/imagens/adiciona-usuario.png");
         
          
         

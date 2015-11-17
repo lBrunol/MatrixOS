@@ -42,7 +42,7 @@ public class ConsultaNotaFiscal {
     private JTable tblConsultaContasReceber = new JTable(tabela);
     
     //Botões
-    private JButton botGerarRelatorio = new JButton();
+    private JButton botPesquisar = new JButton();
     
     public ConsultaNotaFiscal(){
         this.iniciaComponentes();
@@ -54,7 +54,7 @@ public class ConsultaNotaFiscal {
     public void iniciaComponentes(){
         
         //Instância da classe monta interfaces, passei o nome do formulário e o caminho onde a imagem dele está
-        MontaInterfaces telaOS = new MontaInterfaces("Consulta Notas Fiscais", "/imagens/nota-fiscal-eletronica.png");
+        MontaInterfaces telaOS = new MontaInterfaces("Consulta Notas Fiscais", "/imagens/nota-fiscal-eletronica-s-f-2.png");
        
         //Deixei a janela visível
         telaOS.setVisible(true);        
@@ -63,17 +63,17 @@ public class ConsultaNotaFiscal {
         //Adiciona os componentes na tela
         telaOS.addAbas(panelConsulta, "Consulta");
         telaOS.addPanelBotoes(panelConsulta,panelBotoesConsulta);
-        telaOS.addBotoes("Gerar Relatório", botGerarRelatorio, panelBotoesConsulta); 
+        telaOS.addBotoes("Buscar", botPesquisar, panelBotoesConsulta); 
         telaOS.addCincoComponentes("Cliente", txtCliente, "Data Inicial", txtDataInicial,"Entre Datas",chkEntreDatas,"DataFinal",txtDataFinal,"Status",cboStatus,panelConsulta);
         telaOS.addTabela(tblConsultaContasReceber,panelConsulta);
         ConexaoBanco teste=new ConexaoBanco();
         teste.preencheTabela(tabela, "select *from notaFiscal");
         
         //Cria objetos do tipo icone para coloca-los nos botões
-        Icon iconeGerarRelatorio = new ImageIcon(getClass().getResource("/imagens/relatorio.png"));
+        Icon iconeGerarRelatorio = new ImageIcon(getClass().getResource("/imagens/pesquisar.png"));
         
         //Seta os icones dos botões
-        botGerarRelatorio.setIcon(iconeGerarRelatorio);
+        botPesquisar.setIcon(iconeGerarRelatorio);
     }
 }
     

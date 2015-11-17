@@ -157,7 +157,7 @@ public class Cliente implements ActionListener{
         
         //Criei objetos do tipo icone com o caminho do icone para coloca-los nos botões 
         Icon iconeCadastrar = new ImageIcon(getClass().getResource("/imagens/salvar.png"));
-        Icon iconeExcluir = new ImageIcon(getClass().getResource("/imagens/excluir.png"));
+        Icon iconeExcluir = new ImageIcon(getClass().getResource("/imagens/limpar.png"));
         Icon iconeInserir = new ImageIcon(getClass().getResource("/imagens/adicionar.png"));
         Icon iconeAlterar= new ImageIcon(getClass().getResource("/imagens/alterar.png"));
         Icon iconeLimpar = new ImageIcon(getClass().getResource("/imagens/limpar.png"));

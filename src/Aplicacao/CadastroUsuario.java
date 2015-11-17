@@ -76,9 +76,9 @@ public class CadastroUsuario {
         telaCadastroUsuario.addUmComponente("Senha", txtSenha, panelCadastro);
         telaCadastroUsuario.addUmComponente("Confima senha", txtConfirmaSenha, panelCadastro);
         telaCadastroUsuario.addUmComponente("Administrador", chkAdministrador, panelCadastro);
-        telaCadastroUsuario.addTabela(tblCadastroUsuario, panelCadastro);
+        //telaCadastroUsuario.addTabela(tblCadastroUsuario, panelCadastro);
         ConexaoBanco teste=new ConexaoBanco();
-        teste.preencheTabela(tabela, "select *from usuario");
+        //teste.preencheTabela(tabela, "select *from usuarios");
     
     }
     

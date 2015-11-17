@@ -22,7 +22,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JComboBox;
-import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 
 /**
@@ -53,8 +52,7 @@ public class ConsultaContasReceber implements ActionListener {
     private JButton botPesquisar = new JButton();
     
     //Select
-    private String dataemissao = "data emissão";
-    private String query = "SELECT contasReceber.ctrCodigo as Código, cliente.cliNome as Nome, cliente.cliEndereco as Endereço, contasReceber.ctrDataEmissao as '" + dataemissao + "', contasReceber.ctrDataVencimento, contasReceber.ctrValorEmitido , contasReceber.ctrDataPagamento, contasReceber.ctrDesconto as Desconto, contasReceber.ctrJuros as Juros, contasReceber.ctrValorPago, tiposPagamento.tpaDescricao, notaFiscal.notCodigo FROM ((((tiposPagamento INNER JOIN contasReceber ON tiposPagamento.tpaCodigo = contasReceber.tpaCodigo) INNER JOIN notaFiscal ON contasReceber.notCodigo = notaFiscal.notCodigo) INNER JOIN ordemServico ON notaFiscal.ordCodigo = ordemServico.ordCodigo) INNER JOIN cliente ON ordemServico.cliCodigo = cliente.cliCodigo)";
+    private String query = "SELECT contasReceber.ctrCodigo as Código, cliente.cliNome as Nome, cliente.cliEndereco as Endereço, contasReceber.ctrDataEmissao, contasReceber.ctrDataVencimento, contasReceber.ctrValorEmitido , contasReceber.ctrDataPagamento, contasReceber.ctrDesconto as Desconto, contasReceber.ctrJuros as Juros, contasReceber.ctrValorPago, tiposPagamento.tpaDescricao, notaFiscal.notCodigo FROM ((((tiposPagamento INNER JOIN contasReceber ON tiposPagamento.tpaCodigo = contasReceber.tpaCodigo) INNER JOIN notaFiscal ON contasReceber.notCodigo = notaFiscal.notCodigo) INNER JOIN ordemServico ON notaFiscal.ordCodigo = ordemServico.ordCodigo) INNER JOIN cliente ON ordemServico.cliCodigo = cliente.cliCodigo)";
     
     public ConsultaContasReceber(){
         this.iniciaComponentes();
