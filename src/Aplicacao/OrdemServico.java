@@ -49,7 +49,6 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
     ConexaoBanco conexao = new ConexaoBanco();
     
     //Criação dos objetos, imprescindível criar ao menos um JPanel para servir de aba no formulário
-    private PTextField txtCodigo = new PTextField();
     private PFormattedTextField txtDataAbertura = new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
     private PFormattedTextField txtDataFechamento = new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
     private PTextField txtDescricaoOcorrencia = new PTextField();
@@ -119,7 +118,11 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         telaOS.setTamanho(1000, 1000);
         telaOS.setVisible(true);
         
-      
+        this.preencheCombos();
+        this.adicionaEventos();
+        
+        this.preencheTabela();
+        this.setaNomes();      
         
     }
     //Método main
@@ -146,7 +149,7 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
 
         //Adiciona os componentes na tela
         telaOS.addLabelTitulo("Ordem de Serviço", panelCadastro);
-        telaOS.addQuatroComponentes("Código", txtCodigo, "Data de Abertura", txtDataAbertura, "Data de Fechamento", txtDataFechamento, "Valor Total", txtValorTotal, panelCadastro);
+        telaOS.addTresComponentes("Data de Abertura", txtDataAbertura, "Data de Fechamento", txtDataFechamento, "Valor Total", txtValorTotal, panelCadastro);
         telaOS.addUmComponente("Descrição da Ocorrência*", txtDescricaoOcorrencia, panelCadastro);
         telaOS.addLabelTitulo("Cliente", panelCadastro);
         telaOS.addUmComponente("Selecione o cliente*", cboCliente, panelCadastro);
@@ -184,6 +187,7 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         //Formata os valores em moeda
         txtDataAbertura.setText(auxiliar.hoje());
         txtDataFechamento.setObrigatorio(false);
+        txtComplemento.setObrigatorio(false);
     }
     
     @Override
@@ -355,7 +359,6 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
                         ResultSet rs;
                         rs = conexao.executar("SELECT * FROM ordemServico WHERE ordCodigo =" + intCodigoOS);
                         rs.next();                    
-                        txtCodigo.setText(rs.getString(1));
                         txtDescricaoOcorrencia.setText(rs.getString(2));
                         txtDataAbertura.setText(auxiliar.formataData(rs.getDate(3)));
                         txtDataFechamento.setText(auxiliar.formataData(rs.getDate(4)));
@@ -368,7 +371,6 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
                         rs = conexao.executar("SELECT * FROM servicosOS WHERE ordCodigo =" + intCodigoOS);
                         rs.next();
                         cboServico.setSelectedIndex(rs.getInt(4));
-                        JOptionPane.showMessageDialog(null, rs.getString(2));
                         txtQtde.setText(rs.getString(2));
 
                         mostraBotoesAlteracao();
@@ -420,7 +422,6 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
             txtCPF.setName("CPF");
             txtCargo.setName("Cargo");
             txtCidade.setName("Cidade");
-            txtCodigo.setName("Código");
             txtDataAbertura.setName("Data de Abertura");
             txtDataFechamento.setName("Data de Fechamento");
             txtDescricaoOcorrencia.setName("Descrição da Ocorrência");
@@ -444,7 +445,6 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
     @Override
     public boolean cadastrar() {
         if(auxiliar.validaCampos(telaOS.getListaComponentes())){ 
-            this.intCodigoOS = Integer.parseInt(txtCodigo.getText());
             this.strDataAbertura = txtDataAbertura.getText();
             this.strDataFechamento = txtDataFechamento.getText();
             this.strOcorrencia =  txtDescricaoOcorrencia.getText();
@@ -462,13 +462,12 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
     @Override
     public boolean alterar() {
         if(auxiliar.validaCampos(telaOS.getListaComponentes())){            
-            //this.intCodigoOS = intCodigoOS;
             this.strDataAbertura = txtDataAbertura.getText();
             this.strDataFechamento = txtDataFechamento.getText();
             this.strOcorrencia =  txtDescricaoOcorrencia.getText();
-            //this.fltValorTotal = auxiliar.removeCaracteresFloat(txtValorTotal.getText());
             this.fltValorTotal = auxiliar.calculaValorTotal(this.fltValorServico, this.intQtdeServico);
             this.intQtdeServico = Integer.parseInt(txtQtde.getText());
+            
             ComboItem comboItem = (ComboItem) cboServico.getSelectedItem();
             this.intCodigoServico = Integer.parseInt(comboItem.getId());
             

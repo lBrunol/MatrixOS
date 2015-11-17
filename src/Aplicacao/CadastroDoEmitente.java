@@ -68,11 +68,11 @@ public class CadastroDoEmitente implements PadraoFormulario, ActionListener {
     private int intCodigo;
     private String strRazaoSocial;
     private String strNomeFantasia;
-    private long logCNPJ;
+    private String strCNPJ;
     private String strEndereco;
     private String strBairro;
-    private int intCEP;
-    private int intTelefone;
+    private String strCEP;
+    private String strTelefone;
     private String strMunicipio;
     private String strUF;
     
@@ -227,11 +227,11 @@ public class CadastroDoEmitente implements PadraoFormulario, ActionListener {
         if(auxiliar.validaCampos(telaEmitente.getListaComponentes())){
             this.strNomeFantasia = txtNomeFantasia.getText();
             this.strRazaoSocial = txtRazaoSocial.getText();
-            this.logCNPJ = Long.parseLong(auxiliar.removeCaracteresString(txtCNPJ.getText()));
+            this.strCNPJ = auxiliar.removeCaracteresString(txtCNPJ.getText());
             this.strEndereco = txtEndereco.getText();
             this.strBairro = txtBairro.getText();
-            this.intCEP = Integer.parseInt(auxiliar.removeCaracteresString(txtCEP.getText()));
-            this.intTelefone = Integer.parseInt(auxiliar.removeCaracteresString(txtTelefone.getText()));
+            this.strCEP = auxiliar.removeCaracteresString(txtCEP.getText());
+            this.strTelefone = auxiliar.removeCaracteresString(txtTelefone.getText());
             this.strMunicipio = txtMunicipio.getText();
             this.strUF = "SP";
             return true;            
@@ -245,11 +245,11 @@ public class CadastroDoEmitente implements PadraoFormulario, ActionListener {
         if(auxiliar.validaCampos(telaEmitente.getListaComponentes())){
             this.strNomeFantasia = txtNomeFantasia.getText();
             this.strRazaoSocial = txtRazaoSocial.getText();
-            this.logCNPJ = Long.parseLong(auxiliar.removeCaracteresString(txtCNPJ.getText()));
+            this.strCNPJ = auxiliar.removeCaracteresString(txtCNPJ.getText());
             this.strEndereco = txtEndereco.getText();
             this.strBairro = txtBairro.getText();
-            this.intCEP = Integer.parseInt(auxiliar.removeCaracteresString(txtCEP.getText()));
-            this.intTelefone = Integer.parseInt(auxiliar.removeCaracteresString(txtTelefone.getText()));
+            this.strCEP = auxiliar.removeCaracteresString(txtCEP.getText());
+            this.strTelefone = auxiliar.removeCaracteresString(txtTelefone.getText());
             this.strMunicipio = txtMunicipio.getText();
             this.strUF = "SP";
             return true;            
@@ -275,7 +275,7 @@ public class CadastroDoEmitente implements PadraoFormulario, ActionListener {
             if(ok){	
                 try {
                     ResultSet rs;
-                    conexao.executaProcedure("INSERT_DADOSEMITENTE ('" + this.strRazaoSocial + "', '" + this.strNomeFantasia + "' , " + this.logCNPJ + ", '" + this.strEndereco + "' , '" + this.strBairro + "' , " + this.intCEP + ", " + this.intTelefone + " , '" + this.strMunicipio + "', '" + this.strUF + "' )");
+                    conexao.executaProcedure("INSERT_DADOSEMITENTE ('" + this.strRazaoSocial + "', '" + this.strNomeFantasia + "' , '" + this.strCNPJ + "', '" + this.strEndereco + "' , '" + this.strBairro + "' , '" + this.strCEP + "', '" + this.strTelefone + "' , '" + this.strMunicipio + "', '" + this.strUF + "' )");
                     JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
                     auxiliar.limpaCampos(telaEmitente.getListaComponentes());
                     this.preencheTabela();
@@ -315,7 +315,7 @@ public class CadastroDoEmitente implements PadraoFormulario, ActionListener {
             ok = alterar();
             if(ok){	
                 try {
-                    conexao.executaProcedure("UPDATE_DADOSEMITENTE (" + this.intCodigo + ",'" + this.strRazaoSocial + "', '" + this.strNomeFantasia + "' , " + this.logCNPJ + ", '" + this.strEndereco + "' , '" + this.strBairro + "' , " + this.intCEP + ", " + this.intTelefone + " , '" + this.strMunicipio + "', '" + this.strUF + "' )");
+                    conexao.executaProcedure("UPDATE_DADOSEMITENTE (" + this.intCodigo + ",'" + this.strRazaoSocial + "', '" + this.strNomeFantasia + "' , '" + this.strCNPJ + "', '" + this.strEndereco + "' , '" + this.strBairro + "' , '" + this.strCEP + "', '" + this.strTelefone + "' , '" + this.strMunicipio + "', '" + this.strUF + "' )");
                     JOptionPane.showMessageDialog(null, "Dados Alterados com sucesso");
                     auxiliar.limpaCampos(telaEmitente.getListaComponentes());
                     this.mostraBotoesCadastro();

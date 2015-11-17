@@ -247,9 +247,59 @@ public class MontaInterfaces extends JFrame {
         cons.gridwidth = GridBagConstraints.REMAINDER;
         listaComponentes.add(componente2);
         panel.add(componente2, cons);
-        
-        //panel.add(jp, cons);
     }
+    
+    /** 
+    * Adiciona três label e três componentes de edição Todos na mesma linha 
+    * @param label Label 1  
+    * @param componente passar um componente para adição na janela, exemplo, JTextBox, JComboBox, JTextArea. 
+    * @param label2 Label 2 
+    * @param componente2 passar um componente para adição na janela, exemplo, JTextBox, JComboBox, JTextArea. 2
+    * @param label3 Label 3 
+    * @param componente3 passar um componente para adição na janela, exemplo, JTextBox, JComboBox, JTextArea. 3
+    * @param panel Jpanel onde os componentes ficarão
+    */  
+    public void addTresComponentes(String label, JComponent componente, String label2, JComponent componente2, String label3, JComponent componente3, JPanel panel) {  
+        GridBagConstraints cons = new GridBagConstraints();  
+        JPanel jp = new JPanel(new GridBagLayout());
+        
+        cons.fill = GridBagConstraints.BOTH;  
+        cons.insets = new Insets(4,4,4,4);  
+  
+        cons.fill = GridBagConstraints.NONE;  
+        cons.anchor = GridBagConstraints.NORTHWEST;  
+        cons.weightx = 0;  
+        cons.gridwidth = 1;  
+        panel.add(new JLabel(label), cons);  
+          
+        cons.weightx = 1;  
+        cons.gridwidth = 1;  
+        cons.fill = GridBagConstraints.BOTH;
+        listaComponentes.add(componente);
+        panel.add(componente, cons);  
+  
+        cons.fill = GridBagConstraints.NONE;  
+        cons.weightx = 0;  
+        cons.gridwidth = 1;  
+        panel.add(new JLabel(label2), cons);  
+          
+        cons.weightx = 1;  
+        cons.fill = GridBagConstraints.BOTH;  
+        listaComponentes.add(componente2);
+        panel.add(componente2, cons);
+        
+        cons.fill = GridBagConstraints.NONE;  
+        cons.weightx = 0;  
+        cons.gridwidth = 1;  
+        panel.add(new JLabel(label3), cons);  
+          
+        cons.weightx = 1;  
+        cons.fill = GridBagConstraints.BOTH;  
+        cons.gridwidth = GridBagConstraints.REMAINDER;
+        listaComponentes.add(componente3);
+        panel.add(componente3, cons);
+    }
+    
     
     /** 
     * Adiciona 4 componentes junto as suas labels na mesma linha 

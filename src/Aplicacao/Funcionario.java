@@ -57,7 +57,7 @@ public class Funcionario implements PadraoFormulario, ActionListener{
     //Atributos da classe relacionados ao banco
     private int intMatricula;
     private int intCodigoCargo;
-    private int intTelefone;
+    private String strTelefone;
     private String strNome;
     
     
@@ -106,7 +106,7 @@ public class Funcionario implements PadraoFormulario, ActionListener{
     @Override
     public boolean cadastrar() {
         if(auxiliar.validaCampos(telaFuncionario.getListaComponentes())){ 
-            this.intTelefone = Integer.parseInt(auxiliar.removeCaracteresString(txtTelefone.getText()));
+            this.strTelefone = auxiliar.removeCaracteresString(txtTelefone.getText());
             this.strNome = txtNome.getText();
             ComboItem comboItem = (ComboItem) cboCargo.getSelectedItem();
             this.intCodigoCargo = Integer.parseInt(comboItem.getId());
@@ -119,7 +119,7 @@ public class Funcionario implements PadraoFormulario, ActionListener{
     @Override
     public boolean alterar() {
         if(auxiliar.validaCampos(telaFuncionario.getListaComponentes())){ 
-            this.intTelefone = Integer.parseInt(auxiliar.removeCaracteresString(txtTelefone.getText()));
+            this.strTelefone = auxiliar.removeCaracteresString(txtTelefone.getText());
             this.strNome = txtNome.getText();
             ComboItem comboItem = (ComboItem) cboCargo.getSelectedItem();
             this.intCodigoCargo = Integer.parseInt(comboItem.getId());
@@ -249,7 +249,7 @@ public class Funcionario implements PadraoFormulario, ActionListener{
             if(ok){	
                 try {
                     ResultSet rs;
-                    conexao.executaProcedure("INSERT_FUNCIONARIO ('" + this.strNome + "', " + this.intTelefone + ", " + this.intCodigoCargo + " )");
+                    conexao.executaProcedure("INSERT_FUNCIONARIO ('" + this.strNome + "', '" + this.strTelefone + "', " + this.intCodigoCargo + " )");
                     JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
                     auxiliar.limpaCampos(telaFuncionario.getListaComponentes());
                     this.preencheTabela();
@@ -289,7 +289,7 @@ public class Funcionario implements PadraoFormulario, ActionListener{
             ok = alterar();
             if(ok){	
                 try {
-                    conexao.executaProcedure("UPDATE_FUNCIONARIO (" + this.intMatricula + ",'" + this.strNome + "', " + this.intTelefone + ", " + this.intCodigoCargo + " )");
+                    conexao.executaProcedure("UPDATE_FUNCIONARIO (" + this.intMatricula + ",'" + this.strNome + "', '" + this.strTelefone + "', " + this.intCodigoCargo + " )");
                     JOptionPane.showMessageDialog(null, "Dados Alterados com sucesso");
                     auxiliar.limpaCampos(telaFuncionario.getListaComponentes());
                     this.mostraBotoesCadastro();
