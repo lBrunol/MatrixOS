@@ -531,6 +531,8 @@ public class DadosGraficos extends JFrame {
         xii[23] = 17;
 
         DadosGraficos d = new DadosGraficos(xii);
+        d.criaJTable();
+	d.criaJanela();
         d.setVisible(true);
     }
 }
