@@ -63,6 +63,7 @@ public class Cliente implements ActionListener{
     
     
     
+    
     //Panels
     private JPanel panelConsulta = new JPanel(new GridBagLayout());
     private JPanel panelCadastro = new JPanel(new GridBagLayout());
@@ -90,6 +91,7 @@ public class Cliente implements ActionListener{
     private JTextField txtComplemento= new JTextField();
     private JRadioButton rdbpf = new JRadioButton();
     private JRadioButton rdbpj = new JRadioButton();
+    private JTextField txtNumEndereco = new JTextField();
     
     //Campos para Cliente Jurídico
     private PTextField txtRazaoSocial = new PTextField();
@@ -174,9 +176,10 @@ public class Cliente implements ActionListener{
         telaCliente.addLabelTitulo("Cliente", panelCadastro);
        
         telaCliente.addDoisComponentes("Codigo", txtCodigo,"Nome",txtNome,panelCadastro);
-        telaCliente.addUmComponente("Endereço",txtEndereco,panelCadastro);
-        telaCliente.addQuatroComponentes( "Bairro", txtBairro, "Complemento", txtComplemento,"Estado", cboEstado,"Cidade",txtCidade, panelCadastro);
+        telaCliente.addDoisComponentes("Endereço",txtEndereco,"Número Endereço",txtNumEndereco,panelCadastro);
+        telaCliente.addQuatroComponentes( "Bairro", txtBairro, "Complemento", txtComplemento,"UF", cboEstado,"Cidade",txtCidade, panelCadastro);
         telaCliente.addQuatroComponentes("CEP", txtCEP, "Telefone", txtTelefone, "Celular", txtCelular, "Data Cadastro", txtDataCadastro, panelCadastro);
+        telaCliente.addUmComponente("Email:",txtEmail,panelCadastro);
         telaCliente.addUmComponente("Observação",txtObservacao,panelCadastro);
         
         //Troca de botões do radio
@@ -200,36 +203,36 @@ public class Cliente implements ActionListener{
         botAlterarRegistro.addActionListener(this);
         botLimpar.addActionListener(this);
         
-         //THIS IS CALLED: GAMBIARRA !!!
+         //Definição do combobos de UF.
         
         cboEstado.addItem("");
-        cboEstado.addItem("Acre");                             
-        cboEstado.addItem("Alagoas");
-        cboEstado.addItem("Amapá");
-        cboEstado.addItem("Amazonas");
-        cboEstado.addItem("Bahia");
-        cboEstado.addItem("Ceará");
-        cboEstado.addItem("Distrito Federal");
-        cboEstado.addItem("Espírito Santo");
-        cboEstado.addItem("Goiás");
-        cboEstado.addItem("Maranhão");
-        cboEstado.addItem("Mato Grosso");                             
-        cboEstado.addItem("Mato Grosso do Sul");
-        cboEstado.addItem("Minas Gerais");
-        cboEstado.addItem("Pará");
-        cboEstado.addItem("Paraíba");
-        cboEstado.addItem("Paraná");
-        cboEstado.addItem("Pernambuco");
-        cboEstado.addItem("Piauí");
-        cboEstado.addItem("Rio de Janeiro");
-        cboEstado.addItem("Rio Grande do Norte");
-        cboEstado.addItem("Rio Grande do Sul");                             
-        cboEstado.addItem("Rondônia");
-        cboEstado.addItem("Roraima");
-        cboEstado.addItem("Santa Catarina");
-        cboEstado.addItem("São Paulo");
-        cboEstado.addItem("Sergipe");
-        cboEstado.addItem("Tocantins"); 
+        cboEstado.addItem("AC");                             
+        cboEstado.addItem("AL");
+        cboEstado.addItem("AP");
+        cboEstado.addItem("AM");
+        cboEstado.addItem("BA");
+        cboEstado.addItem("CE");
+        cboEstado.addItem("DF");
+        cboEstado.addItem("ES");
+        cboEstado.addItem("GO");
+        cboEstado.addItem("MA");
+        cboEstado.addItem("MT");                             
+        cboEstado.addItem("MS");
+        cboEstado.addItem("MG");
+        cboEstado.addItem("PA");
+        cboEstado.addItem("PB");
+        cboEstado.addItem("PR");
+        cboEstado.addItem("PE");
+        cboEstado.addItem("PI");
+        cboEstado.addItem("RJ");
+        cboEstado.addItem("RN");
+        cboEstado.addItem("RS");                             
+        cboEstado.addItem("RO");
+        cboEstado.addItem("RR");
+        cboEstado.addItem("SC");
+        cboEstado.addItem("SP");
+        cboEstado.addItem("SE");
+        cboEstado.addItem("TO"); 
         
        /* cboEstado = new javax.swing.JComboBox(); 
     
@@ -258,11 +261,13 @@ public class Cliente implements ActionListener{
             ok = Cadastrar();
             if(ok){	
                 try {
+                    // PERGUNTAR O QUE FAZER COM O CAMPO TIPO DE CLIENTE !!!
+                    
                     ResultSet rs;
-                    conexao.executaProcedure("INSERT_CLIENTE ('" + this.cliNome + "', '" + this.cliEndereco + "', 10, '" + this.cliComplemento + "', '" + cliBairro + "' , " + cliCep + ", '" + this.cliCidade + "' , 'SP', " + this.cliTelefone + ", " + this.cliCelular + ", 'teste@teste', '" + auxiliar.hoje() + "', '" + this.cliObersavacao + "', 'F')");
+                    conexao.executaProcedure("INSERT_CLIENTE ('" + this.cliNome + "', '" + this.cliEndereco + "', '" +this.cliNumEndereco+"','"+ this.cliComplemento + "', '" + cliBairro + "' , " + cliCep + ", '" + this.cliCidade + "' ,  " + this.cliTelefone + ", " + this.cliCelular + " ," + this.cliEmail+"',"+ auxiliar.hoje() + "', '" + this.cliObersavacao + "', 'F')");
                     
                     
-                    if(rdbSelecionado){
+                    if(rdbSelecionado = true){
                         CliPessoaFisica pf = new CliPessoaFisica();
                         pf.setCliCpf(Long.parseLong(auxiliar.removeCaracteresString(txtCPF.getText())));
                         pf.setCliRg(Integer.parseInt(auxiliar.removeCaracteresString(txtRG.getText())));
@@ -273,8 +278,24 @@ public class Cliente implements ActionListener{
                         ok = pf.cadastrar();
                         if(ok){
                             JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
+                        } }
+                        else {
+                            CliPessoaJuridica pj =new CliPessoaJuridica();
+                            pj.setIntIE(Integer.parseInt(txtIE.getText()));
+                            pj.setIntIM(Integer.parseInt(txtIM.getText()));
+                            pj.setStrNomeFantasia(txtNomeFantasia.getText());
+                            pj.setStrRazaoSocial(txtRazaoSocial.getText());
+                            pj.setLongCnpj(Long.parseLong(auxiliar.removeCaracteresString(txtCNPJ.getText())));
+                            rs = conexao.executar("SELECT MAX(cliCodigo) FROM cliente");
+                        rs.next();
+                        pj.setCliCodigo(rs.getInt(1));
+                        ok = pj.cadastrar();
+                        if(ok){
+                            JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
+                        } 
+                            
                         }
-                    }
+                    
                                       
                     
                     auxiliar.limpaCampos(telaCliente.getListaComponentes());
@@ -390,14 +411,7 @@ public class Cliente implements ActionListener{
             this.cliTelefone = Long.parseLong(auxiliar.removeCaracteresString(txtTelefone.getText()));
             this.cliObersavacao = txtObservacao.getText();
             this.cliComplemento = txtComplemento.getText();
-            
-            
-             
-            //CliPessoaJuridica pj =new CliPessoaJuridica();
-             //pj.setIntIE(Integer.parseInt(txtIE.getText()));
-             //pj.setIntIM(Integer.parseInt(txtIM.getText()));
-             //pj.setStrNomeFantasia(txtNomeFantasia.getText());
-             //pj.setStrRazaoSocial(txtRazaoSocial.getText());
+           
            
             return true;
             
@@ -425,16 +439,7 @@ public class Cliente implements ActionListener{
             this.cliComplemento= txtComplemento.getText();
             
               
-            CliPessoaFisica pf = new CliPessoaFisica();
-             pf.setCliCpf(Integer.parseInt(txtCPF.getText()));
-             pf.setCliRg(Integer.parseInt(txtRG.getText()));
-             
-            CliPessoaJuridica pj =new CliPessoaJuridica();
-             pj.setIntIE(Integer.parseInt(txtIE.getText()));
-             pj.setIntIM(Integer.parseInt(txtIM.getText()));
-             pj.setStrNomeFantasia(txtNomeFantasia.getText());
-             pj.setStrRazaoSocial(txtRazaoSocial.getText());
-           
+                  
             
             ComboItem comboItem = (ComboItem) cboEstado.getSelectedItem();
             this.cliCod = Integer.parseInt(comboItem.getId());
