@@ -27,7 +27,7 @@ public class MontaInterfaces extends JFrame {
         ImageIcon icon = new ImageIcon(iconURL);
         
         //Faz com que ao clicar no fechar da janela a aplicação feche junto
-        //this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.getContentPane().setLayout(new GridBagLayout());
         this.setSize(600,600);
         this.setTitle(tituloForm);
@@ -139,6 +139,15 @@ public class MontaInterfaces extends JFrame {
     */
     public void setTamanhoMinimo(int largura, int altura){
         this.setMinimumSize(new Dimension(largura, altura));	
+    }
+    /** 
+    * Maximiza a janela
+    * @param valor passar um booleano com valor true para maximizar a janela
+    */
+    public void setMaximizado (boolean valor){
+        if(valor){
+            setExtendedState(MAXIMIZED_BOTH);
+        }
     }
         
     /** 

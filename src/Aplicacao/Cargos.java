@@ -92,10 +92,8 @@ public class Cargos implements PadraoFormulario, ActionListener {
         telaCargos.addLabelTitulo("Cargos", panelCadastro);
         
         telaCargos.addUmComponente("Descrição", txtDescricao, panelCadastro);
-        telaCargos.addTabela(tblCargos, panelConsulta);
-        
-        conexao.preencheTabela(tabela, "select *from cargos");
-        
+        telaCargos.addTabela(tblCargos, panelConsulta);       
+     
         panelBotoesAlteracao.setVisible(false);
         panelBotoesCadastro.setVisible(true);
     }
@@ -162,7 +160,9 @@ public class Cargos implements PadraoFormulario, ActionListener {
     @Override
     public void preencheTabela() {
         try {
-            conexao.preencheTabela(tabela, "select carCodigo, carDescricao FROM cargos ORDER BY carCodigo");            
+            String teste;
+            teste = "CARCODIGO";
+            conexao.preencheTabela(tabela, "SELECT * FROM CARGOS WHERE CARCODIGO = CARCODIGO AND CARDESCRICAO = CARDESCRICAO");            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
         }

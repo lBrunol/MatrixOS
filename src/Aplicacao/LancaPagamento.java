@@ -11,20 +11,24 @@ import Core.MontaInterfaces;
 import Core.PFormattedTextField;
 import Core.PTextField;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Fabiano
  */
-public class LancaPagamento {
-    //Instância da classe Métodos auxliares
+public class LancaPagamento implements ActionListener {
     MetodosAuxiliares auxiliar = new MetodosAuxiliares();
+    MontaInterfaces telaLancaPagamentos = new MontaInterfaces("Lançamento de Pagamentos", "/imagens/lancar-pagamento-maior.png");
+    ConexaoBanco conexao = new ConexaoBanco();
     
     //Painels
     private JPanel panelLancamento = new JPanel(new GridBagLayout());
@@ -40,40 +44,113 @@ public class LancaPagamento {
     private JButton botSalvar = new JButton();
     private JButton botCancelar = new JButton();
     
-    //Tabela
-    DefaultTableModel tabela = new DefaultTableModel();
-    private JTable tblClientes = new JTable(tabela);
+    //Atributos relacionados ao banco
     
-    public LancaPagamento(){
+    private int intCodigo;
+    private String strDataPagamento;
+    private float fltValorPago;
+    
+    public LancaPagamento(int codigoDocumento){
+        ResultSet rs;
+        
         this.iniciaComponentes();
+        this.atribuiIcones();        
+        this.intCodigo = codigoDocumento;
+        txtNumeroDocumento.setText(Integer.toString(intCodigo));
+        try {
+            
+            rs = conexao.executar("SELECT ctrDataVencimento, ctrValorEmitido FROM contasReceber WHERE ctrCodigo = " + this.intCodigo);
+            rs.next();
+            txtDataVencimento.setText(auxiliar.formataData(rs.getDate(1)));
+            txtDataPagamento.setText(auxiliar.hoje());
+            this.fltValorPago = rs.getFloat(2);
+            txtValorPago.setText(auxiliar.formataValor(fltValorPago));
+            
+        }catch (SQLException b) {
+            JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
+        }
+        catch (Exception b) {
+            JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
+        }
+        
+        txtDataVencimento.setEnabled(false);
+        txtDataVencimento.setObrigatorio(false);        
+        txtNumeroDocumento.setEnabled(false);
+        txtNumeroDocumento.setObrigatorio(false);        
+        
+        telaLancaPagamentos.setVisible(true);
+        
+        this.setaNomes();
     }
-public static void main(String[] args){
-        LancaPagamento lp = new LancaPagamento();
+    
+    public static void main(String[] args){
+        LancaPagamento lp = new LancaPagamento(1);
     }
-public void iniciaComponentes(){
+    
+    public void iniciaComponentes(){ 
+
+        telaLancaPagamentos.addAbas(panelLancamento, "Lançamentos");
+        telaLancaPagamentos.addPanelBotoes(panelLancamento, panelBotoes);
         
-        //Instância da classe monta interfaces, passei o nome do formulário e o caminho onde a imagem dele está
-        MontaInterfaces telaOS = new MontaInterfaces("Lançamento de Pagamentos", "/imagens/lancar-pagamento-maior.png");
-        //Deixei a janela visível
-        telaOS.setVisible(true);        
-        //Adicionei as abas com o método addAbas e o panel para os botões com o método addPanelBotoes
-        telaOS.addAbas(panelLancamento, "Lançamentos");
-        telaOS.addPanelBotoes(panelLancamento, panelBotoes);
+        telaLancaPagamentos.addBotoes("Salvar", botSalvar, panelBotoes);
+        telaLancaPagamentos.addBotoes("Cancelar", botCancelar, panelBotoes);
         
-        //Adicionei os botões dentro do panelBotoes
-        telaOS.addBotoes("Salvar", botSalvar, panelBotoes);
-        telaOS.addBotoes("Cancelar", botCancelar, panelBotoes);
+        telaLancaPagamentos.addLabelTitulo("Lançamento", panelLancamento);
+        telaLancaPagamentos.addDoisComponentes("Numero do Documento", txtNumeroDocumento, "Data de Vencimento", txtDataVencimento, panelLancamento);
+        telaLancaPagamentos.addDoisComponentes("Data Pagamento", txtDataPagamento, "Valor Pago", txtValorPago, panelLancamento);
         
-        //Criei objetos do tipo icone com o caminho do icone para coloca-los nos botões 
+        botSalvar.addActionListener(this);
+        botCancelar.addActionListener(this);
+    }
+    
+    public void atribuiIcones(){
+        
         Icon iconeSalvar = new ImageIcon(getClass().getResource("/imagens/salvar.png"));
         Icon iconeCancelar = new ImageIcon(getClass().getResource("/imagens/cancelar.png"));
        
-        //Seta os icones dos botões
         botSalvar.setIcon(iconeSalvar);
         botCancelar.setIcon(iconeCancelar);
-       
-        //Adiciona os componentes na tela
-        telaOS.addLabelTitulo("Lançamento", panelLancamento);
-        telaOS.addQuatroComponentes("Numero do Documento", txtNumeroDocumento, "Data de Vencimento", txtDataVencimento, "Data Pagamento", txtDataPagamento, "Valor Pago", txtValorPago, panelLancamento);
+    
+    }
+    
+    public boolean cadastrar(){
+        if(auxiliar.validaCampos(telaLancaPagamentos.getListaComponentes())){
+            this.intCodigo = Integer.parseInt(txtNumeroDocumento.getText());
+            this.strDataPagamento = txtDataPagamento.getText();
+            this.fltValorPago = auxiliar.removeCaracteresFloat(txtValorPago.getText());
+            
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    public void setaNomes(){
+        txtDataPagamento.setName("Data de Pagamento");
+        txtValorPago.setName("Valor pago");
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent botao) {
+        boolean ok ;
+        if (botao.getSource() == botSalvar) {            
+            ok = cadastrar();
+            if(ok){	
+                try {
+                    ResultSet rs;
+                    conexao.executaProcedure("LANCA_PAGAMENTO (" + this.intCodigo + ",'" + this.strDataPagamento + "', " + this.fltValorPago + ")");
+                    JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
+                    telaLancaPagamentos.dispose();                    
+                }catch (SQLException b) {
+                    JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
+                }
+                catch (Exception b) {
+                    JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
+                }                                    
+            }
+        }        
+        if (botao.getSource() == botCancelar){
+            telaLancaPagamentos.dispose();
+        }
     }
 }

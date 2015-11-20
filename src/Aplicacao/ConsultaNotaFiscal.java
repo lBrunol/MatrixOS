@@ -9,6 +9,10 @@ import Core.ConexaoBanco;
 import Core.MetodosAuxiliares;
 import Core.MontaInterfaces;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -17,73 +21,108 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.JComboBox;
-import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
 
 
-public class ConsultaNotaFiscal {
+public class ConsultaNotaFiscal implements ActionListener, FocusListener{
     
-    //Instância da classe Métodos auxliares
     MetodosAuxiliares auxiliar = new MetodosAuxiliares();
+    MontaInterfaces telaConsultaNotaFiscal = new MontaInterfaces("Consulta Notas Fiscais", "/imagens/nota-fiscal-eletronica-s-f-2.png");
+    ConexaoBanco conexao = new ConexaoBanco();
     
     //Panels
     private JPanel panelConsulta = new JPanel(new GridBagLayout());
     private JPanel panelBotoesConsulta = new JPanel(new GridBagLayout());
     
     //Caixas de texto
+    private JTextField txtCodigo = new JTextField();
     private JTextField txtCliente = new JTextField();
-    private JTextField txtDataInicial = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
-    private JCheckBox  chkEntreDatas = new JCheckBox("EntreDatas",false); 
-    private JTextField txtDataFinal = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
-    private JComboBox cboStatus = new JComboBox();
+    private JTextField txtData = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
     
     //Tabela
     DefaultTableModel tabela = new DefaultTableModel();
-    private JTable tblConsultaContasReceber = new JTable(tabela);
+    private JTable tblConsultaNotaFiscal = new JTable(tabela){public boolean isCellEditable(int row,int column){return false;}};
     
     //Botões
     private JButton botPesquisar = new JButton();
     
+    //Select
+    String teste = "Data Emissão";
+    private String query = "SELECT notaFiscal.notCodigo, cliente.cliNome as Nome , notaFiscal.notValor as Valor, notaFiscal.notData, notaFiscal.notCodVerificacao, notaFiscal.notOutrasInformacoes FROM cliente INNER JOIN (ordemServico INNER JOIN notaFiscal ON ordemServico.ordCodigo = notaFiscal.ordCodigo) ON cliente.cliCodigo = ordemServico.cliCodigo";
+    
     public ConsultaNotaFiscal(){
         this.iniciaComponentes();
+        this.atribuiIcones();
+        this.preencheTabela();
+        
+        telaConsultaNotaFiscal.setVisible(true);
+        telaConsultaNotaFiscal.setTamanho(1000, 1000);
+        telaConsultaNotaFiscal.setMaximizado(true);
     }
-     public static void main(String[] args){
+    
+    public static void main(String[] args){
         ConsultaNotaFiscal cnf = new ConsultaNotaFiscal();
     }
-    //Adiciona os componentes na tela
-    public void iniciaComponentes(){
+
+    public void iniciaComponentes(){        
+        telaConsultaNotaFiscal.addAbas(panelConsulta, "Consulta");
+        telaConsultaNotaFiscal.addPanelBotoes(panelConsulta,panelBotoesConsulta);
+        telaConsultaNotaFiscal.addBotoes("Buscar", botPesquisar, panelBotoesConsulta); 
+        telaConsultaNotaFiscal.addTresComponentes("Código", txtCodigo, "Cliente", txtCliente, "Data", txtData, panelConsulta);
+        telaConsultaNotaFiscal.addTabela(tblConsultaNotaFiscal,panelConsulta);
         
-        //Instância da classe monta interfaces, passei o nome do formulário e o caminho onde a imagem dele está
-        MontaInterfaces telaOS = new MontaInterfaces("Consulta Notas Fiscais", "/imagens/nota-fiscal-eletronica-s-f-2.png");
-       
-        //Deixei a janela visível
-        telaOS.setVisible(true);        
+        botPesquisar.addActionListener(this);
+        txtCliente.addFocusListener(this);
+        txtData.addFocusListener(this);
         
-        //Adicionei as abas com o método addAbas e o panel para os botões com o método addPanelBotoes
-        //Adiciona os componentes na tela
-        telaOS.addAbas(panelConsulta, "Consulta");
-        telaOS.addPanelBotoes(panelConsulta,panelBotoesConsulta);
-        telaOS.addBotoes("Buscar", botPesquisar, panelBotoesConsulta); 
-        telaOS.addCincoComponentes("Cliente", txtCliente, "Data Inicial", txtDataInicial,"Entre Datas",chkEntreDatas,"DataFinal",txtDataFinal,"Status",cboStatus,panelConsulta);
-        telaOS.addTabela(tblConsultaContasReceber,panelConsulta);
-        ConexaoBanco teste=new ConexaoBanco();
-        teste.preencheTabela(tabela, "select *from notaFiscal");
-        
-        //Cria objetos do tipo icone para coloca-los nos botões
-        Icon iconeGerarRelatorio = new ImageIcon(getClass().getResource("/imagens/pesquisar.png"));
-        
-        //Seta os icones dos botões
+    }
+    
+     public void atribuiIcones() {   
+        Icon iconeGerarRelatorio = new ImageIcon(getClass().getResource("/imagens/pesquisar.png"));  
         botPesquisar.setIcon(iconeGerarRelatorio);
+     }
+     
+     public void preencheTabela(){
+        try {
+            conexao.preencheTabela(tabela, query);            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent botao) {
+        String queryFilter = query;
+        if(botao.getSource() == botPesquisar){
+            if(!"".equals(txtCliente.getText())){
+                queryFilter = query  + " WHERE cliente.cliNome LIKE '%" + txtCliente.getText() + "%'";
+            }else if(!"".equals(txtCodigo.getText())){
+                queryFilter = query  + " WHERE notaFiscal.notCodigo= " + txtCodigo.getText() + "";
+            }else if(!"".equals(auxiliar.removeCaracteresString(txtData.getText()))){
+                queryFilter = query  + " WHERE notaFiscal.notData = '" + txtData.getText() + "'";
+            }
+            conexao.preencheTabela(tabela, queryFilter);
+        }
+    }
+
+    @Override
+    public void focusGained(FocusEvent e) {
+        if(e.getSource() == txtCliente && !"".equals(txtData.getText()) || !"".equals(txtCodigo.getText())){
+            txtData.setText("");
+            txtCodigo.setText("");
+        }
+        if(e.getSource() == txtCodigo && !"".equals(txtData.getText()) || !"".equals(txtCliente.getText())){
+            txtData.setText("");
+            txtCliente.setText("");
+        }
+        if(e.getSource() == txtData && !"".equals(txtCliente.getText()) || !"".equals(txtCodigo.getText())){
+            txtCliente.setText("");
+            txtCodigo.setText("");
+        }
+    }
+
+    @Override
+    public void focusLost(FocusEvent e) {
+        
     }
 }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-

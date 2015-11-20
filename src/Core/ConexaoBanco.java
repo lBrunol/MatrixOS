@@ -179,11 +179,10 @@ public class ConexaoBanco {
     	ResultSet rs;
         ResultSetMetaData rsmd;    	
         Locale localPadrao = Locale.getDefault();
-        //for(int i = 0; i < tabela.getRowCount(); i++){
-        //    tabela.removeRow(i);
-        //}
+
         tabela.setRowCount(0);
-        rs = executar(query);        
+        rs = executar(query);
+        //rs = executar("SELECT consulta_tiposPagamento(tpaCodigo, tpaDescricao) FROM tiposPagamento");
         try {
                 
                 //Armazena no objeto os metadados do resultset
@@ -220,7 +219,7 @@ public class ConexaoBanco {
             }
         }  
         catch(SQLException e){  
-            JOptionPane.showMessageDialog(null,"Ocorreu um erro  de SQL ao listar a tabela" + e.getMessage() + " \n Favor entrar em contato com administrador");        
+            JOptionPane.showMessageDialog(null,"Ocorreu um erro  de SQL ao listar a tabela " + e.getMessage() + " \n Favor entrar em contato com administrador");        
         }catch (Exception e){
             JOptionPane.showMessageDialog(null,"Ocorreu um erro ao listar a tabela " + e.getMessage() + " \n Favor entrar em contato com administrador");
         }finally{
@@ -251,15 +250,14 @@ public class ConexaoBanco {
         }
     }
     
-    public ResultSet executaProcedureSelect (){
+    public ResultSet executaProcedureSelect (String query){
         try {
             conectar();
-            CallableStatement cs = c.prepareCall("{? = call consulta_servicos(?)}");
+            CallableStatement cs = c.prepareCall("{? = call CONSULTA_CARGOS(?)}");
 
             //Registra o parâmetro para retorna da função
             cs.registerOutParameter(1, OracleTypes.CURSOR);
-            cs.setInt(2,1);
-
+            cs.setInt(2, 2);
             cs.execute();
 
             //Converte o resultado em um resultset
