@@ -8,7 +8,12 @@ package Core;
 import java.util.Arrays;
 import java.awt.GridLayout;
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
@@ -22,6 +27,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.lang.reflect.Modifier;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 /**
  *
@@ -33,6 +40,11 @@ public class DadosGraficos extends JFrame {
     JTable tabela;
     JScrollPane barraRolagem;
     private DefaultTableModel modelo = new DefaultTableModel();
+    private JLabel lblmedia;
+    private JLabel lblmediana;
+    private JLabel lblmoda;
+    private JLabel lbltitulo;
+    private JLabel icoimg;
 
     String[] colunas = {"Xi", "Fi", "Fri", "Fa", "Fra", "XiFi"};
 
@@ -416,13 +428,61 @@ public class DadosGraficos extends JFrame {
     
     
     public void criaJanela() {
+        
+        
         barraRolagem = new JScrollPane(tabela);
         painelFundo = new JPanel();
+        lblmedia = new JLabel("      Media: " + String.valueOf(media));
+        lblmediana = new JLabel("      Mediana: " + String.valueOf(mediana));
+        lblmoda = new JLabel("      Moda: " + String.valueOf(moda[0]));
+        
+        Font fonte = new Font("Calibri",Font.BOLD, 30);
+        lbltitulo = new JLabel("                               Variável Discreta");
+        lbltitulo.setFont(fonte);
+        
+        ImageIcon icon = new ImageIcon(getClass().getResource("/imagens/relatorio.png"));
+        icoimg = new JLabel(icon);
+        
+        Container c = new JPanel();
+        Container c2 = new JPanel();
+        
+        
         painelFundo.setLayout(new BorderLayout());
+        c2.setLayout(new GridLayout(1,2));
+        
+        c2.add(lbltitulo);
+        c2.add(icoimg);
+        
+        c.setLayout(new GridLayout(1,3));
+        Font fonte2 = new Font("Calibri",Font.BOLD, 35);
+        
+        
+        c.add(lblmedia);
+        c.add(lblmediana);
+        c.add(lblmoda);
+        
+        lblmedia.setFont(fonte2);
+        lblmediana.setFont(fonte2);
+        lblmoda.setFont(fonte2);
+        
+        
+        painelFundo.add(BorderLayout.NORTH, c2);
         painelFundo.add(BorderLayout.CENTER, barraRolagem);
+        painelFundo.add(BorderLayout.SOUTH, c);
+        
+        
         getContentPane().add(painelFundo);
+        
+        
+
+        
+        
+        
+        //painelFundo.add(lblmedia);
+        //painelFundo.add(lblmediana);
+        //painelFundo.add(lblmoda);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(600, 320);
+        setSize(1000, 600);
         setTitle("Variável Discreta - Valores totais das Ordens de Serviço");
         centralize();
         setVisible(true);
