@@ -16,8 +16,11 @@ import Core.MontaInterfaces;
 import Core.PFormattedTextField;
 import Core.PTextField;
 import java.awt.GridBagLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.Icon;
@@ -129,8 +132,10 @@ public class Cliente implements ActionListener{
         
         this.atribuiIcones();
         this.iniciaComponentes();
-        this.preencheCombos();
+        //this.preencheCombos();
         this.setaNomes(); 
+        this.preencheTabela();
+        this.adicionaEventos();
         
                
        
@@ -151,10 +156,9 @@ public class Cliente implements ActionListener{
         telaCliente.setVisible(true);        
         //Adicionei as abas com o método addAbas e o panel para os botões com o método addPanelBotoes
         telaCliente.addAbas(panelCadastro, "Cadastro");
-        telaCliente.addPanelBotoes(panelCadastro, panelBotoesCadastro);
-        
         telaCliente.addAbas(panelConsulta, "Consulta");
-        telaCliente.addPanelBotoes(panelConsulta, panelBotoes);
+        telaCliente.addPanelBotoes(panelCadastro, panelBotoesCadastro); 
+        telaCliente.addPanelBotoes(panelCadastro, panelBotoesAlteracao);
         
         //Adicionei os botões dentro do panelBotoes
         telaCliente.addBotoes("Cadastrar", botCadastrar, panelBotoesCadastro);
@@ -257,8 +261,7 @@ public class Cliente implements ActionListener{
         telaCliente.addDoisComponentes("Pessoa Física",rdbpf,"Pessoa Jurídica",rdbpj,panelCadastro);
          
         telaCliente.addTabela(tblClientes, panelConsulta);
-        ConexaoBanco teste=new ConexaoBanco();
-        teste.preencheTabela(tabela, "select * from cliente");
+
         
         
         
@@ -280,7 +283,7 @@ public class Cliente implements ActionListener{
     //falta a instrução do conexao.preencheTabela
     public void preencheTabela(){
         try {
-            conexao.preencheTabela(tabela, "falta");            
+            conexao.preencheTabela(tabela, "select * from cliente");            
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
@@ -342,7 +345,7 @@ public class Cliente implements ActionListener{
      public void preencheCombos(){
         //Preenche as combobox
         cboEstado.addItem("");
-        conexao.preencheCombo(cboEstado, "SELECT cliCodigo, cliEstado FROM cliente");
+        //conexao.preencheCombo(cboEstado, "SELECT cliCodigo, cliEstado FROM cliente");
     }
     public boolean cadastrar(){
     if(auxiliar.validaCampos(telaCliente.getListaComponentes())){ 
@@ -414,21 +417,86 @@ public class Cliente implements ActionListener{
         botLimpar.addActionListener(this);
         botAlterarRegistro.addActionListener(this);
         
-         }
+        tblClientes.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent me) {
+                              
+                if (me.getClickCount() == 2) {                    
+                    try {
+                        
+                        JTable table =(JTable) me.getSource();
+                        Point p = me.getPoint();  
+                        int row = table.rowAtPoint(p);
+                        
+                        //Pega o valor da primeira coluna da tabela e joga no código
+                        cliCod = Integer.parseInt(tblClientes.getValueAt(row, 0).toString());
+                        
+                        ResultSet rs;
+                        //Faz select com valor do código que foi pego na tabela
+                        rs = conexao.executar("SELECT * FROM cliente WHERE cliCodigo =" + cliCod);
+                        rs.next();                    
+                        txtNome.setText(rs.getString(2));
+                        txtEndereco.setText(rs.getString(3));
+                        txtNumEndereco.setText(rs.getString(4));
+                        txtComplemento.setText(rs.getString(5));
+                        txtBairro.setText(rs.getString(6));
+                        
+                        //Verifica se o campo cliTipo é J ou F para fazer o select nas tabelas especializadas
+                        
+                        if("J".equals(rs.getString(15).toUpperCase())){
+                            rs.close();
+                            rs = conexao.executar("SELECT * FROM cliPessoaJuridica WHERE cliCodigo =" + cliCod); 
+                            
+                            rs.next();
+                            txtRazaoSocial.setText(rs.getString(1));
+                            txtNomeFantasia.setText(rs.getString(2));
+                            txtCNPJ.setText(rs.getString(3));
+                            txtIM.setText(rs.getString(4));
+                            txtIE.setText(rs.getString(5));
+                            
+                            panelCliPF.setVisible(false);
+                            panelCliPJ.setVisible(true);
+                            
+                        }else{
+                            rs.close();
+                            rs = conexao.executar("SELECT * FROM cliPessoaFisica WHERE cliCodigo =" + cliCod);
+                            rs.next();
+                            txtRG.setText(rs.getString(1));
+                            txtCPF.setText(rs.getString(2));
+                            
+                            panelCliPF.setVisible(true);
+                            panelCliPJ.setVisible(false);
+                        }
+
+                        mostraBotoesAlteracao();
+                        telaCliente.getTabbedPane().setSelectedIndex(0);
+                        rs.close();
+                    }             
+                    catch (SQLException b) {
+                        JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
+                    }
+                    catch (Exception b) {
+                        JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
+                    }
+                }
+            }
+        });
+        
+    }
  
       
       
     //Eventos
     @Override
     public void actionPerformed(ActionEvent botao) {
-         //Retorna qual o botão clicado e gera a ação
+        
+        boolean ok;
+        
         //cadastrar
-        if (botao.getSource() == botCadastrar) { 
-            boolean ok ;
+        if (botao.getSource() == botCadastrar) {             
             ok = cadastrar();
             if(ok){	
                 try {
-                   
                     
                     ResultSet rs;
                     conexao.executaProcedure("INSERT_CLIENTE ('" + this.cliNome + "', '" + this.cliEndereco + "', '" +this.cliNumEndereco+"','"+ this.cliComplemento + "', '" + cliBairro + "' , " + cliCep + ", '" + this.cliCidade + "' ,  " + this.cliTelefone + ", " + this.cliCelular + " ," + this.cliEmail+"',"+ auxiliar.hoje() + "', '" + this.cliObersavacao + "','" + this.cliTipo +"' )");
@@ -474,8 +542,10 @@ public class Cliente implements ActionListener{
                     JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
                 }                                    
             }
-            //deletar
-            if (botao.getSource() == botExcluir) {
+        }
+        //deletar
+        if (botao.getSource() == botExcluir) {
+
             ok = deletar();
             if(ok){	
                 try {
@@ -507,19 +577,20 @@ public class Cliente implements ActionListener{
                         if(ok){
                             JOptionPane.showMessageDialog(null, "Dados  deletados com sucesso");
                         } 
-                   
+
                      }
                     auxiliar.limpaCampos(telaCliente.getListaComponentes());
                     txtDataAbertura.setText(auxiliar.hoje());
                     this.mostraBotoesCadastro();
                     this.preencheTabela();
-                    
+
                 }catch (SQLException b) {
                     JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
                 }
                 catch (Exception b) {
                     JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
                 }           
+            }
         }
             
         //inserir
@@ -540,35 +611,33 @@ public class Cliente implements ActionListener{
                     conexao.executaProcedure("UPDATE_CLIENTE ("  + this.cliNome + "', '" + this.cliEndereco + "', '" +this.cliNumEndereco+"','"+ this.cliComplemento + "', '" + cliBairro + "' , " + cliCep + ", '" + this.cliCidade + "' ,  " + this.cliTelefone + ", " + this.cliCelular + " ," + this.cliEmail+"',"+ auxiliar.hoje() + "', '" + this.cliObersavacao + "','" + this.cliTipo +"' )");
                    
                     ResultSet rs;
-                     if(rdbSelecionado = true){
-                        CliPessoaFisica pf = new CliPessoaFisica();
-                        pf.setCliCpf(Long.parseLong(auxiliar.removeCaracteresString(txtCPF.getText())));
-                        pf.setCliRg(Integer.parseInt(auxiliar.removeCaracteresString(txtRG.getText())));
+                    if(rdbSelecionado = true){
+                       CliPessoaFisica pf = new CliPessoaFisica();
+                       pf.setCliCpf(Long.parseLong(auxiliar.removeCaracteresString(txtCPF.getText())));
+                       pf.setCliRg(Integer.parseInt(auxiliar.removeCaracteresString(txtRG.getText())));
 
-                        rs = conexao.executar("SELECT MAX(cliCodigo) FROM cliente");
-                        rs.next();
-                        pf.setCliCodigo(rs.getInt(1));
-                        ok = pf.alterar();
-                        if(ok){
-                            JOptionPane.showMessageDialog(null, "Dados alterados com sucesso");
-                        } 
-                     }
-                        else {
-                            CliPessoaJuridica pj =new CliPessoaJuridica();
-                            pj.setIntIE(Integer.parseInt(txtIE.getText()));
-                            pj.setIntIM(Integer.parseInt(txtIM.getText()));
-                            pj.setStrNomeFantasia(txtNomeFantasia.getText());
-                            pj.setStrRazaoSocial(txtRazaoSocial.getText());
-                            pj.setLongCnpj(Long.parseLong(auxiliar.removeCaracteresString(txtCNPJ.getText())));
-                            rs = conexao.executar("SELECT MAX(cliCodigo) FROM cliente");
-                        rs.next();
-                        pj.setCliCodigo(rs.getInt(1));
+                       pf.setCliCodigo(cliCod);
+                       ok = pf.alterar();
+                       if(ok){
+                           JOptionPane.showMessageDialog(null, "Dados alterados com sucesso");
+                       } 
+                    }
+                    else {
+                        CliPessoaJuridica pj = new CliPessoaJuridica();
+                        pj.setIntIE(Integer.parseInt(txtIE.getText()));
+                        pj.setIntIM(Integer.parseInt(txtIM.getText()));
+                        pj.setStrNomeFantasia(txtNomeFantasia.getText());
+                        pj.setStrRazaoSocial(txtRazaoSocial.getText());
+                        pj.setLongCnpj(Long.parseLong(auxiliar.removeCaracteresString(txtCNPJ.getText())));
+
+                        pj.setCliCodigo(cliCod);
                         ok = pj.alterar();
+                        
                         if(ok){
                             JOptionPane.showMessageDialog(null, "Dados  alterados com sucesso");
                         } 
-                   
-                     }
+
+                    }
                   
                     auxiliar.limpaCampos(telaCliente.getListaComponentes());
                     txtDataAbertura.setText(auxiliar.hoje());
@@ -581,9 +650,7 @@ public class Cliente implements ActionListener{
                     JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
                 }                                    
             }
-        }
-     }
-       
+        }       
         
         if(botao.getSource() == rdbpf){
             rdbpj.setSelected(false);
@@ -600,11 +667,10 @@ public class Cliente implements ActionListener{
             txtIE.setObrigatorio(false);
             
             rdbSelecionado = true;
-            
-            
-            
         }
+        
         if(botao.getSource() == rdbpj){
+            
             rdbpf.setSelected(false);
             rdbpj.setSelected(true);
             
@@ -622,6 +688,6 @@ public class Cliente implements ActionListener{
             
             rdbSelecionado = false;
         }
-      }
     }
-} 
+}
+ 
