@@ -275,13 +275,9 @@ public class Cliente implements ActionListener{
         panelBotoesAlteracao.setVisible(false);
         panelBotoesCadastro.setVisible(true);
         txtDataAbertura.setText(auxiliar.hoje());
-    }
+    } 
     
-    
-    
-    
-    
-    
+    //falta a instrução do conexao.preencheTabela
     public void preencheTabela(){
         try {
             conexao.preencheTabela(tabela, "falta");            
