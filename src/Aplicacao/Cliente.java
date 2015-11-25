@@ -626,4 +626,6 @@ public class Cliente implements ActionListener{
             
             rdbSelecionado = false;
         }
-          
+      }
+    }
+} 
