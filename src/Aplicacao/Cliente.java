@@ -16,13 +16,8 @@ import Core.MontaInterfaces;
 import Core.PFormattedTextField;
 import Core.PTextField;
 import java.awt.GridBagLayout;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.Icon;
@@ -36,7 +31,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JRadioButton;
-import javax.swing.text.DefaultFormatterFactory;
+
 
 /**
  *

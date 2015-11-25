@@ -2,13 +2,8 @@ package Aplicacao;
 
 import Core.ConexaoBanco;
 import Core.MetodosAuxiliares;
-import Core.MontaInterfaces;
-import java.awt.GridBagLayout;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 
 
  /**
