@@ -9,14 +9,18 @@ package Aplicacao;
 
 
 import Core.ComboItem;
+
 import Core.ConexaoBanco;
 import Core.MetodosAuxiliares;
 import Core.MontaInterfaces;
 import Core.PFormattedTextField;
 import Core.PTextField;
 import java.awt.GridBagLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
@@ -60,7 +64,7 @@ public class Cliente implements ActionListener{
     private String cliEmail;
     private String cliDataCadastro;
     private String cliObersavacao;
-    
+    private char cliTipo;
     
     
     
@@ -71,6 +75,7 @@ public class Cliente implements ActionListener{
     private JPanel panelCliPF = new JPanel(new GridBagLayout());
     private JPanel panelCliPJ = new JPanel(new GridBagLayout());
     private JPanel panelBotoesCadastro = new JPanel(new GridBagLayout());
+    private JPanel panelBotoesAlteracao = new JPanel(new GridBagLayout());
     
 
     
@@ -104,7 +109,8 @@ public class Cliente implements ActionListener{
     private JTextField txtCPF = new  JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CPF));
     private JFormattedTextField txtRG = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_RG));
    
-  
+   //Criação dos objetos, imprescindível criar ao menos um JPanel para servir de aba no formulário
+    private PFormattedTextField txtDataAbertura = new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
     
     //Botões
     private JButton botCadastrar = new JButton();
@@ -150,12 +156,21 @@ public class Cliente implements ActionListener{
         telaCliente.setVisible(true);        
         //Adicionei as abas com o método addAbas e o panel para os botões com o método addPanelBotoes
         telaCliente.addAbas(panelCadastro, "Cadastro");
+        telaCliente.addPanelBotoes(panelCadastro, panelBotoesCadastro);
+        
         telaCliente.addAbas(panelConsulta, "Consulta");
-        telaCliente.addPanelBotoes(panelCadastro, panelBotoes);
+        telaCliente.addPanelBotoes(panelConsulta, panelBotoes);
         
         //Adicionei os botões dentro do panelBotoes
-        telaCliente.addBotoes("Cadastrar", botCadastrar, panelBotoes);
-        telaCliente.addBotoes("Limpar", botExcluir, panelBotoes);
+        telaCliente.addBotoes("Cadastrar", botCadastrar, panelBotoesCadastro);
+        telaCliente.addBotoes("Limpar", botLimpar, panelBotoesCadastro);
+        telaCliente.addBotoes("Excluir Registro", botExcluir,panelBotoesAlteracao);
+        telaCliente.addBotoes("Alterar Registro", botAlterarRegistro, panelBotoesAlteracao);        
+
+        
+        //Deixa visível o panel de botões de cadastro
+        panelBotoesAlteracao.setVisible(false);
+        panelBotoesCadastro.setVisible(true);
         
         //Criei objetos do tipo icone com o caminho do icone para coloca-los nos botões 
         Icon iconeCadastrar = new ImageIcon(getClass().getResource("/imagens/salvar.png"));
@@ -203,7 +218,7 @@ public class Cliente implements ActionListener{
         botAlterarRegistro.addActionListener(this);
         botLimpar.addActionListener(this);
         
-         //Definição do combobos de UF.
+         //Definição do combobox de UF.
         
         cboEstado.addItem("");
         cboEstado.addItem("AC");                             
@@ -252,19 +267,180 @@ public class Cliente implements ActionListener{
         
         
         
+    }//Fim do inicia componentes
+          
+    public void mostraBotoesAlteracao() {
+        panelBotoesAlteracao.setVisible(true);
+        panelBotoesCadastro.setVisible(false);
     }
 
+                        
+    
+    public void mostraBotoesCadastro() {
+        panelBotoesAlteracao.setVisible(false);
+        panelBotoesCadastro.setVisible(true);
+        txtDataAbertura.setText(auxiliar.hoje());
+    }
+    
+    
+    
+    
+    
+    
+    public void preencheTabela(){
+        try {
+            conexao.preencheTabela(tabela, "falta");            
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
+        }
+       formataValoresTabela();
+    }
+    
+          
+        public void setaNomes(){
+            txtCodigo.setName("Código");
+            txtNome.setName("Nome");
+            txtEndereco.setName("Endereço");
+            txtBairro.setName("Bairro");
+            txtCidade.setName("Cidade");
+            txtDataCadastro.setName("Data de Cadastro");
+            
+            //PF
+            txtRG.setName("RG");
+            txtCPF.setName("CPF");
+            
+            //PJ
+            txtCNPJ.setName("CNPJ");
+            txtRazaoSocial.setName("Razão Social");
+            txtIM.setName("Inscrição Municipal");
+            txtIE.setName("Inscrição Estadual");
+            txtNomeFantasia.setName("Nome Fantasia");
+           
+            cboEstado.setName("Estado");
+            txtEmail.setName("Email");
+            txtCEP.setName("CEP");
+            txtCelular.setName("Celular");
+            txtTelefone.setName("Telefone");
+            txtObservacao.setName("Observação");
+            txtComplemento.setName("Complemento");
+        }
+        
+       private void formataValoresTabela(){
+         auxiliar.formataValorTabela(tblClientes, 3);
+          }
+       
+       public void atribuiIcones() {
+        Icon iconeCadastrar = new ImageIcon(getClass().getResource("/imagens/salvar.png"));
+        Icon iconeExcluir = new ImageIcon(getClass().getResource("/imagens/excluir.png"));
+        Icon iconeAlterar = new ImageIcon(getClass().getResource("/imagens/alterar.png"));
+        Icon iconeInserir = new ImageIcon(getClass().getResource("/imagens/adicionar.png"));
+        Icon iconeLimpar = new ImageIcon(getClass().getResource("/imagens/limpar.png"));
+
+
+       //Seta os icones dos botões
+        botAlterarRegistro.setIcon(iconeAlterar);
+        botCadastrar.setIcon(iconeCadastrar);
+        botExcluir.setIcon(iconeExcluir);
+        botInserir.setIcon(iconeInserir);
+        botLimpar.setIcon(iconeLimpar);
+    }
+
+          
+     //Para tratar os combobox
+     public void preencheCombos(){
+        //Preenche as combobox
+        cboEstado.addItem("");
+        conexao.preencheCombo(cboEstado, "SELECT cliCodigo, cliEstado FROM cliente");
+    }
+    public boolean cadastrar(){
+    if(auxiliar.validaCampos(telaCliente.getListaComponentes())){ 
+            this.cliCod = Integer.parseInt(txtCodigo.getText());
+            this.cliNome= txtNome.getText();
+            this.cliEndereco= txtEndereco.getText();
+            this.cliBairro= txtBairro.getText();
+            this.cliCidade= txtCidade.getText();
+            this.cliDataCadastro=  txtDataCadastro.getText();
+            
+            
+            //ComboItem comboItem = (ComboItem) cboEstado.getSelectedItem();
+            //this.cliCod= Integer.parseInt(comboItem.getId());
+            
+            this.cliEmail=  txtEmail.getText();
+            this.cliCep = Integer.parseInt(auxiliar.removeCaracteresString(txtCEP.getText()));
+            this.cliCelular = Long.parseLong(auxiliar.removeCaracteresString(txtCelular.getText()));
+            this.cliTelefone = Long.parseLong(auxiliar.removeCaracteresString(txtTelefone.getText()));
+            this.cliObersavacao = txtObservacao.getText();
+            this.cliComplemento = txtComplemento.getText();
+           
+           
+            return true;
+            
+        }else{            
+           return false;
+        }
+    }
+    
+     
+    public boolean alterar() {
+        if(auxiliar.validaCampos(telaCliente.getListaComponentes())){            
+      
+            this.cliCod = Integer.parseInt(txtCodigo.getText());
+            this.cliNome = txtNome.getText();
+            this.cliEndereco= txtEndereco.getText();
+            this.cliBairro =  txtBairro.getText();
+            this.cliCidade =  txtCidade.getText();
+            this.cliDataCadastro =  txtDataCadastro.getText();
+          //this.cliEstado =  cboEstado.getText();
+            this.cliEmail =  txtEmail.getText();
+            this.cliCep = Integer.parseInt(txtCEP.getText());
+            this.cliCelular = Integer.parseInt(txtCelular.getText());
+            this.cliTelefone = Integer.parseInt(txtTelefone.getText());
+            this.cliObersavacao= txtObservacao.getText();
+            this.cliComplemento= txtComplemento.getText();
+        
+            ComboItem comboItem = (ComboItem) cboEstado.getSelectedItem();
+            this.cliCod = Integer.parseInt(comboItem.getId());
+          
+           
+            return true;
+        }else{            
+           return false; 
+        }
+    }
+   
+     public boolean deletar() {
+        if(JOptionPane.showConfirmDialog(null, "Deseja realmente excluir o registro?", "Confirmação", JOptionPane.YES_NO_OPTION) == 0){                                
+            return true;                       
+        }else{
+            return false;
+        }
+    }
+      public void adicionaEventos() {
+        botCadastrar.addActionListener(this);
+        botInserir.addActionListener(this);
+        botExcluir.addActionListener(this);
+        botLimpar.addActionListener(this);
+        botAlterarRegistro.addActionListener(this);
+        
+         }
+ 
+      
+      
+    //Eventos
     @Override
     public void actionPerformed(ActionEvent botao) {
+         //Retorna qual o botão clicado e gera a ação
+        //cadastrar
         if (botao.getSource() == botCadastrar) { 
             boolean ok ;
-            ok = Cadastrar();
+            ok = cadastrar();
             if(ok){	
                 try {
-                    // PERGUNTAR O QUE FAZER COM O CAMPO TIPO DE CLIENTE !!!
+                   
                     
                     ResultSet rs;
-                    conexao.executaProcedure("INSERT_CLIENTE ('" + this.cliNome + "', '" + this.cliEndereco + "', '" +this.cliNumEndereco+"','"+ this.cliComplemento + "', '" + cliBairro + "' , " + cliCep + ", '" + this.cliCidade + "' ,  " + this.cliTelefone + ", " + this.cliCelular + " ," + this.cliEmail+"',"+ auxiliar.hoje() + "', '" + this.cliObersavacao + "', 'F')");
+                    conexao.executaProcedure("INSERT_CLIENTE ('" + this.cliNome + "', '" + this.cliEndereco + "', '" +this.cliNumEndereco+"','"+ this.cliComplemento + "', '" + cliBairro + "' , " + cliCep + ", '" + this.cliCidade + "' ,  " + this.cliTelefone + ", " + this.cliCelular + " ," + this.cliEmail+"',"+ auxiliar.hoje() + "', '" + this.cliObersavacao + "','" + this.cliTipo +"' )");
                     
                     
                     if(rdbSelecionado = true){
@@ -307,7 +483,116 @@ public class Cliente implements ActionListener{
                     JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
                 }                                    
             }
+            //deletar
+            if (botao.getSource() == botExcluir) {
+            ok = deletar();
+            if(ok){	
+                try {
+                    conexao.executaProcedure("DELETE_CLIENTE(" + this.cliCod+ ")");
+                    ResultSet rs;
+                     if(rdbSelecionado = true){
+                        CliPessoaFisica pf = new CliPessoaFisica();
+                        pf.setCliCpf(Long.parseLong(auxiliar.removeCaracteresString(txtCPF.getText())));
+                        pf.setCliRg(Integer.parseInt(auxiliar.removeCaracteresString(txtRG.getText())));
+
+                        rs = conexao.executar("SELECT MAX(cliCodigo) FROM cliente");
+                        rs.next();
+                        pf.setCliCodigo(rs.getInt(1));
+                        ok = pf.deletar();
+                        if(ok){
+                            JOptionPane.showMessageDialog(null, "Dados deletados com sucesso");
+                        } }
+                        else {
+                            CliPessoaJuridica pj =new CliPessoaJuridica();
+                            pj.setIntIE(Integer.parseInt(txtIE.getText()));
+                            pj.setIntIM(Integer.parseInt(txtIM.getText()));
+                            pj.setStrNomeFantasia(txtNomeFantasia.getText());
+                            pj.setStrRazaoSocial(txtRazaoSocial.getText());
+                            pj.setLongCnpj(Long.parseLong(auxiliar.removeCaracteresString(txtCNPJ.getText())));
+                            rs = conexao.executar("SELECT MAX(cliCodigo) FROM cliente");
+                        rs.next();
+                        pj.setCliCodigo(rs.getInt(1));
+                        ok = pj.deletar();
+                        if(ok){
+                            JOptionPane.showMessageDialog(null, "Dados  deletados com sucesso");
+                        } 
+                   
+                     }
+                    auxiliar.limpaCampos(telaCliente.getListaComponentes());
+                    txtDataAbertura.setText(auxiliar.hoje());
+                    this.mostraBotoesCadastro();
+                    this.preencheTabela();
+                    
+                }catch (SQLException b) {
+                    JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
+                }
+                catch (Exception b) {
+                    JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
+                }           
         }
+            
+        //inserir
+        if (botao.getSource() == botInserir) {
+            auxiliar.limpaCampos(telaCliente.getListaComponentes());
+            this.mostraBotoesCadastro();
+        }
+        //limpar
+        if (botao.getSource() == botLimpar) {            
+            auxiliar.limpaCampos(telaCliente.getListaComponentes());
+        }
+        //alterar
+        if (botao.getSource() == botAlterarRegistro) {            
+            ok = alterar();
+            if(ok){	
+                try {
+                    String hoje = auxiliar.hoje();
+                    conexao.executaProcedure("UPDATE_CLIENTE ("  + this.cliNome + "', '" + this.cliEndereco + "', '" +this.cliNumEndereco+"','"+ this.cliComplemento + "', '" + cliBairro + "' , " + cliCep + ", '" + this.cliCidade + "' ,  " + this.cliTelefone + ", " + this.cliCelular + " ," + this.cliEmail+"',"+ auxiliar.hoje() + "', '" + this.cliObersavacao + "','" + this.cliTipo +"' )");
+                   
+                    ResultSet rs;
+                     if(rdbSelecionado = true){
+                        CliPessoaFisica pf = new CliPessoaFisica();
+                        pf.setCliCpf(Long.parseLong(auxiliar.removeCaracteresString(txtCPF.getText())));
+                        pf.setCliRg(Integer.parseInt(auxiliar.removeCaracteresString(txtRG.getText())));
+
+                        rs = conexao.executar("SELECT MAX(cliCodigo) FROM cliente");
+                        rs.next();
+                        pf.setCliCodigo(rs.getInt(1));
+                        ok = pf.alterar();
+                        if(ok){
+                            JOptionPane.showMessageDialog(null, "Dados alterados com sucesso");
+                        } 
+                     }
+                        else {
+                            CliPessoaJuridica pj =new CliPessoaJuridica();
+                            pj.setIntIE(Integer.parseInt(txtIE.getText()));
+                            pj.setIntIM(Integer.parseInt(txtIM.getText()));
+                            pj.setStrNomeFantasia(txtNomeFantasia.getText());
+                            pj.setStrRazaoSocial(txtRazaoSocial.getText());
+                            pj.setLongCnpj(Long.parseLong(auxiliar.removeCaracteresString(txtCNPJ.getText())));
+                            rs = conexao.executar("SELECT MAX(cliCodigo) FROM cliente");
+                        rs.next();
+                        pj.setCliCodigo(rs.getInt(1));
+                        ok = pj.alterar();
+                        if(ok){
+                            JOptionPane.showMessageDialog(null, "Dados  alterados com sucesso");
+                        } 
+                   
+                     }
+                  
+                    auxiliar.limpaCampos(telaCliente.getListaComponentes());
+                    txtDataAbertura.setText(auxiliar.hoje());
+                    this.mostraBotoesCadastro();
+                    this.preencheTabela();
+                }catch (SQLException b) {
+                    JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
+                }
+                catch (Exception b) {
+                    JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
+                }                                    
+            }
+        }
+     }
+       
         
         if(botao.getSource() == rdbpf){
             rdbpj.setSelected(false);
@@ -346,133 +631,4 @@ public class Cliente implements ActionListener{
             
             rdbSelecionado = false;
         }
-    }
           
-        public void setaNomes(){
-            txtCodigo.setName("Código");
-            txtNome.setName("Nome");
-            txtEndereco.setName("Endereço");
-            txtBairro.setName("Bairro");
-            txtCidade.setName("Cidade");
-            txtDataCadastro.setName("Data de Cadastro");
-            
-           
-            cboEstado.setName("Estado");
-            txtEmail.setName("Email");
-            txtCEP.setName("CEP");
-            txtCelular.setName("Celular");
-            txtTelefone.setName("Telefone");
-            txtObservacao.setName("Observação");
-            txtComplemento.setName("Complemento");
-        }
-        
-         private void formataValoresTabela(){
-         auxiliar.formataValorTabela(tblClientes, 3);
-          }
-       public void atribuiIcones() {
-        Icon iconeCadastrar = new ImageIcon(getClass().getResource("/imagens/salvar.png"));
-        Icon iconeExcluir = new ImageIcon(getClass().getResource("/imagens/excluir.png"));
-        Icon iconeAlterar = new ImageIcon(getClass().getResource("/imagens/alterar.png"));
-        Icon iconeInserir = new ImageIcon(getClass().getResource("/imagens/adicionar.png"));
-        Icon iconeLimpar = new ImageIcon(getClass().getResource("/imagens/limpar.png"));
-
-
-       //Seta os icones dos botões
-        botAlterarRegistro.setIcon(iconeAlterar);
-        botCadastrar.setIcon(iconeCadastrar);
-        botExcluir.setIcon(iconeExcluir);
-        botInserir.setIcon(iconeInserir);
-        botLimpar.setIcon(iconeLimpar);
-    }
-
-          
-     //Para tratar os combobox
-     public void preencheCombos(){
-        //Preenche as combobox
-        cboEstado.addItem("");
-        conexao.preencheCombo(cboEstado, "SELECT cliCodigo, cliEstado FROM cliente");
-    }
-    public boolean Cadastrar(){
-    if(auxiliar.validaCampos(telaCliente.getListaComponentes())){ 
-            this.cliCod = Integer.parseInt(txtCodigo.getText());
-            this.cliNome= txtNome.getText();
-            this.cliEndereco= txtEndereco.getText();
-            this.cliBairro= txtBairro.getText();
-            this.cliCidade= txtCidade.getText();
-            this.cliDataCadastro=  txtDataCadastro.getText();
-            
-            
-            //ComboItem comboItem = (ComboItem) cboEstado.getSelectedItem();
-            //this.cliCod= Integer.parseInt(comboItem.getId());
-            
-            this.cliEmail=  txtEmail.getText();
-            this.cliCep = Integer.parseInt(auxiliar.removeCaracteresString(txtCEP.getText()));
-            this.cliCelular = Long.parseLong(auxiliar.removeCaracteresString(txtCelular.getText()));
-            this.cliTelefone = Long.parseLong(auxiliar.removeCaracteresString(txtTelefone.getText()));
-            this.cliObersavacao = txtObservacao.getText();
-            this.cliComplemento = txtComplemento.getText();
-           
-           
-            return true;
-            
-        }else{            
-           return false;
-        }
-    }
-    
-     
-    public boolean alterar() {
-        if(auxiliar.validaCampos(telaCliente.getListaComponentes())){            
-            //this.intCodigoOS = intCodigoOS;
-            this.cliCod = Integer.parseInt(txtCodigo.getText());
-            this.cliNome = txtNome.getText();
-            this.cliEndereco= txtEndereco.getText();
-            this.cliBairro =  txtBairro.getText();
-            this.cliCidade =  txtCidade.getText();
-            this.cliDataCadastro =  txtDataCadastro.getText();
-          //this.cliEstado =  cboEstado.getText();
-            this.cliEmail =  txtEmail.getText();
-            this.cliCep = Integer.parseInt(txtCEP.getText());
-            this.cliCelular = Integer.parseInt(txtCelular.getText());
-            this.cliTelefone = Integer.parseInt(txtTelefone.getText());
-            this.cliObersavacao= txtObservacao.getText();
-            this.cliComplemento= txtComplemento.getText();
-            
-              
-                  
-            
-            ComboItem comboItem = (ComboItem) cboEstado.getSelectedItem();
-            this.cliCod = Integer.parseInt(comboItem.getId());
-          
-           
-            return true;
-        }else{            
-           return false; 
-        }
-    }
-   
-     public boolean deletar() {
-        if(JOptionPane.showConfirmDialog(null, "Deseja realmente excluir o registro?", "Confirmação", JOptionPane.YES_NO_OPTION) == 0){                                
-            return true;                       
-        }else{
-            return false;
-        }
-    }
-     
-     
-     
-       public void adicionaEventos() {
-        botCadastrar.addActionListener(this);
-        botInserir.addActionListener(this);
-        botExcluir.addActionListener(this);
-        botLimpar.addActionListener(this);
-        botAlterarRegistro.addActionListener(this);
-        
-        
-        
-         }
-        
-        
-      }
-           
-

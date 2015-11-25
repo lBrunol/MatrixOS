@@ -588,4 +588,8 @@ public class MontaInterfaces extends JFrame {
     public void setTabbedPane(JTabbedPane tabbedPane) {
         this.tabbedPane = tabbedPane;
     }
+
+    public void addAbas(JPanel panelCadastro, JPanel panelBotoesCadastro) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

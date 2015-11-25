@@ -46,7 +46,38 @@ public class CliPessoaJuridica  {
         return false;
         
        }
+       
+        public boolean deletar(){
+        try {
+            conexao.executaProcedure("DELETE_CLIPESSOAJURIDICA ('" + this.strRazaoSocial + "', " + this.strNomeFantasia + ", " + this.longCnpj + "','"+this.intIM+"','"+this.intIE + "','"+ this.getCliCodigo() + ")");
+            return true;
+             
+        }catch (SQLException b) {
+            JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
+        }
+        catch (Exception b) {
+            JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
+        }
+        
+        return false;
+        
+       }
      
+       public boolean alterar(){
+        try {
+            conexao.executaProcedure("UPDATE_CLIPESSOAJURIDICA ('" + this.strRazaoSocial + "', " + this.strNomeFantasia + ", " + this.longCnpj + "','"+this.intIM+"','"+this.intIE + "','"+ this.getCliCodigo() + ")");
+            return true;
+             
+        }catch (SQLException b) {
+            JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
+        }
+        catch (Exception b) {
+            JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
+        }
+        
+        return false;
+        
+       }
 
  
  

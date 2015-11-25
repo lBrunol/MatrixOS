@@ -40,6 +40,38 @@ public class CliPessoaFisica {
         
         return false;
      }
+     
+     public boolean deletar()
+     {
+          try {
+            conexao.executaProcedure("DELETE_CLIPESSOAFISICA ('" + this.cliRg + "', " + this.cliCpf + ", " + this.cliCodigo + ")");
+            return true;
+             
+        }catch (SQLException b) {
+            JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
+        }
+        catch (Exception b) {
+            JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
+        }
+        
+        return false;
+     }
+
+      public boolean alterar()
+     {
+          try {
+            conexao.executaProcedure("UPDATE_CLIPESSOAFISICA ('" + this.cliRg + "', " + this.cliCpf + ", " + this.cliCodigo + ")");
+            return true;
+             
+        }catch (SQLException b) {
+            JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
+        }
+        catch (Exception b) {
+            JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
+        }
+        
+        return false;
+     }
   
     
 
