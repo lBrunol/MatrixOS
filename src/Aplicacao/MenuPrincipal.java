@@ -459,8 +459,8 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
     @Override
     public void actionPerformed(ActionEvent botao) {
          if (botao.getSource() == JButtonCliente) {             
-             //Aplicacao.Cliente c = new Aplicacao.Cliente();
-             JOptionPane.showMessageDialog(null,"Em construção");
+             Aplicacao.Cliente c = new Aplicacao.Cliente();
+            
          }else if(botao.getSource() == JButtonContasaReceber){
              //Aplicacao.ConsultaContasReceber cons = new Aplicacao.ConsultaContasReceber();
              JOptionPane.showMessageDialog(null,"Em construção");
