@@ -34,6 +34,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JRadioButton;
+import javax.swing.text.DefaultFormatterFactory;
 
 
 /**
@@ -190,7 +191,7 @@ public class Cliente implements ActionListener{
         telaCliente.addLabelTitulo("Cliente", panelCadastro);
        
         telaCliente.addDoisComponentes("Codigo", txtCodigo,"Nome",txtNome,panelCadastro);
-        telaCliente.addDoisComponentes("Endereço",txtEndereco,"Número Endereço",txtNumEndereco,panelCadastro);
+        telaCliente.addDoisComponentes("Número Endereço",txtNumEndereco,"Endereço",txtEndereco,panelCadastro);
         telaCliente.addQuatroComponentes( "Bairro", txtBairro, "Complemento", txtComplemento,"UF", cboEstado,"Cidade",txtCidade, panelCadastro);
         telaCliente.addQuatroComponentes("CEP", txtCEP, "Telefone", txtTelefone, "Celular", txtCelular, "Data Cadastro", txtDataCadastro, panelCadastro);
         telaCliente.addUmComponente("Email:",txtEmail,panelCadastro);
@@ -345,8 +346,11 @@ public class Cliente implements ActionListener{
      public void preencheCombos(){
         //Preenche as combobox
         cboEstado.addItem("");
+        //na mão
         //conexao.preencheCombo(cboEstado, "SELECT cliCodigo, cliEstado FROM cliente");
     }
+     
+     //metodos relacionados aos atributos da interface
     public boolean cadastrar(){
     if(auxiliar.validaCampos(telaCliente.getListaComponentes())){ 
             this.cliCod = Integer.parseInt(txtCodigo.getText());
@@ -420,7 +424,7 @@ public class Cliente implements ActionListener{
         tblClientes.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent me) {
-                              
+                 //dois cliques no mouse---aciona             
                 if (me.getClickCount() == 2) {                    
                     try {
                         
@@ -440,13 +444,20 @@ public class Cliente implements ActionListener{
                         txtNumEndereco.setText(rs.getString(4));
                         txtComplemento.setText(rs.getString(5));
                         txtBairro.setText(rs.getString(6));
-                        
+                        txtCEP.setText(rs.getString(7));
+                        txtCidade.setText(rs.getString(8));
+                        cboEstado.setSelectedItem(rs.getString(9));
+                        txtTelefone.setText(rs.getString(10));
+                        txtCelular.setText(rs.getString(11));
+                        txtEmail.setText(rs.getString(12));
+                        txtDataCadastro.setText(rs.getString(13));
+                        txtObservacao.setText(rs.getString(14));
                         //Verifica se o campo cliTipo é J ou F para fazer o select nas tabelas especializadas
                         
-                        if("J".equals(rs.getString(15).toUpperCase())){
+                        if("J".equals(rs.getString(1).toUpperCase())){
                             rs.close();
                             rs = conexao.executar("SELECT * FROM cliPessoaJuridica WHERE cliCodigo =" + cliCod); 
-                            
+                           
                             rs.next();
                             txtRazaoSocial.setText(rs.getString(1));
                             txtNomeFantasia.setText(rs.getString(2));
@@ -457,7 +468,7 @@ public class Cliente implements ActionListener{
                             panelCliPF.setVisible(false);
                             panelCliPJ.setVisible(true);
                             
-                        }else{
+                        }else if("F".equals(rs.getString(1).toUpperCase())){
                             rs.close();
                             rs = conexao.executar("SELECT * FROM cliPessoaFisica WHERE cliCodigo =" + cliCod);
                             rs.next();
@@ -466,6 +477,8 @@ public class Cliente implements ActionListener{
                             
                             panelCliPF.setVisible(true);
                             panelCliPJ.setVisible(false);
+                        }else {
+                            throw new IllegalArgumentException("Este cliente foi cadastrado de forma incorreta. Por favor, entre em contato com administrador do sistema.");
                         }
 
                         mostraBotoesAlteracao();
@@ -501,7 +514,7 @@ public class Cliente implements ActionListener{
                     ResultSet rs;
                     conexao.executaProcedure("INSERT_CLIENTE ('" + this.cliNome + "', '" + this.cliEndereco + "', '" +this.cliNumEndereco+"','"+ this.cliComplemento + "', '" + cliBairro + "' , " + cliCep + ", '" + this.cliCidade + "' ,  " + this.cliTelefone + ", " + this.cliCelular + " ," + this.cliEmail+"',"+ auxiliar.hoje() + "', '" + this.cliObersavacao + "','" + this.cliTipo +"' )");
                     
-                    
+                    //pessoa física
                     if(rdbSelecionado = true){
                         CliPessoaFisica pf = new CliPessoaFisica();
                         pf.setCliCpf(Long.parseLong(auxiliar.removeCaracteresString(txtCPF.getText())));
@@ -514,6 +527,7 @@ public class Cliente implements ActionListener{
                         if(ok){
                             JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
                         } }
+                        //pessoa jurídica
                         else {
                             CliPessoaJuridica pj =new CliPessoaJuridica();
                             pj.setIntIE(Integer.parseInt(txtIE.getText()));
@@ -550,30 +564,30 @@ public class Cliente implements ActionListener{
             if(ok){	
                 try {
                     conexao.executaProcedure("DELETE_CLIENTE(" + this.cliCod+ ")");
-                    ResultSet rs;
+                     ResultSet rs;
+                     //pessoa física
                      if(rdbSelecionado = true){
-                        CliPessoaFisica pf = new CliPessoaFisica();
-                        pf.setCliCpf(Long.parseLong(auxiliar.removeCaracteresString(txtCPF.getText())));
-                        pf.setCliRg(Integer.parseInt(auxiliar.removeCaracteresString(txtRG.getText())));
 
-                        rs = conexao.executar("SELECT MAX(cliCodigo) FROM cliente");
-                        rs.next();
-                        pf.setCliCodigo(rs.getInt(1));
-                        ok = pf.deletar();
+                            CliPessoaFisica pf = new CliPessoaFisica();
+                            pf.setCliCpf(Long.parseLong(auxiliar.removeCaracteresString(txtCPF.getText())));
+                            pf.setCliRg(Integer.parseInt(auxiliar.removeCaracteresString(txtRG.getText())));
+
+                            pf.setCliCodigo(cliCod);
+                            ok = pf.deletar();
                         if(ok){
                             JOptionPane.showMessageDialog(null, "Dados deletados com sucesso");
                         } }
-                        else {
+                      //pessoa jurídica
+                     else {
                             CliPessoaJuridica pj =new CliPessoaJuridica();
                             pj.setIntIE(Integer.parseInt(txtIE.getText()));
                             pj.setIntIM(Integer.parseInt(txtIM.getText()));
                             pj.setStrNomeFantasia(txtNomeFantasia.getText());
                             pj.setStrRazaoSocial(txtRazaoSocial.getText());
                             pj.setLongCnpj(Long.parseLong(auxiliar.removeCaracteresString(txtCNPJ.getText())));
-                            rs = conexao.executar("SELECT MAX(cliCodigo) FROM cliente");
-                        rs.next();
-                        pj.setCliCodigo(rs.getInt(1));
-                        ok = pj.deletar();
+                            
+                            pj.setCliCodigo(cliCod);
+                            ok = pj.deletar();
                         if(ok){
                             JOptionPane.showMessageDialog(null, "Dados  deletados com sucesso");
                         } 
@@ -611,17 +625,19 @@ public class Cliente implements ActionListener{
                     conexao.executaProcedure("UPDATE_CLIENTE ("  + this.cliNome + "', '" + this.cliEndereco + "', '" +this.cliNumEndereco+"','"+ this.cliComplemento + "', '" + cliBairro + "' , " + cliCep + ", '" + this.cliCidade + "' ,  " + this.cliTelefone + ", " + this.cliCelular + " ," + this.cliEmail+"',"+ auxiliar.hoje() + "', '" + this.cliObersavacao + "','" + this.cliTipo +"' )");
                    
                     ResultSet rs;
+                    //pessoa física
                     if(rdbSelecionado = true){
-                       CliPessoaFisica pf = new CliPessoaFisica();
-                       pf.setCliCpf(Long.parseLong(auxiliar.removeCaracteresString(txtCPF.getText())));
-                       pf.setCliRg(Integer.parseInt(auxiliar.removeCaracteresString(txtRG.getText())));
+                        CliPessoaFisica pf = new CliPessoaFisica();
+                        pf.setCliCpf(Long.parseLong(auxiliar.removeCaracteresString(txtCPF.getText())));
+                        pf.setCliRg(Integer.parseInt(auxiliar.removeCaracteresString(txtRG.getText())));
 
-                       pf.setCliCodigo(cliCod);
-                       ok = pf.alterar();
+                        pf.setCliCodigo(cliCod);
+                        ok = pf.alterar();
                        if(ok){
                            JOptionPane.showMessageDialog(null, "Dados alterados com sucesso");
                        } 
                     }
+                    //pessoa jurídica
                     else {
                         CliPessoaJuridica pj = new CliPessoaJuridica();
                         pj.setIntIE(Integer.parseInt(txtIE.getText()));

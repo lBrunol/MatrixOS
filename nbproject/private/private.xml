@@ -12,6 +12,16 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< .mine
+            <file>file:/C:/Users/Amanda/Documents/Programa%20Matrix/trunk/src/Aplicacao/Cliente.java</file>
+            <file>file:/C:/Users/Amanda/Documents/Programa%20Matrix/trunk/src/Aplicacao/CliPessoaFisica.java</file>
+            <file>file:/C:/Users/Amanda/Documents/Programa%20Matrix/trunk/src/Aplicacao/CliPessoaJuridica.java</file>
+||||||| .r88
+            <file>file:/C:/Users/Amanda/Documents/Programa%20Matrix/trunk/src/Aplicacao/Cliente.java</file>
+            <file>file:/C:/Users/Amanda/Documents/Programa%20Matrix/trunk/src/Aplicacao/CliPessoaFisica.java</file>
+            <file>file:/C:/Users/Amanda/Documents/Programa%20Matrix/trunk/src/Aplicacao/CliPessoaJuridica.java</file>
+            <file>file:/C:/Users/Amanda/Documents/Programa%20Matrix/trunk/src/Aplicacao/OrdemServico.java</file>
+=======
             <file>file:/C:/Users/CASA/Documents/MatrixOS/trunk/src/Core/PFormattedTextField.java</file>
             <file>file:/C:/Users/CASA/Documents/MatrixOS/trunk/src/Core/PTextField.java</file>
             <file>file:/C:/Users/CASA/Documents/MatrixOS/trunk/src/Aplicacao/ConsultaContasReceber.java</file>
@@ -26,6 +36,7 @@
             <file>file:/C:/Users/CASA/Documents/MatrixOS/trunk/src/Aplicacao/ConsultaNotaFiscal.java</file>
             <file>file:/C:/Users/CASA/Documents/MatrixOS/trunk/src/Core/ComboItem.java</file>
             <file>file:/C:/Users/CASA/Documents/MatrixOS/trunk/src/Core/PComboBox.java</file>
+>>>>>>> .r91
         </group>
     </open-files>
 </project-private>

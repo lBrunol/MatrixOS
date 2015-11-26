@@ -243,7 +243,7 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
                         if("J".equals(rs.getString(1).toUpperCase())){                        
                             rs = conexao.executar("SELECT cliEndereco, cliNumEndereco, cliComplemento, cliCEP, cliBairro, cliCidade, cliUF, cliTelefone, cliCNPJ, cliIM FROM cliente INNER JOIN cliPessoaJuridica ON cliente.cliCodigo = cliPessoaJuridica.cliCodigo WHERE cliente.cliCodigo = " + intCodigoCliente);
                             rs.next();
-                            txtCPF.setFormatterFactory(new DefaultFormatterFactory(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CNPJ)));
+                            txtCPF.setFormatterFactory(new DefaultFormatterFactory(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CPF)));
                             txtRG.getFormatter().uninstall();
                         }else if("F".equals(rs.getString(1).toUpperCase())){
                             rs = conexao.executar("SELECT cliEndereco, cliNumEndereco, cliComplemento, cliCEP, cliBairro, cliCidade, cliUF, cliTelefone, cliCPF, cliRG FROM cliente INNER JOIN cliPessoaFisica ON cliente.cliCodigo = cliPessoaFisica.cliCodigo WHERE cliente.cliCodigo = " + intCodigoCliente);
