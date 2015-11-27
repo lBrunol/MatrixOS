@@ -95,8 +95,6 @@ public class TiposPagamento implements PadraoFormulario, ActionListener {
         telaTiposPagamento.addUmComponente("Descrição", txtDescricao, panelCadastro);
         telaTiposPagamento.addTabela(tblTiposPagamento, panelConsulta);
         
-        conexao.preencheTabela(tabela, "select *from tipospagamento");
-        
         panelBotoesAlteracao.setVisible(false);
         panelBotoesCadastro.setVisible(true);
     }
@@ -141,7 +139,7 @@ public class TiposPagamento implements PadraoFormulario, ActionListener {
                         intCodigo = Integer.parseInt(tblTiposPagamento.getValueAt(row, 0).toString());
                         
                         ResultSet rs;
-                        rs = conexao.executar("SELECT * FROM tipospagamento WHERE tpaCodigo =" + intCodigo);
+                        rs = conexao.executaProcedureSelect("CONSULTA_TIPOSPAGAMENTO(" + intCodigo + ")");
                         rs.next();                    
                         txtDescricao.setText(rs.getString(2));                
                         
@@ -163,7 +161,7 @@ public class TiposPagamento implements PadraoFormulario, ActionListener {
     @Override
     public void preencheTabela() {
         try {
-            conexao.preencheTabela(tabela, "select tpaCodigo, tpaDescricao FROM tiposPagamento ORDER BY tpaCodigo");            
+            conexao.preencheTabela(tabela, "CONSULTA_TIPOSPAGAMENTO(0)");            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
         }

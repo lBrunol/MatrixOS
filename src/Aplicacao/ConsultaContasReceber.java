@@ -66,11 +66,11 @@ public class ConsultaContasReceber implements ActionListener, FocusListener {
         this.adicionaEventos();
         
         telaConsultaContas.setVisible(true);
-        telaConsultaContas.setTamanho(1000, 1000);
+        telaConsultaContas.setTamanho(1000, 600);
         telaConsultaContas.setMaximizado(true);
     }
     
-     public static void main(String[] args){
+    public static void main(String[] args){
         ConsultaContasReceber ccr = new ConsultaContasReceber();
     }
 
@@ -104,7 +104,7 @@ public class ConsultaContasReceber implements ActionListener, FocusListener {
     
     public void preencheTabela() {
         try {
-            conexao.preencheTabela(tabela, query);            
+            conexao.preencheTabelaSelect(tabela, query);            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
         }
@@ -157,7 +157,11 @@ public class ConsultaContasReceber implements ActionListener, FocusListener {
                 }
                     
             }
-            conexao.preencheTabela(tabela, queryFilter);
+            try{
+                conexao.preencheTabelaSelect(tabela, queryFilter);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
+            }
         }
     }
 

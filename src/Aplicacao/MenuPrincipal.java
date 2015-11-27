@@ -9,7 +9,6 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -73,7 +72,6 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         jMenuBar1 = new javax.swing.JMenuBar();
         JMenuUsuarios = new javax.swing.JMenu();
         JMenuCriacaoUsuarios = new javax.swing.JMenuItem();
-        JMenuAlteracaoUsuarios = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Menu Principal - Matrix OS");
@@ -351,11 +349,8 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
 
         JMenuUsuarios.setText("Usuários");
 
-        JMenuCriacaoUsuarios.setText("Criação de Usuários");
+        JMenuCriacaoUsuarios.setText("Gerenciamento de Usuários");
         JMenuUsuarios.add(JMenuCriacaoUsuarios);
-
-        JMenuAlteracaoUsuarios.setText("Alteração de Usuários");
-        JMenuUsuarios.add(JMenuAlteracaoUsuarios);
 
         jMenuBar1.add(JMenuUsuarios);
 
@@ -374,7 +369,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         JButtonCliente.addActionListener(this); 
         JButtonAjuda.addActionListener(this);
         JButtonRelatorioContasaReceber.addActionListener(this);
-        JButtonNotasFiscais.addActionListener(this);
+        JMenuCriacaoUsuarios.addActionListener(this);
     }// </editor-fold>         
     
     public void centralize() {	
@@ -437,7 +432,6 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
     private javax.swing.JButton JButtonOrdemdeServico2;
     private javax.swing.JButton JButtonRelatorioContasaReceber;
     private javax.swing.JButton JButtonServiços;
-    private javax.swing.JMenuItem JMenuAlteracaoUsuarios;
     private javax.swing.JMenuItem JMenuCriacaoUsuarios;
     private javax.swing.JMenu JMenuUsuarios;
     private javax.swing.JLabel jLabel1;
@@ -459,17 +453,15 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
     @Override
     public void actionPerformed(ActionEvent botao) {
          if (botao.getSource() == JButtonCliente) {             
-             Aplicacao.Cliente c = new Aplicacao.Cliente();
+             Aplicacao.Cliente c = new Aplicacao.Cliente();            
          }else if(botao.getSource() == JButtonContasaReceber){
-            // Aplicacao.ConsultaContasReceber cons = new Aplicacao.ConsultaContasReceber();
-             JOptionPane.showMessageDialog(null,"Em construção");
+             Aplicacao.ConsultaContasReceber cons = new Aplicacao.ConsultaContasReceber();
          }else if(botao.getSource() == JButtonEmitente){
              Aplicacao.CadastroDoEmitente emi = new Aplicacao.CadastroDoEmitente();
          }else if(botao.getSource() == JButtonFuncionario){
              Aplicacao.Funcionario fun = new Aplicacao.Funcionario();
          }else if(botao.getSource() == JButtonNotasFiscais){
-             //Aplicacao.ConsultaNotaFiscal not = new Aplicacao.ConsultaNotaFiscal();
-             JOptionPane.showMessageDialog(null,"Em construção"); 
+             Aplicacao.ConsultaNotaFiscal not = new Aplicacao.ConsultaNotaFiscal();
          }else if(botao.getSource() == JButtonOrdemdeServico1){
              Aplicacao.OrdemServico os = new Aplicacao.OrdemServico();
          }else if(botao.getSource() == JButtonOrdemdeServico){
@@ -478,9 +470,13 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
              Aplicacao.Cargos car = new Aplicacao.Cargos();
          }else if(botao.getSource() == JButtonServiços){
              Aplicacao.Servicos svc = new Aplicacao.Servicos();
-         }else if(botao.getSource() == JButtonRelatorioContasaReceber){
-            JOptionPane.showMessageDialog(null,"Em construção");             
-           // Aplicacao.Servicos svc = new Aplicacao.Servicos();
+         }else if(botao.getSource() == JButtonRelatorioContasaReceber){            
+            Core.DadosGraficos dados = new Core.DadosGraficos();
+            dados.criaJTable();
+            dados.criaJanela();
+            dados.setVisible(true);
+         }else if(botao.getSource() == JMenuCriacaoUsuarios){
+             Aplicacao.Usuario usr = new Usuario();
          }
     }    
 }

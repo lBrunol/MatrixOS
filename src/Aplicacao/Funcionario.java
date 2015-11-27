@@ -157,7 +157,7 @@ public class Funcionario implements PadraoFormulario, ActionListener{
     public void preencheCombos() {
         cboCargo.addItem("");
 
-        conexao.preencheCombo(cboCargo, "SELECT carCodigo, carDescricao FROM cargos");
+        conexao.preencheCombo(cboCargo, "SELECT carCodigo, carDescricao FROM cargos ORDER BY carCodigo");
     }
 
     @Override
@@ -173,7 +173,7 @@ public class Funcionario implements PadraoFormulario, ActionListener{
             public void actionPerformed(ActionEvent e) {
                 if(cboCargo.getSelectedItem() != ""){
                     ComboItem comboItem = (ComboItem) cboCargo.getSelectedItem();
-                    intCodigoCargo = Integer.parseInt(comboItem.getId());                    
+                    intCodigoCargo = Integer.parseInt(comboItem.getId());
                 }
             }
         });
@@ -191,7 +191,7 @@ public class Funcionario implements PadraoFormulario, ActionListener{
                         intMatricula = Integer.parseInt(tblFuncionario.getValueAt(row, 0).toString());
                         
                         ResultSet rs;
-                        rs = conexao.executar("SELECT * FROM funcionario WHERE funMatricula =" + intMatricula);
+                        rs = conexao.executaProcedureSelect("CONSULTA_FUNCIONARIO(" + intMatricula + ")");
                         rs.next();                    
                         txtNome.setText(rs.getString(2));
                         txtTelefone.setText(rs.getString(3));
@@ -215,8 +215,7 @@ public class Funcionario implements PadraoFormulario, ActionListener{
     @Override
     public void preencheTabela() {
        try {
-            conexao.preencheTabela(tabela, "select funMatricula, funNome, funTelefone, carDescricao FROM Funcionario INNER JOIN cargos ON funcionario.carCodigo = cargos.carCodigo ORDER BY funMatricula");
-            
+            conexao.preencheTabela(tabela, "CONSULTA_FUNCIONARIO(0)");      
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
         }

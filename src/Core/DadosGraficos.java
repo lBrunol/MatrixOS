@@ -6,27 +6,19 @@
 package Core;
 
 import java.util.Arrays;
-import java.awt.GridLayout;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
-import java.lang.reflect.Modifier;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -62,18 +54,14 @@ public class DadosGraficos extends JFrame {
     private double media;
     private double mediana;
     private double moda[];
-//test
 
-    public DadosGraficos(double[] xi) {
-
-        
+    public DadosGraficos() {
         
         this.lenghtArrays = 101;
 
         this.xi = new double[lenghtArrays];
         this.xiExclusivos = new double[lenghtArrays];
 
-        //this.lenghtArrays = calculaComprimentoVetores(xiExclusivos);
         this.fi = new int[lenghtArrays];
         this.fri = new double[lenghtArrays];
         this.fa = new int[lenghtArrays];
@@ -81,7 +69,6 @@ public class DadosGraficos extends JFrame {
         this.xifi = new double[lenghtArrays];
         this.moda = new double[lenghtArrays];
 
-        //this.xi = xi;
         this.xi = this.getDadosXi();
         this.fi = this.calculaFi(this.ordenaXi(this.xi));
         this.xiExclusivos = this.valoresExclusivosXi(this.xi);
@@ -94,76 +81,7 @@ public class DadosGraficos extends JFrame {
         this.somaXiFi = this.somaXiFi(xifi);
         this.media = this.calculaMedia(somaXi, somaFi);
         this.mediana = this.calculaMediana(somaFi, this.ordenaXi(this.xi));
-        this.moda = this.calculaModa(this.fi, this.xiExclusivos);
-
-        for (int i = 0; i < xiExclusivos.length; i++) {
-            if (xiExclusivos[i] == 0) {
-                break;
-            }
-            System.out.println("XI " + xiExclusivos[i]);
-
-        }
-
-        for (int i = 0; i < fi.length; i++) {
-            if (fi[i] == 0) {
-                break;
-            }
-            System.out.println("FI " + fi[i]);
-        }
-
-        for (int i = 0; i < fri.length; i++) {
-            if (fri[i] == 0) {
-                break;
-            }
-            System.out.println("FRI " + fri[i]);
-        }
-
-        for (int i = 0; i < fa.length; i++) {
-            if (fa[i] == 0) {
-                break;
-            }
-            System.out.println("FA " + fa[i]);
-        }
-
-        for (int i = 0; i < fra.length; i++) {
-            if (fra[i] == 0) {
-                break;
-            }
-            System.out.println("FRA " + fra[i]);
-        }
-
-        for (int i = 0; i < xifi.length; i++) {
-            if (xifi[i] == 0) {
-                break;
-            }
-            System.out.println("XIFI " + xifi[i]);
-        }
-
-        System.out.println("Soma XI " + this.somaXi);
-        System.out.println("Soma FI " + this.somaFi);
-        System.out.println("Soma XIFI " + this.somaXiFi);
-        System.out.println("MÉDIA " + this.media);
-        System.out.println("MEDIANA " + this.mediana);
-
-        for (int i = 0; i < moda.length; i++) {
-            if (moda[i] == 0) {
-                break;
-            }
-            System.out.println("MODA  " + moda[i]);
-        }
-
-        Object[][] obj;
-        obj = new Object[fi.length][6];
-        obj = this.getDados();
-
-        for (int i = 0; i < fi.length; i++) {
-            for (int j = 0; j < 6; j++) {
-                System.out.println(obj[i][j]);
-            }
-        }
-        
-        //criaJTable();
-	//criaJanela();
+        this.moda = this.calculaModa(this.fi, this.xiExclusivos);	
     }
 
     private int[] calculaFi(double[] xi) {
@@ -420,15 +338,9 @@ public class DadosGraficos extends JFrame {
             }
         }
         return input;
-    }
-
-    public DadosGraficos() {
-		
-	}
+    }   
     
-    
-    public void criaJanela() {
-        
+    public void criaJanela() {        
         
         barraRolagem = new JScrollPane(tabela);
         painelFundo = new JPanel();
@@ -455,8 +367,7 @@ public class DadosGraficos extends JFrame {
         
         c.setLayout(new GridLayout(1,3));
         Font fonte2 = new Font("Calibri",Font.BOLD, 35);
-        
-        
+                
         c.add(lblmedia);
         c.add(lblmediana);
         c.add(lblmoda);
@@ -468,24 +379,13 @@ public class DadosGraficos extends JFrame {
         
         painelFundo.add(BorderLayout.NORTH, c2);
         painelFundo.add(BorderLayout.CENTER, barraRolagem);
-        painelFundo.add(BorderLayout.SOUTH, c);
-        
+        painelFundo.add(BorderLayout.SOUTH, c);        
         
         getContentPane().add(painelFundo);
         
-        
-
-        
-        
-        
-        //painelFundo.add(lblmedia);
-        //painelFundo.add(lblmediana);
-        //painelFundo.add(lblmoda);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1000, 600);
         setTitle("Variável Discreta - Valores totais das Ordens de Serviço");
         centralize();
-        setVisible(true);
 
     }
     
@@ -502,7 +402,7 @@ public class DadosGraficos extends JFrame {
         setLocation((T.width - J.width )/2,(T.height-J.height)/2);
     }
 
-    private void criaJTable() {
+    public void criaJTable() {
         tabela = new JTable(modelo);
         modelo.addColumn("XI");
         modelo.addColumn("FI");
@@ -545,8 +445,7 @@ public class DadosGraficos extends JFrame {
         rs = cn.executar("SELECT ordValorTotal FROM ordemServico WHERE ROWNUM < 100 ORDER BY ordValorTotal DESC");
         i = 0;
         try {
-            while (rs.next()) {
-                System.out.println(rs.getDouble(1));                
+            while (rs.next()) {              
                 dadosXi[i] = rs.getDouble(1);
                 i++;
             }
@@ -578,39 +477,5 @@ public class DadosGraficos extends JFrame {
             }
         }
         return dados;
-    }
-
-    public static void main(String[] args) {
-        double[] xii = new double[24];
-
-        xii[0] = 10;
-        xii[1] = 11;
-        xii[2] = 11;
-        xii[3] = 11;
-        xii[4] = 12;
-        xii[5] = 12;
-        xii[6] = 12;
-        xii[7] = 12;
-        xii[8] = 13;
-        xii[9] = 13;
-        xii[10] = 13;
-        xii[11] = 13;
-        xii[12] = 13;
-        xii[13] = 14;
-        xii[14] = 14;
-        xii[15] = 14;
-        xii[16] = 14;
-        xii[17] = 14;
-        xii[18] = 14;
-        xii[19] = 14;
-        xii[20] = 15;
-        xii[21] = 15;
-        xii[22] = 16;
-        xii[23] = 17;
-
-        DadosGraficos d = new DadosGraficos(xii);
-        d.criaJTable();
-	d.criaJanela();
-        d.setVisible(true);
     }
 }

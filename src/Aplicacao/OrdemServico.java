@@ -115,10 +115,11 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         this.iniciaComponentes();
         this.atribuiIcones();
         
-        telaOS.setTamanho(1000, 1000);
+        telaOS.setTamanho(1000, 600);
+        telaOS.setMaximizado(true);
+        this.preencheCombos();
         telaOS.setVisible(true);
         
-        this.preencheCombos();
         this.adicionaEventos();
         
         this.preencheTabela();
@@ -216,9 +217,9 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         cboFuncionario.addItem("");
         cboServico.addItem("");
 
-        conexao.preencheCombo(cboCliente, "SELECT cliCodigo, cliNome FROM cliente");
-        conexao.preencheCombo(cboFuncionario, "SELECT funMatricula, funNome FROM funcionario");
-        conexao.preencheCombo(cboServico, "SELECT svcCodigo, svcNome FROM servicos");
+        conexao.preencheCombo(cboCliente, "SELECT cliCodigo, cliNome FROM cliente ORDER BY cliCodigo");
+        conexao.preencheCombo(cboFuncionario, "SELECT funMatricula, funNome FROM funcionario ORDER BY funMatricula");
+        conexao.preencheCombo(cboServico, "SELECT svcCodigo, svcNome FROM servicos ORDER BY svcCodigo");
     }
     
     @Override
@@ -353,11 +354,11 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
                         JTable table =(JTable) me.getSource();
                         Point p = me.getPoint();  
                         int row = table.rowAtPoint(p);
-                        //int intCodigoSelecionado;
+
                         intCodigoOS = Integer.parseInt(tblOrdemServico.getValueAt(row, 0).toString());
                         
                         ResultSet rs;
-                        rs = conexao.executar("SELECT * FROM ordemServico WHERE ordCodigo =" + intCodigoOS);
+                        rs = conexao.executaProcedureSelect("CONSULTA_ORDEMSERVICO (" + intCodigoOS + ")");
                         rs.next();                    
                         txtDescricaoOcorrencia.setText(rs.getString(2));
                         txtDataAbertura.setText(auxiliar.formataData(rs.getDate(3)));
@@ -404,7 +405,7 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
     @Override
     public void preencheTabela(){
         try {
-            conexao.preencheTabela(tabela, "SELECT ordCodigo, ordOcorrencia, ordDataAbertura, ordValorTotal, cliNome, funNome FROM cliente INNER JOIN (funcionario INNER JOIN ordemServico ON funcionario.funMatricula = ordemServico.funMatricula ) ON cliente.cliCodigo = ordemServico.cliCodigo ORDER BY ordCodigo");            
+            conexao.preencheTabelaSelect(tabela, "SELECT ordCodigo, ordOcorrencia, ordDataAbertura, ordValorTotal, cliNome, funNome FROM cliente INNER JOIN (funcionario INNER JOIN ordemServico ON funcionario.funMatricula = ordemServico.funMatricula ) ON cliente.cliCodigo = ordemServico.cliCodigo ORDER BY ordCodigo");            
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
@@ -448,10 +449,8 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
             this.strDataAbertura = txtDataAbertura.getText();
             this.strDataFechamento = txtDataFechamento.getText();
             this.strOcorrencia =  txtDescricaoOcorrencia.getText();
-            //this.fltValorTotal = auxiliar.removeCaracteresFloat(txtValorTotal.getText());
             this.fltValorTotal = auxiliar.calculaValorTotal(this.fltValorServico, this.intQtdeServico);
-            this.intQtdeServico = Integer.parseInt(txtQtde.getText());
-            //this.intCodigoServico = cboServico.getSelectedIndex();            
+            this.intQtdeServico = Integer.parseInt(txtQtde.getText());         
             return true;
             
         }else{            
@@ -596,41 +595,41 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
 
     @Override
     public void keyPressed(KeyEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-       //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       
     }
     
     @Override
     public void mouseClicked(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
     
     @Override
     public void focusGained(FocusEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 }

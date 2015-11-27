@@ -56,7 +56,7 @@ public class ConsultaNotaFiscal implements ActionListener, FocusListener{
         this.preencheTabela();
         
         telaConsultaNotaFiscal.setVisible(true);
-        telaConsultaNotaFiscal.setTamanho(1000, 1000);
+        telaConsultaNotaFiscal.setTamanho(1000, 600);
         telaConsultaNotaFiscal.setMaximizado(true);
     }
     
@@ -84,7 +84,7 @@ public class ConsultaNotaFiscal implements ActionListener, FocusListener{
      
      public void preencheTabela(){
         try {
-            conexao.preencheTabela(tabela, query);            
+            conexao.preencheTabelaSelect(tabela, query);            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
         }
@@ -101,7 +101,11 @@ public class ConsultaNotaFiscal implements ActionListener, FocusListener{
             }else if(!"".equals(auxiliar.removeCaracteresString(txtData.getText()))){
                 queryFilter = query  + " WHERE notaFiscal.notData = '" + txtData.getText() + "'";
             }
-            conexao.preencheTabela(tabela, queryFilter);
+            try{
+                conexao.preencheTabelaSelect(tabela, queryFilter);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
+            }
         }
     }
 

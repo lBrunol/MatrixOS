@@ -10,8 +10,6 @@ public class MontaInterfaces extends JFrame {
     *Classe responsável por prover os métodos para criação das telas gráficas do sistema
     */
     private static final long serialVersionUID = 633256218760738756L;
-    private JPanel panelConsulta;
-    private JPanel panelCadastro;
     private JTabbedPane tabbedPane;
     private JPanel panelPrincipal;
     private ArrayList<JComponent> listaComponentes = new ArrayList<>();
@@ -20,6 +18,7 @@ public class MontaInterfaces extends JFrame {
     /** 
     * Método construtor da classe de interface, como padrão já cria o título e a imagem do formulário
     * @param tituloForm onde será passado o título do seu formulário (janela e cabeçalho)
+    * @param caminhoIcone passar a string com o caminho do icone do formulário
     */
     public MontaInterfaces(String tituloForm, String caminhoIcone) {          
         
@@ -27,7 +26,7 @@ public class MontaInterfaces extends JFrame {
         ImageIcon icon = new ImageIcon(iconURL);
         
         //Faz com que ao clicar no fechar da janela a aplicação feche junto
-       // this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        //this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.getContentPane().setLayout(new GridBagLayout());
         this.setSize(600,600);
         this.setTitle(tituloForm);
@@ -150,17 +149,6 @@ public class MontaInterfaces extends JFrame {
         }
     }
         
-    /** 
-    * Altera a cor de fundo da janela
-    * @param r quantidade de vermelho
-    * @param g quantidade de verde
-    * @param b quantiade de azul 
-    */
-    private void setCor(int r, int g, int b){
-        getContentPane().setBackground(new Color(r,g,b));
-        getPanelPrincipal().setBackground(new Color(r,g,b));
-    }
-	
     /** 
     * Altera o titulo da página
     * @param titulo string para alterar o título da janela
@@ -525,13 +513,6 @@ public class MontaInterfaces extends JFrame {
         panel.add(lblSubtitulo, cons);
    
     }
-    
-    
-    public static void main(String[] args) {
-        MontaInterfaces exe = new MontaInterfaces("Menu", "/imagens/icone-servico.png");
-        exe.setVisible(true);
-
-    }
 
     /**
      * @return the panelPrincipal
@@ -558,8 +539,6 @@ public class MontaInterfaces extends JFrame {
             
         }
     }
-    
-    
 
     /**
      * @return the listaComponentes

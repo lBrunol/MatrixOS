@@ -5,7 +5,6 @@
  */
 package Aplicacao;
 
-import Core.ComboItem;
 import Core.ConexaoBanco;
 import Core.MetodosAuxiliares;
 import Core.MontaInterfaces;
@@ -26,7 +25,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -151,7 +149,7 @@ public class Usuario implements PadraoFormulario, ActionListener {
                         intCodigo = Integer.parseInt(tblUsuario.getValueAt(row, 0).toString());
                         
                         ResultSet rs;
-                        rs = conexao.executar("SELECT * FROM usuarios WHERE usrCodigo =" + intCodigo);
+                        rs = conexao.executaProcedureSelect("CONSULTA_USUARIOS(" + intCodigo + ")");
                         rs.next();                    
                         txtNome.setText(rs.getString(2));
                         txtSenha.setText(rs.getString(3));
@@ -178,7 +176,7 @@ public class Usuario implements PadraoFormulario, ActionListener {
     @Override
     public void preencheTabela() {
         try {
-            conexao.preencheTabela(tabela, "select * FROM usuarios ORDER BY usrCodigo");            
+            conexao.preencheTabela(tabela, "CONSULTA_USUARIOS(0)");            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
         }

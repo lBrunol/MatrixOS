@@ -138,7 +138,7 @@ public class Cargos implements PadraoFormulario, ActionListener {
                         intCodigo = Integer.parseInt(tblCargos.getValueAt(row, 0).toString());
                         
                         ResultSet rs;
-                        rs = conexao.executar("SELECT * FROM cargos WHERE carCodigo =" + intCodigo);
+                        rs = conexao.executaProcedureSelect("CONSULTA_CARGOS(" + intCodigo + ")");
                         rs.next();                    
                         txtDescricao.setText(rs.getString(2));                
                         
@@ -162,7 +162,7 @@ public class Cargos implements PadraoFormulario, ActionListener {
         try {
             String teste;
             teste = "CARCODIGO";
-            conexao.preencheTabela(tabela, "SELECT * FROM CARGOS WHERE CARCODIGO = CARCODIGO AND CARDESCRICAO = CARDESCRICAO");            
+            conexao.preencheTabela(tabela, "CONSULTA_CARGOS(0)");            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
         }

@@ -160,7 +160,7 @@ public class CadastroDoEmitente implements PadraoFormulario, ActionListener {
                         intCodigo = Integer.parseInt(tblEmitente.getValueAt(row, 0).toString());
                         
                         ResultSet rs;
-                        rs = conexao.executar("SELECT * FROM dadosEmitente WHERE demCodigo =" + intCodigo);
+                        rs = conexao.executaProcedureSelect("CONSULTA_DADOSEMITENTE(" + intCodigo + ")");
                         rs.next();                    
                         
                         txtRazaoSocial.setText(rs.getString(2));
@@ -191,7 +191,7 @@ public class CadastroDoEmitente implements PadraoFormulario, ActionListener {
     @Override
     public void preencheTabela() {
         try {
-            conexao.preencheTabela(tabela, "select demCodigo, demNomeFantasia, demEndereco, demUF FROM dadosEmitente ORDER BY demCodigo");
+            conexao.preencheTabela(tabela, "CONSULTA_DADOSEMITENTE(0)");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
         }

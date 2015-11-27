@@ -174,63 +174,122 @@ public class ConexaoBanco {
      * Este método preenche uma JTable com os dados provindos do método Executar .
      * @param tabela o nome da TableModel que você deseja preencher
      * @param query select da tabela que você deseja trazer os dados
+     * @throws java.sql.SQLException
      */    
-    public void preencheTabela(DefaultTableModel tabela,  String query) {  
+    public void preencheTabela(DefaultTableModel tabela,  String query) throws SQLException{
+        
+    	ResultSet rs;
+        ResultSetMetaData rsmd;    	
+        Locale localPadrao = Locale.getDefault();
+
+        tabela.setRowCount(0);
+        rs = executaProcedureSelect(query);
+                
+        //Armazena no objeto os metadados do resultset
+        rsmd = rs.getMetaData();
+        //Pega o numero de colunas do resultset
+        int indice = rsmd.getColumnCount();
+        //Cria um array para armzenar o nome das colunas
+        String[] campos = new String[indice];
+        
+        //Armazena na variável campos os nomes das colunas                
+        for (int i = 0; i < indice; i++){
+            campos[i] = rsmd.getColumnName(i+1);
+        }
+        
+        if(tabela.getColumnCount() == 0){
+            //Adiciona as colunas
+            for(int i = 0; i < indice; i++){
+                tabela.addColumn(campos[i]);	
+            }
+        }
+        
+        Object row[] = new Object[indice];
+        Object dadosCampos[] = new Object[indice];
+        
+        while(rs.next()) {            	
+            for(int i = 0; i < indice; i++){
+
+                dadosCampos[i] = rs.getObject(campos[i]);
+
+                if(dadosCampos[i] instanceof Date){                        
+                    DateFormat formatoData = DateFormat.getDateInstance(2,localPadrao);
+                    dadosCampos[i] = formatoData.format(dadosCampos[i]);
+                }
+
+                row[i] = dadosCampos[i];
+            }
+            tabela.addRow(row);
+        }       
+
+        try {
+            rs.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ConexaoBanco.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
+    /**
+     * Este método preenche uma JTable com os dados provindos do método Executar .
+     * @param tabela o nome da TableModel que você deseja preencher
+     * @param query select da tabela que você deseja trazer os dados
+     * @throws java.sql.SQLException
+     */    
+    public void preencheTabelaSelect(DefaultTableModel tabela,  String query) throws SQLException{
+        
     	ResultSet rs;
         ResultSetMetaData rsmd;    	
         Locale localPadrao = Locale.getDefault();
 
         tabela.setRowCount(0);
         rs = executar(query);
-        //rs = executar("SELECT consulta_tiposPagamento(tpaCodigo, tpaDescricao) FROM tiposPagamento");
-        try {
                 
-                //Armazena no objeto os metadados do resultset
-                rsmd = rs.getMetaData();
-                //Pega o numero de colunas do resultset
-        	int indice = rsmd.getColumnCount();
-                //Cria um array para armzenar o nome das colunas
-                String[] campos = new String[indice];
-                //Armazena na variável campos os nomes das colunas                
-                for (int i = 0; i < indice; i++){
-                    campos[i] = rsmd.getColumnName(i+1);
-                }
-                if(tabela.getColumnCount() == 0){
-                    //Adiciona as colunas
-                    for(int i = 0; i < indice; i++){
-                        tabela.addColumn(campos[i]);	
-                    }
-                }
-        	Object row[] = new Object[indice];
-                Object dadosCampos[] = new Object[indice];
-            while(rs.next()) {            	
-                for(int i = 0; i < indice; i++){
-                    
-                    dadosCampos[i] = rs.getObject(campos[i]);
-                    
-                    if(dadosCampos[i] instanceof Date){                        
-                        DateFormat formatoData = DateFormat.getDateInstance(2,localPadrao);
-                        dadosCampos[i] = formatoData.format(dadosCampos[i]);
-                    }
-                    
-                    row[i] = dadosCampos[i];
-                }
-                tabela.addRow(row);
-            }
-        }  
-        catch(SQLException e){  
-            JOptionPane.showMessageDialog(null,"Ocorreu um erro  de SQL ao listar a tabela " + e.getMessage() + " \n Favor entrar em contato com administrador");        
-        }catch (Exception e){
-            JOptionPane.showMessageDialog(null,"Ocorreu um erro ao listar a tabela " + e.getMessage() + " \n Favor entrar em contato com administrador");
-        }finally{
-                try {
-                    rs.close();
-                    
-                } catch (SQLException ex) {
-                    Logger.getLogger(ConexaoBanco.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            
+        //Armazena no objeto os metadados do resultset
+        rsmd = rs.getMetaData();
+        //Pega o numero de colunas do resultset
+        int indice = rsmd.getColumnCount();
+        //Cria um array para armzenar o nome das colunas
+        String[] campos = new String[indice];
+        
+        //Armazena na variável campos os nomes das colunas                
+        for (int i = 0; i < indice; i++){
+            campos[i] = rsmd.getColumnName(i+1);
         }
+        
+        if(tabela.getColumnCount() == 0){
+            //Adiciona as colunas
+            for(int i = 0; i < indice; i++){
+                tabela.addColumn(campos[i]);	
+            }
+        }
+        
+        Object row[] = new Object[indice];
+        Object dadosCampos[] = new Object[indice];
+        
+        while(rs.next()) {            	
+            for(int i = 0; i < indice; i++){
+
+                dadosCampos[i] = rs.getObject(campos[i]);
+
+                if(dadosCampos[i] instanceof Date){                        
+                    DateFormat formatoData = DateFormat.getDateInstance(2,localPadrao);
+                    dadosCampos[i] = formatoData.format(dadosCampos[i]);
+                }
+
+                row[i] = dadosCampos[i];
+            }
+            tabela.addRow(row);
+        }       
+
+        try {
+            rs.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ConexaoBanco.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
         
     /**
@@ -253,11 +312,10 @@ public class ConexaoBanco {
     public ResultSet executaProcedureSelect (String query){
         try {
             conectar();
-            CallableStatement cs = c.prepareCall("{? = call CONSULTA_CARGOS(?)}");
+            CallableStatement cs = c.prepareCall("{? = call " + query + "}");
 
             //Registra o parâmetro para retorna da função
             cs.registerOutParameter(1, OracleTypes.CURSOR);
-            cs.setInt(2, 2);
             cs.execute();
 
             //Converte o resultado em um resultset

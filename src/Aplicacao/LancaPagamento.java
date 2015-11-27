@@ -59,7 +59,7 @@ public class LancaPagamento implements ActionListener {
         txtNumeroDocumento.setText(Integer.toString(intCodigo));
         try {
             
-            rs = conexao.executar("SELECT ctrDataVencimento, ctrValorEmitido FROM contasReceber WHERE ctrCodigo = " + this.intCodigo);
+            rs = conexao.executaProcedureSelect("CONSULTA_PAGAMENTOS(" + this.intCodigo + ")");
             rs.next();
             txtDataVencimento.setText(auxiliar.formataData(rs.getDate(1)));
             txtDataPagamento.setText(auxiliar.hoje());

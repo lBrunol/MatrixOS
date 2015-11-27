@@ -11,6 +11,8 @@ import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
@@ -21,11 +23,10 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 
-public class Servicos implements PadraoFormulario, ActionListener{
+public class Servicos implements PadraoFormulario, ActionListener, KeyListener{
     MetodosAuxiliares auxiliar = new MetodosAuxiliares();
     MontaInterfaces telaServicos = new MontaInterfaces ("Gerenciamento de Serviços", "/imagens/icone-servico.png");
     ConexaoBanco conexao = new ConexaoBanco();
@@ -129,7 +130,9 @@ public class Servicos implements PadraoFormulario, ActionListener{
         botInserir.addActionListener(this);
         botExcluir.addActionListener(this);
         botLimpar.addActionListener(this);
-        botAlterarRegistro.addActionListener(this);        
+        botAlterarRegistro.addActionListener(this);    
+        txtAliquota.addKeyListener(this);
+        txtValorHora.addKeyListener(this);
         
         tblServicos.addMouseListener(new MouseAdapter() {
             @Override
@@ -144,7 +147,7 @@ public class Servicos implements PadraoFormulario, ActionListener{
                         intCodigo = Integer.parseInt(tblServicos.getValueAt(row, 0).toString());
                         
                         ResultSet rs;
-                        rs = conexao.executar("SELECT * FROM servicos WHERE svcCodigo =" + intCodigo);
+                        rs = conexao.executaProcedureSelect("CONSULTA_SERVICOS (" + intCodigo + ")");
                         rs.next();                    
                         txtNome.setText(rs.getString(2));
                         txtValorHora.setText(rs.getString(3));                    
@@ -170,7 +173,7 @@ public class Servicos implements PadraoFormulario, ActionListener{
     @Override
     public void preencheTabela() {
         try {
-            conexao.preencheTabela(tabela, "SELECT svcCodigo, svcNome, svcValorHora, svcDescricao FROM servicos");
+            conexao.preencheTabela(tabela, "CONSULTA_SERVICOS(0)");
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
@@ -298,6 +301,24 @@ public class Servicos implements PadraoFormulario, ActionListener{
                 }                                    
             }
         }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        char key = e.getKeyChar();
+        int k = key;
+        if(!auxiliar.apenasNumeros(k)){
+            e.consume();
+        }
+    }
+    @Override
+    public void keyPressed(KeyEvent e) {
+        
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        
     }
         
 }
