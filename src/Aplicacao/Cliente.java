@@ -106,8 +106,8 @@ public class Cliente implements ActionListener{
     private PFormattedTextField txtCNPJ = new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CNPJ));
     
     //Campos para Cliente Físico
-    private JTextField txtCPF = new  JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CPF));
-    private JFormattedTextField txtRG = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_RG));
+    private PFormattedTextField txtCPF = new  PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CPF));
+    private PFormattedTextField txtRG = new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_RG));
    
    //Criação dos objetos, imprescindível criar ao menos um JPanel para servir de aba no formulário
     private PFormattedTextField txtDataAbertura = new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
