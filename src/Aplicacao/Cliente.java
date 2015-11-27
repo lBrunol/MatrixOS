@@ -83,7 +83,6 @@ public class Cliente implements ActionListener{
     
     
     //Caixas de texto
-    private PTextField txtCodigo = new PTextField();
     private PTextField txtNome =  new PTextField();
     private PTextField txtEndereco =  new PTextField();
     private PTextField txtBairro =  new PTextField();
@@ -193,7 +192,7 @@ public class Cliente implements ActionListener{
         //Adiciona os componentes na tela
         telaCliente.addLabelTitulo("Cliente", panelCadastro);
        
-        telaCliente.addDoisComponentes("Codigo", txtCodigo,"Nome",txtNome,panelCadastro);
+        telaCliente.addUmComponente("Nome",txtNome,panelCadastro);
         telaCliente.addDoisComponentes("Número Endereço",txtNumEndereco,"Endereço",txtEndereco,panelCadastro);
         telaCliente.addQuatroComponentes( "Bairro", txtBairro, "Complemento", txtComplemento,"UF", cboEstado,"Cidade",txtCidade, panelCadastro);
         telaCliente.addQuatroComponentes("CEP", txtCEP, "Telefone", txtTelefone, "Celular", txtCelular, "Data Cadastro", txtDataCadastro, panelCadastro);
@@ -288,7 +287,7 @@ public class Cliente implements ActionListener{
     //falta a instrução do conexao.preencheTabela
     public void preencheTabela(){
         try {
-            conexao.preencheTabela(tabela, "select * from cliente");            
+            conexao.preencheTabela(tabela, "CONSULTA_CLIENTE(0)");            
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
@@ -298,7 +297,6 @@ public class Cliente implements ActionListener{
     
           
         public void setaNomes(){
-            txtCodigo.setName("Código");
             txtNome.setName("Nome");
             txtEndereco.setName("Endereço");
             txtBairro.setName("Bairro");
@@ -357,7 +355,6 @@ public class Cliente implements ActionListener{
      //metodos relacionados aos atributos da interface
     public boolean cadastrar(){
     if(auxiliar.validaCampos(telaCliente.getListaComponentes())){ 
-            this.cliCod = Integer.parseInt(txtCodigo.getText());
             this.cliNome= txtNome.getText();
             this.cliEndereco= txtEndereco.getText();
             this.cliBairro= txtBairro.getText();
@@ -387,7 +384,6 @@ public class Cliente implements ActionListener{
     public boolean alterar() {
         if(auxiliar.validaCampos(telaCliente.getListaComponentes())){            
       
-            this.cliCod = Integer.parseInt(txtCodigo.getText());
             this.cliNome = txtNome.getText();
             this.cliEndereco= txtEndereco.getText();
             this.cliBairro =  txtBairro.getText();
@@ -441,7 +437,7 @@ public class Cliente implements ActionListener{
                         
                         ResultSet rs;
                         //Faz select com valor do código que foi pego na tabela
-                        rs = conexao.executar("SELECT * FROM cliente WHERE cliCodigo =" + cliCod);
+                        rs = conexao.executaProcedureSelect("CONSULTA_CLIENTE(" + cliCod + ")");
                         rs.next();                    
                         txtNome.setText(rs.getString(2));
                         txtEndereco.setText(rs.getString(3));
@@ -454,13 +450,13 @@ public class Cliente implements ActionListener{
                         txtTelefone.setText(rs.getString(10));
                         txtCelular.setText(rs.getString(11));
                         txtEmail.setText(rs.getString(12));
-                        txtDataCadastro.setText(rs.getString(13));
+                        txtDataCadastro.setText(auxiliar.formataData(rs.getDate(13)));
                         txtObservacao.setText(rs.getString(14));
                         //Verifica se o campo cliTipo é J ou F para fazer o select nas tabelas especializadas
                         
-                        if("J".equals(rs.getString(1).toUpperCase())){
+                        if("J".equals(rs.getString(15).toUpperCase())){
                             rs.close();
-                            rs = conexao.executar("SELECT * FROM cliPessoaJuridica WHERE cliCodigo =" + cliCod); 
+                            rs = conexao.executaProcedureSelect("CONSULTA_CLIPESSOAJURIDICA(" + cliCod + ")"); 
                            
                             rs.next();
                             txtRazaoSocial.setText(rs.getString(1));
@@ -472,9 +468,10 @@ public class Cliente implements ActionListener{
                             panelCliPF.setVisible(false);
                             panelCliPJ.setVisible(true);
                             
-                        }else if("F".equals(rs.getString(1).toUpperCase())){
+                        }else if("F".equals(rs.getString(15).toUpperCase())){
                             rs.close();
-                            rs = conexao.executar("SELECT * FROM cliPessoaFisica WHERE cliCodigo =" + cliCod);
+                            rs = conexao.executaProcedureSelect("CONSULTA_CLIPESSOAFISICA(" + cliCod + ")");
+                            
                             rs.next();
                             txtRG.setText(rs.getString(1));
                             txtCPF.setText(rs.getString(2));
@@ -491,6 +488,9 @@ public class Cliente implements ActionListener{
                     }             
                     catch (SQLException b) {
                         JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
+                    }
+                    catch (IllegalArgumentException b){
+                        JOptionPane.showMessageDialog(null, b.getMessage());
                     }
                     catch (Exception b) {
                         JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
@@ -542,9 +542,9 @@ public class Cliente implements ActionListener{
                             pj.setStrRazaoSocial(txtRazaoSocial.getText());
                             pj.setLongCnpj(Long.parseLong(auxiliar.removeCaracteresString(txtCNPJ.getText())));
                             rs = conexao.executar("SELECT MAX(cliCodigo) FROM cliente");
-                        rs.next();
-                        pj.setCliCodigo(rs.getInt(1));
-                        ok = pj.cadastrar();
+                            rs.next();
+                            pj.setCliCodigo(rs.getInt(1));
+                            ok = pj.cadastrar();
                         if(ok){
                             JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
                              txtDataAbertura.setText(auxiliar.hoje());
@@ -634,7 +634,7 @@ public class Cliente implements ActionListener{
             if(ok){	
                 try {
                     String hoje = auxiliar.hoje();
-                    conexao.executaProcedure("UPDATE_CLIENTE ("  + this.cliNome + "', '" + this.cliEndereco + "', '" +this.cliNumEndereco+"','"+ this.cliComplemento + "', '" + cliBairro + "' , " + cliCep + ", '" + this.cliCidade + "' ,  " + this.cliTelefone + ", " + this.cliCelular + " ," + this.cliEmail+"',"+ auxiliar.hoje() + "', '" + this.cliObersavacao + "','" + this.cliTipo +"' )");
+                    conexao.executaProcedure("UPDATE_CLIENTE (" + this.cliCod + " + ,'"  + this.cliNome + "', '" + this.cliEndereco + "', '" +this.cliNumEndereco+"','"+ this.cliComplemento + "', '" + cliBairro + "' , " + cliCep + ", '" + this.cliCidade + "' ,  " + this.cliTelefone + ", " + this.cliCelular + " ," + this.cliEmail+"',"+ auxiliar.hoje() + "', '" + this.cliObersavacao + "','" + this.cliTipo +"' )");
                    
                     ResultSet rs;
                     //pessoa física
