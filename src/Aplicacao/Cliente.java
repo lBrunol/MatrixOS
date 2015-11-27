@@ -20,6 +20,8 @@ import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
@@ -528,6 +530,8 @@ public class Cliente implements ActionListener{
                         ok = pf.cadastrar();
                         if(ok){
                             JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
+                            txtDataAbertura.setText(auxiliar.hoje());
+                           auxiliar.limpaCampos(telaCliente.getListaComponentes());
                         } }
                         //pessoa jurídica
                         else {
@@ -543,13 +547,15 @@ public class Cliente implements ActionListener{
                         ok = pj.cadastrar();
                         if(ok){
                             JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
+                             txtDataAbertura.setText(auxiliar.hoje());
+                             auxiliar.limpaCampos(telaCliente.getListaComponentes());
                         } 
+                        
                             
                         }
                     
                                       
                     
-                    auxiliar.limpaCampos(telaCliente.getListaComponentes());
                     
                 }catch (SQLException b) {
                     JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
@@ -578,6 +584,8 @@ public class Cliente implements ActionListener{
                             ok = pf.deletar();
                         if(ok){
                             JOptionPane.showMessageDialog(null, "Dados deletados com sucesso");
+                            txtDataAbertura.setText(auxiliar.hoje());
+                            auxiliar.limpaCampos(telaCliente.getListaComponentes());
                         } }
                       //pessoa jurídica
                      else {
@@ -592,11 +600,12 @@ public class Cliente implements ActionListener{
                             ok = pj.deletar();
                         if(ok){
                             JOptionPane.showMessageDialog(null, "Dados  deletados com sucesso");
+                            txtDataAbertura.setText(auxiliar.hoje());
+                            auxiliar.limpaCampos(telaCliente.getListaComponentes());
                         } 
 
                      }
-                    auxiliar.limpaCampos(telaCliente.getListaComponentes());
-                    txtDataAbertura.setText(auxiliar.hoje());
+                   
                     this.mostraBotoesCadastro();
                     this.preencheTabela();
 
@@ -638,6 +647,8 @@ public class Cliente implements ActionListener{
                         ok = pf.alterar();
                        if(ok){
                            JOptionPane.showMessageDialog(null, "Dados alterados com sucesso");
+                           txtDataAbertura.setText(auxiliar.hoje());
+                            auxiliar.limpaCampos(telaCliente.getListaComponentes());
                        } 
                     }
                     //pessoa jurídica
@@ -654,12 +665,13 @@ public class Cliente implements ActionListener{
                         
                         if(ok){
                             JOptionPane.showMessageDialog(null, "Dados  alterados com sucesso");
+                            txtDataAbertura.setText(auxiliar.hoje());
+                            auxiliar.limpaCampos(telaCliente.getListaComponentes());
                         } 
 
                     }
                   
-                    auxiliar.limpaCampos(telaCliente.getListaComponentes());
-                    txtDataAbertura.setText(auxiliar.hoje());
+                    
                     this.mostraBotoesCadastro();
                     this.preencheTabela();
                 }catch (SQLException b) {
@@ -674,8 +686,10 @@ public class Cliente implements ActionListener{
         if(botao.getSource() == rdbpf){
             rdbpj.setSelected(false);
             rdbpf.setSelected(true);
+            
             panelCliPJ.setVisible(false);
             panelCliPF.setVisible(true);
+            
             txtRG.setVisible(true);
             txtCPF.setVisible(true);
 
@@ -709,4 +723,4 @@ public class Cliente implements ActionListener{
         }
     }
 }
- 
+
