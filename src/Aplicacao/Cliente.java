@@ -13,6 +13,7 @@ import Core.ComboItem;
 import Core.ConexaoBanco;
 import Core.MetodosAuxiliares;
 import Core.MontaInterfaces;
+import Core.PComboBox;
 import Core.PFormattedTextField;
 import Core.PTextField;
 import java.awt.GridBagLayout;
@@ -81,21 +82,21 @@ public class Cliente implements ActionListener{
     
     //Caixas de texto
     private PTextField txtCodigo = new PTextField();
-    private JTextField txtNome = new JTextField();
-    private JTextField txtEndereco = new JTextField();
-    private JTextField txtBairro = new JTextField();
-    private JTextField txtCidade = new JTextField();
-    private JTextField txtDataCadastro  = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
-    private JComboBox cboEstado= new JComboBox();
-    private JTextField txtEmail = new JTextField();
-    private JTextField txtCEP = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CEP));
-    private JTextField txtCelular = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_TELEFONE));
-    private JTextField txtTelefone = new JFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_TELEFONE));
-    private JTextField txtObservacao = new JTextField();
-    private JTextField txtComplemento= new JTextField();
+    private PTextField txtNome =  new PTextField();
+    private PTextField txtEndereco =  new PTextField();
+    private PTextField txtBairro =  new PTextField();
+    private PTextField txtCidade =  new PTextField();
+    private PFormattedTextField txtDataCadastro  =  new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
+    private PComboBox cboEstado=  new PComboBox();
+    private PTextField txtEmail =  new PTextField();
+    private PFormattedTextField txtCEP =  new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CEP));
+    private PFormattedTextField txtCelular = new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_TELEFONE));
+    private PFormattedTextField txtTelefone =  new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_TELEFONE));
+    private PTextField txtObservacao = new PTextField();
+    private PTextField txtComplemento=  new PTextField();
     private JRadioButton rdbpf = new JRadioButton();
     private JRadioButton rdbpj = new JRadioButton();
-    private JTextField txtNumEndereco = new JTextField();
+    private PTextField txtNumEndereco =  new PTextField();
     
     //Campos para Cliente Jurídico
     private PTextField txtRazaoSocial = new PTextField();
@@ -217,6 +218,7 @@ public class Cliente implements ActionListener{
         botInserir.addActionListener(this);
         botAlterarRegistro.addActionListener(this);
         botLimpar.addActionListener(this);
+       
         
          //Definição do combobox de UF.
         
@@ -614,7 +616,8 @@ public class Cliente implements ActionListener{
         }
         //limpar
         if (botao.getSource() == botLimpar) {            
-            auxiliar.limpaCampos(telaCliente.getListaComponentes());
+           
+           auxiliar.limpaCampos(telaCliente.getListaComponentes());
         }
         //alterar
         if (botao.getSource() == botAlterarRegistro) {            

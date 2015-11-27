@@ -460,17 +460,17 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
     public void actionPerformed(ActionEvent botao) {
          if (botao.getSource() == JButtonCliente) {             
              Aplicacao.Cliente c = new Aplicacao.Cliente();
-            
+         
          }else if(botao.getSource() == JButtonContasaReceber){
-             Aplicacao.ConsultaContasReceber cons = new Aplicacao.ConsultaContasReceber();
-             //JOptionPane.showMessageDialog(null,"Em construção");
+            // Aplicacao.ConsultaContasReceber cons = new Aplicacao.ConsultaContasReceber();
+             JOptionPane.showMessageDialog(null,"Em construção");
          }else if(botao.getSource() == JButtonEmitente){
              Aplicacao.CadastroDoEmitente emi = new Aplicacao.CadastroDoEmitente();
          }else if(botao.getSource() == JButtonFuncionario){
              Aplicacao.Funcionario fun = new Aplicacao.Funcionario();
          }else if(botao.getSource() == JButtonNotasFiscais){
-             Aplicacao.ConsultaNotaFiscal not = new Aplicacao.ConsultaNotaFiscal();
-            // JOptionPane.showMessageDialog(null,"Em construção"); 
+             //Aplicacao.ConsultaNotaFiscal not = new Aplicacao.ConsultaNotaFiscal();
+             JOptionPane.showMessageDialog(null,"Em construção"); 
          }else if(botao.getSource() == JButtonOrdemdeServico1){
              Aplicacao.OrdemServico os = new Aplicacao.OrdemServico();
          }else if(botao.getSource() == JButtonOrdemdeServico){
@@ -480,8 +480,8 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
          }else if(botao.getSource() == JButtonServiços){
              Aplicacao.Servicos svc = new Aplicacao.Servicos();
          }else if(botao.getSource() == JButtonRelatorioContasaReceber){
-            //JOptionPane.showMessageDialog(null,"Em construção");             
-            Aplicacao.Servicos svc = new Aplicacao.Servicos();
+            JOptionPane.showMessageDialog(null,"Em construção");             
+           // Aplicacao.Servicos svc = new Aplicacao.Servicos();
          }
     }    
 }
