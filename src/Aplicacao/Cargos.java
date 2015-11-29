@@ -40,8 +40,7 @@ public class Cargos implements PadraoFormulario, ActionListener {
     private JPanel panelBotoesCadastro = new JPanel(new GridBagLayout());
     private JPanel panelBotoesAlteracao = new JPanel(new GridBagLayout());
 
-    //caixas de texto
-    private PTextField txtCodigo = new PTextField();
+    //caixas de text
     private PTextField txtDescricao = new PTextField();
     
     //Botões
@@ -256,15 +255,7 @@ public class Cargos implements PadraoFormulario, ActionListener {
             this.mostraBotoesCadastro();
         }
         if (botao.getSource() == botLimpar) {
-            auxiliar.limpaCampos(telaCargos.getListaComponentes());
-            //try {
-            //    ResultSet rs;
-            //rs = conexao.executaProcedureSelect();
-            //rs.next();
-            //txtDescricao.setText(rs.getString(2));
-            //    
-            //} catch (Exception e) {
-            //}            
+            auxiliar.limpaCampos(telaCargos.getListaComponentes());                       
         }
         if (botao.getSource() == botAlterarRegistro) {            
             ok = alterar();
