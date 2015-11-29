@@ -452,10 +452,11 @@ public class Cliente implements ActionListener{
                         txtEmail.setText(rs.getString(12));
                         txtDataCadastro.setText(auxiliar.formataData(rs.getDate(13)));
                         txtObservacao.setText(rs.getString(14));
+                        
                         //Verifica se o campo cliTipo é J ou F para fazer o select nas tabelas especializadas
                         
                         if("J".equals(rs.getString(15).toUpperCase())){
-                            rs.close();
+                            
                             rs = conexao.executaProcedureSelect("CONSULTA_CLIPESSOAJURIDICA(" + cliCod + ")"); 
                            
                             rs.next();
@@ -467,17 +468,19 @@ public class Cliente implements ActionListener{
                             
                             panelCliPF.setVisible(false);
                             panelCliPJ.setVisible(true);
-                            
-                        }else if("F".equals(rs.getString(15).toUpperCase())){
                             rs.close();
+                        }else if("F".equals(rs.getString(15).toUpperCase())){
+                            
                             rs = conexao.executaProcedureSelect("CONSULTA_CLIPESSOAFISICA(" + cliCod + ")");
                             
                             rs.next();
                             txtRG.setText(rs.getString(1));
                             txtCPF.setText(rs.getString(2));
                             
+                        
                             panelCliPF.setVisible(true);
                             panelCliPJ.setVisible(false);
+                            rs.close();
                         }else {
                             throw new IllegalArgumentException("Este cliente foi cadastrado de forma incorreta. Por favor, entre em contato com administrador do sistema.");
                         }
@@ -489,9 +492,7 @@ public class Cliente implements ActionListener{
                     catch (SQLException b) {
                         JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
                     }
-                    catch (IllegalArgumentException b){
-                        JOptionPane.showMessageDialog(null, b.getMessage());
-                    }
+                    
                     catch (Exception b) {
                         JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
                     }
@@ -530,12 +531,12 @@ public class Cliente implements ActionListener{
                         ok = pf.cadastrar();
                         if(ok){
                             JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
-                            txtDataAbertura.setText(auxiliar.hoje());
-                           auxiliar.limpaCampos(telaCliente.getListaComponentes());
-                        } }
+                           
+                        }
+                    }
                         //pessoa jurídica
                         else {
-                            CliPessoaJuridica pj =new CliPessoaJuridica();
+                            CliPessoaJuridica pj = new CliPessoaJuridica();
                             pj.setIntIE(Integer.parseInt(txtIE.getText()));
                             pj.setIntIM(Integer.parseInt(txtIM.getText()));
                             pj.setStrNomeFantasia(txtNomeFantasia.getText());
@@ -547,13 +548,13 @@ public class Cliente implements ActionListener{
                             ok = pj.cadastrar();
                         if(ok){
                             JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
-                             txtDataAbertura.setText(auxiliar.hoje());
-                             auxiliar.limpaCampos(telaCliente.getListaComponentes());
+                             
                         } 
                         
                             
                         }
-                    
+                    txtDataAbertura.setText(auxiliar.hoje());
+                    auxiliar.limpaCampos(telaCliente.getListaComponentes());
                                       
                     
                     
@@ -584,12 +585,11 @@ public class Cliente implements ActionListener{
                             ok = pf.deletar();
                         if(ok){
                             JOptionPane.showMessageDialog(null, "Dados deletados com sucesso");
-                            txtDataAbertura.setText(auxiliar.hoje());
-                            auxiliar.limpaCampos(telaCliente.getListaComponentes());
+                            
                         } }
                       //pessoa jurídica
                      else {
-                            CliPessoaJuridica pj =new CliPessoaJuridica();
+                            CliPessoaJuridica pj = new CliPessoaJuridica();
                             pj.setIntIE(Integer.parseInt(txtIE.getText()));
                             pj.setIntIM(Integer.parseInt(txtIM.getText()));
                             pj.setStrNomeFantasia(txtNomeFantasia.getText());
@@ -600,12 +600,12 @@ public class Cliente implements ActionListener{
                             ok = pj.deletar();
                         if(ok){
                             JOptionPane.showMessageDialog(null, "Dados  deletados com sucesso");
-                            txtDataAbertura.setText(auxiliar.hoje());
-                            auxiliar.limpaCampos(telaCliente.getListaComponentes());
+                            
                         } 
 
                      }
-                   
+                    txtDataAbertura.setText(auxiliar.hoje());
+                    auxiliar.limpaCampos(telaCliente.getListaComponentes());
                     this.mostraBotoesCadastro();
                     this.preencheTabela();
 
@@ -642,13 +642,18 @@ public class Cliente implements ActionListener{
                         CliPessoaFisica pf = new CliPessoaFisica();
                         pf.setCliCpf(Long.parseLong(auxiliar.removeCaracteresString(txtCPF.getText())));
                         pf.setCliRg(Integer.parseInt(auxiliar.removeCaracteresString(txtRG.getText())));
+                     
+                        panelCliPJ.setVisible(false);
+                        panelCliPF.setVisible(true);
+                        
+                        panelCliPJ.setEnabled(false);
+                        panelCliPF.setEnabled(true);
 
                         pf.setCliCodigo(cliCod);
                         ok = pf.alterar();
                        if(ok){
                            JOptionPane.showMessageDialog(null, "Dados alterados com sucesso");
-                           txtDataAbertura.setText(auxiliar.hoje());
-                            auxiliar.limpaCampos(telaCliente.getListaComponentes());
+                          
                        } 
                     }
                     //pessoa jurídica
@@ -659,19 +664,26 @@ public class Cliente implements ActionListener{
                         pj.setStrNomeFantasia(txtNomeFantasia.getText());
                         pj.setStrRazaoSocial(txtRazaoSocial.getText());
                         pj.setLongCnpj(Long.parseLong(auxiliar.removeCaracteresString(txtCNPJ.getText())));
-
+                  
+                        
+                        panelCliPJ.setVisible(true);
+                        panelCliPF.setVisible(false);
+                        
+                        panelCliPJ.setEnabled(true);
+                        panelCliPF.setEnabled(false);
                         pj.setCliCodigo(cliCod);
                         ok = pj.alterar();
                         
                         if(ok){
                             JOptionPane.showMessageDialog(null, "Dados  alterados com sucesso");
-                            txtDataAbertura.setText(auxiliar.hoje());
-                            auxiliar.limpaCampos(telaCliente.getListaComponentes());
+                           
+                            
                         } 
 
                     }
                   
-                    
+                    txtDataAbertura.setText(auxiliar.hoje());
+                    auxiliar.limpaCampos(telaCliente.getListaComponentes());
                     this.mostraBotoesCadastro();
                     this.preencheTabela();
                 }catch (SQLException b) {
@@ -684,6 +696,7 @@ public class Cliente implements ActionListener{
         }       
         
         if(botao.getSource() == rdbpf){
+            
             rdbpj.setSelected(false);
             rdbpf.setSelected(true);
             
@@ -700,9 +713,10 @@ public class Cliente implements ActionListener{
             txtIE.setObrigatorio(false);
             
             rdbSelecionado = true;
-        }
         
-        if(botao.getSource() == rdbpj){
+    }
+     else   if(botao.getSource() == rdbpj){
+            
             
             rdbpf.setSelected(false);
             rdbpj.setSelected(true);
@@ -721,6 +735,8 @@ public class Cliente implements ActionListener{
             
             rdbSelecionado = false;
         }
-    }
+      }
+ 
+   
 }
 

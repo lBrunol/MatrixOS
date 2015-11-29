@@ -9,6 +9,8 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -448,7 +450,11 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
     private javax.swing.JLabel txtAjuda;
     private javax.swing.JLabel txtGerenciamento;
     private javax.swing.JLabel txtLogoff;
-    // End of variables declaration      
+    // End of variables declaration  
+    
+     Icon iconeSair = new ImageIcon(getClass().getResource("/imagens/logoff.png"));
+    
+  
     
     @Override
     public void actionPerformed(ActionEvent botao) {
@@ -477,6 +483,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
             dados.setVisible(true);
          }else if(botao.getSource() == JMenuCriacaoUsuarios){
              Aplicacao.Usuario usr = new Usuario();
+        
          }
     }    
 }
