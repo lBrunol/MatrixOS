@@ -21,17 +21,17 @@ public class CliPessoaJuridica  {
      ConexaoBanco conexao = new ConexaoBanco();
     
      //Caixas de texto
-     private long longCnpj;
-     private String strRazaoSocial;
-     private int intIM;
-     private int intIE;
-     private String strNomeFantasia;
+    private String longCnpj;
+    private String strRazaoSocial;
+    private String intIM;
+    private String intIE;
+    private String strNomeFantasia;
     private int cliCodigo;
      
      
        public boolean cadastrar(){
         try {
-            conexao.executaProcedure("INSERT_CLIPESSOAJURIDICA ('" + this.strRazaoSocial + "', " + this.strNomeFantasia + ", " + this.longCnpj + "','"+this.intIM+"','"+this.intIE + "','"+ this.getCliCodigo() + ")");
+            conexao.executaProcedure("INSERT_CLIPESSOAJURIDICA ('" + this.strRazaoSocial + "', '" + this.strNomeFantasia + "', '" + this.longCnpj + "', '"+ this.intIM + "','" + this.intIE + "', "+ this.cliCodigo + ")");
             return true;
              
         }catch (SQLException b) {
@@ -47,7 +47,7 @@ public class CliPessoaJuridica  {
        
         public boolean deletar(){
         try {
-            conexao.executaProcedure("DELETE_CLIPESSOAJURIDICA ('" + this.strRazaoSocial + "', " + this.strNomeFantasia + ", " + this.longCnpj + "','"+this.intIM+"','"+this.intIE + "','"+ this.getCliCodigo() + ")");
+            conexao.executaProcedure("DELETE_CLIPESSOAJURIDICA (" + this.getCliCodigo() + ")");
             return true;
              
         }catch (SQLException b) {
@@ -63,7 +63,7 @@ public class CliPessoaJuridica  {
      
        public boolean alterar(){
         try {
-            conexao.executaProcedure("UPDATE_CLIPESSOAJURIDICA ('" + this.strRazaoSocial + "', " + this.strNomeFantasia + ", " + this.longCnpj + "','"+this.intIM+"','"+this.intIE + "','"+ this.getCliCodigo() + ")");
+            conexao.executaProcedure("UPDATE_CLIPESSOAJURIDICA ('" + this.strRazaoSocial + "', '" + this.strNomeFantasia + "', '" + this.longCnpj + "', '"+ this.intIM + "','" + this.intIE + "', " + this.cliCodigo + ")");
             return true;
              
         }catch (SQLException b) {
@@ -111,28 +111,28 @@ public class CliPessoaJuridica  {
     /**
      * @return the intIM
      */
-    public int getIntIM() {
+    public String getIntIM() {
         return intIM;
     }
 
     /**
      * @param intIM the intIM to set
      */
-    public void setIntIM(int intIM) {
+    public void setIntIM(String intIM) {
         this.intIM = intIM;
     }
 
     /**
      * @return the intIE
      */
-    public int getIntIE() {
+    public String getIntIE() {
         return intIE;
     }
 
     /**
      * @param intIE the intIE to set
      */
-    public void setIntIE(int intIE) {
+    public void setIntIE(String intIE) {
         this.intIE = intIE;
     }
 
@@ -153,14 +153,14 @@ public class CliPessoaJuridica  {
     /**
      * @return the longCnpj
      */
-    public long getLongCnpj() {
+    public String getLongCnpj() {
         return longCnpj;
     }
 
     /**
      * @param longCnpj the longCnpj to set
      */
-    public void setLongCnpj(long longCnpj) {
+    public void setLongCnpj(String longCnpj) {
         this.longCnpj = longCnpj;
     }
 

@@ -18,12 +18,12 @@ public class CliPessoaFisica {
      ConexaoBanco conexao = new ConexaoBanco();
      
      private int cliCodigo;
-     private int cliRg;
-     private long cliCpf;
+     private String cliRg;
+     private String cliCpf;
      
      public boolean cadastrar(){
         try {
-            conexao.executaProcedure("INSERT_CLIPESSOAFISICA ('" + this.cliRg + "', " + this.cliCpf + ", " + this.cliCodigo + ")");
+            conexao.executaProcedure("INSERT_CLIPESSOAFISICA ('" + this.cliRg + "', '" + this.cliCpf + "' , " + this.cliCodigo + ")");
             return true;
              
         }catch (SQLException b) {
@@ -39,7 +39,7 @@ public class CliPessoaFisica {
      public boolean deletar()
      {
           try {
-            conexao.executaProcedure("DELETE_CLIPESSOAFISICA ('" + this.cliRg + "', " + this.cliCpf + ", " + this.cliCodigo + ")");
+            conexao.executaProcedure("DELETE_CLIPESSOAFISICA (" + this.cliCodigo + ")");
             return true;
              
         }catch (SQLException b) {
@@ -55,7 +55,7 @@ public class CliPessoaFisica {
       public boolean alterar()
      {
           try {
-            conexao.executaProcedure("UPDATE_CLIPESSOAFISICA ('" + this.cliRg + "', " + this.cliCpf + ", " + this.cliCodigo + ")");
+            conexao.executaProcedure("UPDATE_CLIPESSOAFISICA ('" + this.cliRg + "', '" + this.cliCpf + "' , " + this.cliCodigo + ")");
             return true;
              
         }catch (SQLException b) {
@@ -87,28 +87,28 @@ public class CliPessoaFisica {
     /**
      * @return the cliRg
      */
-    public int getCliRg() {
+    public String getCliRg() {
         return cliRg;
     }
 
     /**
      * @param cliRg the cliRg to set
      */
-    public void setCliRg(int cliRg) {
+    public void setCliRg(String cliRg) {
         this.cliRg = cliRg;
     }
 
     /**
      * @return the cliCpf
      */
-    public long getCliCpf() {
+    public String getCliCpf() {
         return cliCpf;
     }
 
     /**
      * @param cliCpf the cliCpf to set
      */
-    public void setCliCpf(long cliCpf) {
+    public void setCliCpf(String cliCpf) {
         this.cliCpf = cliCpf;
     }
 

@@ -14,9 +14,12 @@ import Core.PadraoFormulario;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
@@ -76,8 +79,10 @@ public class ConfirmaNotaFiscal implements PadraoFormulario, ActionListener {
     private String strDescricao;
     
     public ConfirmaNotaFiscal(int codigoOS){
+        this.intCodigo = codigoOS;
         this.iniciaComponentes();
         this.atribuiIcones();
+        this.preenchaCampos(this.intCodigo);
         telaConfirmaNotaFiscal.setVisible(true);
         telaConfirmaNotaFiscal.setMaximizado(true);
     }
@@ -92,9 +97,9 @@ public class ConfirmaNotaFiscal implements PadraoFormulario, ActionListener {
         
         
         telaConfirmaNotaFiscal.addLabelTitulo("Prestador de Serviços", panelCadastro);
-        telaConfirmaNotaFiscal.addCincoComponentes("CNPJ/CPF", txtCNPJCPFEmitente, "Razão Social", txtRazaoSocial, "Inscrição Municipal", txtIM, "Endereço", txtEnderecoEmitente, "Município", txtMunicipioEmitente, panelCadastro);
+        telaConfirmaNotaFiscal.addCincoComponentes("CNPJ", txtCNPJCPFEmitente, "Razão Social", txtRazaoSocial, "Inscrição Municipal", txtIM, "Endereço", txtEnderecoEmitente, "Município", txtMunicipioEmitente, panelCadastro);
         telaConfirmaNotaFiscal.addLabelTitulo("Tomador de Serviços", panelCadastro);
-        telaConfirmaNotaFiscal.addTresComponentes("CNPJ/CPF", txtCNPJCPFTomador, "Razão Social", txtRazaoSocialTomador, "Inscrição Municipal", txtIMTomador, panelCadastro);
+        telaConfirmaNotaFiscal.addTresComponentes("CNPJ/CPF", txtCNPJCPFTomador, "Razão Social/Nome", txtRazaoSocialTomador, "Inscrição Municipal", txtIMTomador, panelCadastro);
         telaConfirmaNotaFiscal.addQuatroComponentes("Endereço", txtEnderecoTomador, "Município", txtMunicipioTomador, "UF", txtUfTomador, "E-mail", txtEmail, panelCadastro);
         telaConfirmaNotaFiscal.addLabelTitulo("Discriminação dos Serviços", panelCadastro);
         telaConfirmaNotaFiscal.addDoisComponentes("Quantidade",txtQuantidadeServico, "Serviço", txtServico, panelCadastro);
@@ -111,6 +116,21 @@ public class ConfirmaNotaFiscal implements PadraoFormulario, ActionListener {
         panelBoleto.setVisible(false);
         panelCartao.setVisible(false);
         
+        txtCNPJCPFEmitente.setEnabled(false);
+        txtCNPJCPFTomador.setEnabled(false);
+        txtCodigoServico.setEnabled(false);
+        txtEmail.setEnabled(false);
+        txtEnderecoEmitente.setEnabled(false);
+        txtEnderecoTomador.setEnabled(false);
+        txtIM.setEnabled(false);
+        txtIMTomador.setEnabled(false);
+        txtMunicipioEmitente.setEnabled(false);
+        txtMunicipioTomador.setEnabled(false);
+        txtQuantidadeServico.setEnabled(false);
+        txtRazaoSocial.setEnabled(false);
+        txtRazaoSocialTomador.setEnabled(false);
+        txtRazaoSocialTomador.setEnabled(false);
+        
         rdbBoleto.addActionListener(this);
         rdbCartao.addActionListener(this);
         rdbVista.addActionListener(this);
@@ -119,6 +139,82 @@ public class ConfirmaNotaFiscal implements PadraoFormulario, ActionListener {
     
     public static void main(String[] args){
         ConfirmaNotaFiscal cnf = new ConfirmaNotaFiscal(1);
+    }
+    
+    public void preenchaCampos(int codigo){        
+        
+        int codigoCliente;
+        
+        try {
+            ResultSet rs;
+            rs = conexao.executar("SELECT demCodigo, demCNPJ, demRazaoSocial, demEndereco, demMunicipio FROM dadosEmitente WHERE demCodigo = 1");
+            rs.next();
+            txtCNPJCPFEmitente.setText(rs.getString(2));
+            txtRazaoSocial.setText(rs.getString(3));
+            txtIM.setText("-");
+            txtEnderecoEmitente.setText(rs.getString(4));
+            txtMunicipioEmitente.setText(rs.getString(5));
+            
+            rs.close();
+            
+            rs = conexao.executar("SELECT NVL(ordValorTotal,0) - NVL(ordValorDesconto,0), ordemServico.cliCodigo, servicos.svcNome, servicos.svcCodigoServico, servicosOS.seoQuantidade FROM ((ordemServico INNER JOIN servicosOS ON ordemServico.ordCodigo = servicosOS.ordCodigo) INNER JOIN servicos ON servicos.svcCodigo = servicosOS.svcCodigo) WHERE ordemServico.ordCodigo = " + codigo);
+            rs.next();
+            
+            txtValorTotal.setText(rs.getString(1));
+            codigoCliente = rs.getInt(2);
+            txtCodigoServico.setText(rs.getString(4) + " - " + rs.getString(3));
+            txtServico.setText(rs.getString(3));
+            txtQuantidadeServico.setText(rs.getString(5));
+            
+            rs.close();
+            
+            rs = conexao.executar("SELECT cliTipo FROM cliente WHERE cliCodigo = " + codigoCliente);
+            rs.next();
+            
+            if("J".equals(rs.getString(1).toUpperCase())){
+                
+                rs.close();
+                
+                rs = conexao.executar("SELECT cliPessoaJuridica.cliCNPJ, cliPessoaJuridica.cliRazaoSocial, cliPessoaJuridica.cliIM, cliente.cliEndereco, cliente.cliCidade, cliente.cliUF, cliente.cliEmail FROM cliente INNER JOIN cliPessoaJuridica ON cliente.cliCodigo = cliPessoaJuridica.cliCodigo WHERE cliente.cliCodigo = "+ codigoCliente);
+                rs.next();
+                
+                txtCNPJCPFTomador.setText(rs.getString(1));
+                txtRazaoSocialTomador.setText(rs.getString(2));
+                txtIMTomador.setText(rs.getString(3));
+                txtEnderecoTomador.setText(rs.getString(4));
+                txtMunicipioTomador.setText(rs.getString(5));
+                txtUfTomador.setText(rs.getString(6));
+                txtEmail.setText(rs.getString(7));                
+            
+            }else if("F".equals(rs.getString(1).toUpperCase())){
+                
+                rs.close();
+                
+                rs = conexao.executar("SELECT cliPessoaFisica.cliCPF, cliente.cliNome, cliente.cliEndereco, cliente.cliCidade, cliente.cliUF, cliente.cliEmail FROM cliente INNER JOIN cliPessoaFisica ON cliente.cliCodigo = cliPessoaFisica.cliCodigo WHERE cliente.cliCodigo = "+ codigoCliente);
+                rs.next();
+                
+                txtCNPJCPFTomador.setText(rs.getString(1));
+                txtRazaoSocialTomador.setText(rs.getString(2));
+                txtIMTomador.setText(" - ");
+                txtEnderecoTomador.setText(rs.getString(3));
+                txtMunicipioTomador.setText(rs.getString(4));
+                txtUfTomador.setText(rs.getString(5));
+                txtEmail.setText(rs.getString(6));
+                
+            }else{
+                throw new IllegalArgumentException("Este cliente foi cadastrado de forma incorreta. Por favor, entre em contato com administrador do sistema.");
+            }            
+            
+        } catch (SQLException b) {
+            JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
+        }
+        catch (IllegalArgumentException b){
+            JOptionPane.showMessageDialog(null, b.getMessage());
+        }
+        catch (Exception b) {
+            JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
+        }
+        
     }
 
     @Override
