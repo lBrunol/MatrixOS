@@ -572,16 +572,18 @@ public class Cliente implements ActionListener{
             ok = deletar();
             if(ok){	
                 try {
+                    ResultSet rs;
                     conexao.executaProcedure("DELETE_CLIENTE(" + this.cliCod+ ")");
-                     ResultSet rs;
+                     
                      //pessoa física
                      if(rdbSelecionado = true){
 
                             CliPessoaFisica pf = new CliPessoaFisica();
                             pf.setCliCpf(Long.parseLong(auxiliar.removeCaracteresString(txtCPF.getText())));
                             pf.setCliRg(Integer.parseInt(auxiliar.removeCaracteresString(txtRG.getText())));
-
+                        
                             pf.setCliCodigo(cliCod);
+                 
                             ok = pf.deletar();
                         if(ok){
                             JOptionPane.showMessageDialog(null, "Dados deletados com sucesso");
@@ -595,8 +597,9 @@ public class Cliente implements ActionListener{
                             pj.setStrNomeFantasia(txtNomeFantasia.getText());
                             pj.setStrRazaoSocial(txtRazaoSocial.getText());
                             pj.setLongCnpj(Long.parseLong(auxiliar.removeCaracteresString(txtCNPJ.getText())));
-                            
+                           
                             pj.setCliCodigo(cliCod);
+                            
                             ok = pj.deletar();
                         if(ok){
                             JOptionPane.showMessageDialog(null, "Dados  deletados com sucesso");
