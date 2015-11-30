@@ -642,13 +642,8 @@ public class Cliente implements ActionListener{
                         CliPessoaFisica pf = new CliPessoaFisica();
                         pf.setCliCpf(Long.parseLong(auxiliar.removeCaracteresString(txtCPF.getText())));
                         pf.setCliRg(Integer.parseInt(auxiliar.removeCaracteresString(txtRG.getText())));
-                     
-                        panelCliPJ.setVisible(false);
-                        panelCliPF.setVisible(true);
+                    
                         
-                        panelCliPJ.setEnabled(false);
-                        panelCliPF.setEnabled(true);
-
                         pf.setCliCodigo(cliCod);
                         ok = pf.alterar();
                        if(ok){
@@ -665,12 +660,6 @@ public class Cliente implements ActionListener{
                         pj.setStrRazaoSocial(txtRazaoSocial.getText());
                         pj.setLongCnpj(Long.parseLong(auxiliar.removeCaracteresString(txtCNPJ.getText())));
                   
-                        
-                        panelCliPJ.setVisible(true);
-                        panelCliPF.setVisible(false);
-                        
-                        panelCliPJ.setEnabled(true);
-                        panelCliPF.setEnabled(false);
                         pj.setCliCodigo(cliCod);
                         ok = pj.alterar();
                         
@@ -712,17 +701,27 @@ public class Cliente implements ActionListener{
             txtIM.setObrigatorio(false);
             txtIE.setObrigatorio(false);
             
+            txtRazaoSocial.setVisible(false);
+            txtNomeFantasia.setVisible(false);
+            txtCNPJ.setVisible(false);
+            txtIM.setVisible(false);
+            txtIE.setVisible(false);
+           
+            
             rdbSelecionado = true;
         
     }
      else   if(botao.getSource() == rdbpj){
             
-            
+         
             rdbpf.setSelected(false);
             rdbpj.setSelected(true);
             
             panelCliPJ.setVisible(true);
             panelCliPF.setVisible(false);
+            
+            txtRG.setObrigatorio(false);
+            txtCPF.setObrigatorio(false);
             
             txtRG.setVisible(false);
             txtCPF.setVisible(false);
