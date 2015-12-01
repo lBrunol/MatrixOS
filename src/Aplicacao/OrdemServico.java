@@ -147,7 +147,6 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
             
         }catch (SQLException b) {
             JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
-            b.printStackTrace();
         }
         catch (Exception b) {
             JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
@@ -413,7 +412,7 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
 
                         mostraBotoesAlteracao();
                         botFaturarNotaFiscal.setEnabled(false);
-                        if(verificaFatura()){
+                        if(verificaFatura() == false){
                             botFaturarNotaFiscal.setEnabled(true);
                         }
                         telaOS.getTabbedPane().setSelectedIndex(0);
@@ -612,7 +611,10 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         }
         if (botao.getSource() == botFaturarNotaFiscal){
             if(auxiliar.validaCampos(telaOS.getListaComponentes())){
-                ConfirmaNotaFiscal cnf = new ConfirmaNotaFiscal(intCodigoOS);            
+                if(JOptionPane.showConfirmDialog(null, "Deseja Faturar está ordem de serviço?", "Faturar Ordem", JOptionPane.YES_NO_OPTION) == 0){
+                    ConfirmaNotaFiscal cnf = new ConfirmaNotaFiscal(intCodigoOS);
+                    auxiliar.limpaCampos(telaOS.getListaComponentes());
+                }
             }
         }
     }  

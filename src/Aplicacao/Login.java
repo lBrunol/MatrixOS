@@ -11,8 +11,10 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -34,6 +36,9 @@ public class Login extends javax.swing.JFrame implements ActionListener {
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
+        URL iconURL = getClass().getResource("/imagens/favicon.png");
+        ImageIcon icon = new ImageIcon(iconURL);
+        setIconImage(icon.getImage());
         initComponents();
         txtNomeUsuario.setText("bruno");
         txtSenhaUsuario.setText("123");

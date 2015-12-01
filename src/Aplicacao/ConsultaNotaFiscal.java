@@ -77,6 +77,7 @@ public class ConsultaNotaFiscal implements ActionListener, FocusListener, KeyLis
         txtCliente.addFocusListener(this);
         txtData.addFocusListener(this);
         txtCodigo.addKeyListener(this);
+
     }
     
      public void atribuiIcones() {   
@@ -86,7 +87,8 @@ public class ConsultaNotaFiscal implements ActionListener, FocusListener, KeyLis
      
      public void preencheTabela(){
         try {
-            conexao.preencheTabelaSelect(tabela, query);            
+            conexao.preencheTabelaSelect(tabela, query + " ORDER BY notaFiscal.notCodigo");
+            auxiliar.formataValorTabela(tblConsultaNotaFiscal, 2);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
         }
@@ -97,14 +99,15 @@ public class ConsultaNotaFiscal implements ActionListener, FocusListener, KeyLis
         String queryFilter = query;
         if(botao.getSource() == botPesquisar){
             if(!"".equals(txtCliente.getText())){
-                queryFilter = query  + " WHERE cliente.cliNome LIKE '%" + txtCliente.getText() + "%'";
+                queryFilter = query  + " WHERE cliente.cliNome LIKE '%" + txtCliente.getText() + "%' ORDER BY notaFiscal.notCodigo";
             }else if(!"".equals(txtCodigo.getText())){
-                queryFilter = query  + " WHERE notaFiscal.notCodigo= " + txtCodigo.getText() + "";
+                queryFilter = query  + " WHERE notaFiscal.notCodigo= " + txtCodigo.getText() + " ORDER BY notaFiscal.notCodigo";
             }else if(!"".equals(auxiliar.removeCaracteresString(txtData.getText()))){
-                queryFilter = query  + " WHERE notaFiscal.notData = '" + txtData.getText() + "'";
+                queryFilter = query  + " WHERE notaFiscal.notData = '" + txtData.getText() + "' ORDER BY notaFiscal.notCodigo";
             }
             try{
                 conexao.preencheTabelaSelect(tabela, queryFilter);
+                auxiliar.formataValorTabela(tblConsultaNotaFiscal, 2);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
             }

@@ -87,7 +87,8 @@ public class ConsultaContasReceber implements ActionListener, FocusListener, Key
         cboStatus.addItem("");
         cboStatus.addItem("Pago");
         cboStatus.addItem("Pendente");
-        cboStatus.addItem("Atrasado"); 
+        cboStatus.addItem("Atrasado");        
+        
     }
     
     public void atribuiIcones() {
@@ -100,7 +101,11 @@ public class ConsultaContasReceber implements ActionListener, FocusListener, Key
     
     public void preencheTabela() {
         try {
-            conexao.preencheTabelaSelect(tabela, query);            
+            conexao.preencheTabelaSelect(tabela, query + " ORDER BY contasReceber.ctrCodigo");
+            auxiliar.formataValorTabela(tblConsultaContasReceber, 5);
+            auxiliar.formataValorTabela(tblConsultaContasReceber, 7);
+            auxiliar.formataValorTabela(tblConsultaContasReceber, 8);
+            auxiliar.formataValorTabela(tblConsultaContasReceber, 9);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
         }
@@ -132,6 +137,7 @@ public class ConsultaContasReceber implements ActionListener, FocusListener, Key
         });
         
         botPesquisar.addActionListener(this);
+        botLancaPagamento.addActionListener(this);
         txtCliente.addFocusListener(this);
         txtCodigo.addFocusListener(this);
         txtData.addFocusListener(this);
@@ -144,27 +150,45 @@ public class ConsultaContasReceber implements ActionListener, FocusListener, Key
         String queryFilter = query;
         if(botao.getSource() == botPesquisar){
             if(!"".equals(txtCliente.getText())){
-                queryFilter = query  + " WHERE cliente.cliNome LIKE '%" + txtCliente.getText() + "%'";
+                queryFilter = query  + " WHERE cliente.cliNome LIKE '%" + txtCliente.getText() + "%' ORDER BY contasReceber.ctrCodigo";
             }else if(!"".equals(txtCodigo.getText())){
-                queryFilter = query  + " WHERE contasReceber.ctrCodigo = " + txtCodigo.getText() + "";
+                queryFilter = query  + " WHERE contasReceber.ctrCodigo = " + txtCodigo.getText() + " ORDER BY contasReceber.ctrCodigo";
             }else if(!"".equals(auxiliar.removeCaracteresString(txtData.getText()))){
-                queryFilter = query  + " WHERE contasReceber.ctrDataVencimento = '" + txtData.getText() + "'";
+                queryFilter = query  + " WHERE contasReceber.ctrDataVencimento = '" + txtData.getText() + "' ORDER BY contasReceber.ctrCodigo";
             }else if(cboStatus.getSelectedIndex() != 0){
                 if(cboStatus.getSelectedItem().toString() == "Pago"){
-                     queryFilter = query  + " WHERE contasReceber.ctrDataPagamento Is Not Null";                     
+                     queryFilter = query  + " WHERE contasReceber.ctrDataPagamento Is Not Null ORDER BY contasReceber.ctrCodigo";                     
                 } else if(cboStatus.getSelectedItem().toString() == "Pendente"){
-                     queryFilter = query  + " WHERE contasReceber.ctrDataVencimento >= '" + auxiliar.hoje() + "' AND contasReceber.ctrDataPagamento Is Null";                     
+                     queryFilter = query  + " WHERE contasReceber.ctrDataVencimento >= '" + auxiliar.hoje() + "' AND contasReceber.ctrDataPagamento Is Null ORDER BY contasReceber.ctrCodigo";                     
                 } else if(cboStatus.getSelectedItem().toString() == "Atrasado"){
-                     queryFilter = query  + " WHERE contasReceber.ctrDataVencimento < '" + auxiliar.hoje() + "' AND  contasReceber.ctrDataPagamento Is Null";
-                     System.out.println(queryFilter);
+                     queryFilter = query  + " WHERE contasReceber.ctrDataVencimento < '" + auxiliar.hoje() + "' AND  contasReceber.ctrDataPagamento Is Null ORDER BY contasReceber.ctrCodigo";
                 }
                     
             }
             try{
                 conexao.preencheTabelaSelect(tabela, queryFilter);
+                auxiliar.formataValorTabela(tblConsultaContasReceber, 5);
+                auxiliar.formataValorTabela(tblConsultaContasReceber, 7);
+                auxiliar.formataValorTabela(tblConsultaContasReceber, 8);
+                auxiliar.formataValorTabela(tblConsultaContasReceber, 9);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
             }
+        }
+        if(botao.getSource() == botLancaPagamento){
+            if(tblConsultaContasReceber.getSelectedRow() != -1){
+                if(tblConsultaContasReceber.getValueAt(tblConsultaContasReceber.getSelectedRow(), 6) != null){
+                    JOptionPane.showMessageDialog(null, "Este documento já tem o pagamento lançado");
+                }else{
+                    int codigoDocumento;
+                    codigoDocumento = Integer.parseInt(tblConsultaContasReceber.getValueAt(tblConsultaContasReceber.getSelectedRow(), 0).toString());
+                    LancaPagamento lan = new LancaPagamento(codigoDocumento);
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "Selecione uma linha");
+            }
+            
+            
         }
     }
 

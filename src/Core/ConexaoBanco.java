@@ -344,6 +344,7 @@ public class ConexaoBanco {
                 
                 ComboItem cboItem = new ComboItem(id, nome, index);
                 combo.addItem(cboItem);
+                
                 index++;
             }
         }

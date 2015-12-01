@@ -179,7 +179,6 @@ public class Usuario implements PadraoFormulario, ActionListener {
         try {
             Sessao sessao = Sessao.getInstance();
             if(sessao.isAdm() == false){
-                JOptionPane.showMessageDialog(null, sessao.getUser() + sessao.getSenha());
                 conexao.preencheTabelaSelect(tabela, "SELECT * FROM usuarios WHERE LOWER(usrNome) = '" + sessao.getUser().toLowerCase() + "' AND usrSenha = '" + sessao.getSenha() + "'");
                 chkAdministrador.setEnabled(false);
             }else{

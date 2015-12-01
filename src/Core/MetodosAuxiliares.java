@@ -289,8 +289,7 @@ public class MetodosAuxiliares {
         ComboItem item;
         for (int i = 1; i <= comboBox.getItemCount(); i++)
         {
-            comboBox.setSelectedIndex(i);
-            item = (ComboItem) comboBox.getSelectedItem();
+            item = (ComboItem) comboBox.getItemAt(i);
             if (Integer.parseInt(item.getId()) == value){
                 comboBox.setSelectedIndex(item.getIndex());
                 break;

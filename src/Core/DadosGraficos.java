@@ -19,6 +19,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -83,7 +84,11 @@ public class DadosGraficos extends JFrame {
         this.somaXiFi = this.somaXiFi(xifi);
         this.media = this.calculaMedia(somaXi, somaFi);
         this.mediana = this.calculaMediana(somaFi, this.ordenaXi(this.xi));
-        this.moda = this.calculaModa(this.fi, this.xiExclusivos);	
+        this.moda = this.calculaModa(this.fi, this.xiExclusivos);
+        
+        URL iconURL = getClass().getResource("/imagens/favicon.png");
+        ImageIcon icon = new ImageIcon(iconURL);
+        setIconImage(icon.getImage()); 
     }
 
     private int[] calculaFi(double[] xi) {

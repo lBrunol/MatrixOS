@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
@@ -32,6 +33,9 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
             System.out.println(e.getMessage());
         }
         centralize();
+        URL iconURL = getClass().getResource("/imagens/favicon.png");
+        ImageIcon icon = new ImageIcon(iconURL);
+        setIconImage(icon.getImage()); 
         initComponents();
     }
 
