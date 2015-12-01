@@ -194,7 +194,7 @@ public class Cliente implements ActionListener{
         telaCliente.addUmComponente("Nome",txtNome,panelCadastro);
         telaCliente.addDoisComponentes("Número Endereço",txtNumEndereco,"Endereço",txtEndereco,panelCadastro);
         telaCliente.addQuatroComponentes( "Bairro", txtBairro, "Complemento", txtComplemento,"UF", cboEstado,"Cidade",txtCidade, panelCadastro);
-        telaCliente.addQuatroComponentes("CEP", txtCEP, "Telefone", txtTelefone, "Celular", txtCelular, "Data Cadastro", txtDataCadastro, panelCadastro);
+        telaCliente.addTresComponentes("CEP", txtCEP, "Telefone", txtTelefone, "Celular", txtCelular, panelCadastro);
         telaCliente.addUmComponente("Email:",txtEmail,panelCadastro);
         telaCliente.addUmComponente("Observação",txtObservacao,panelCadastro);
         
@@ -539,7 +539,7 @@ public class Cliente implements ActionListener{
                     this.cliTipo = rdbSelecionado == true ? "F" : "J";
                     
                     ResultSet rs;
-                    conexao.executaProcedure("INSERT_CLIENTE ('" + this.cliNome + "', '" + this.cliEndereco + "', '" +this.cliNumEndereco+"','"+ this.cliComplemento + "', '" + cliBairro + "' , '" + cliCep + "', '" + this.cliCidade + "' , 'SP', '" + this.cliTelefone + "', '" + this.cliCelular + "' ,'" + this.cliEmail+"','"+ auxiliar.hoje() + "', '" + this.cliObersavacao + "','" + this.cliTipo +"' )");
+                    conexao.executaProcedure("INSERT_CLIENTE ('" + this.cliNome + "', '" + this.cliEndereco + "', '" +this.cliNumEndereco+"','"+ this.cliComplemento + "', '" + cliBairro + "' , '" + cliCep + "', '" + this.cliCidade + "' , '" + this.cliEstado + "', '" + this.cliTelefone + "', '" + this.cliCelular + "' ,'" + this.cliEmail+"','"+ auxiliar.hoje() + "', '" + this.cliObersavacao + "','" + this.cliTipo +"' )");
                     
                     //pessoa física
                     if(rdbSelecionado == true){
@@ -556,7 +556,8 @@ public class Cliente implements ActionListener{
                             JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
                            
                         }
-                    }                        //pessoa jurídica
+                    }                        
+                    //pessoa jurídica
                     else {
                         CliPessoaJuridica pj = new CliPessoaJuridica();
                         pj.setIntIE(txtIE.getText());
@@ -617,7 +618,7 @@ public class Cliente implements ActionListener{
                         } 
 
                      }
-                     conexao.executaProcedure("DELETE_CLIENTE(" + this.cliCod + ")");
+                    conexao.executaProcedure("DELETE_CLIENTE(" + this.cliCod + ")");
                     txtDataAbertura.setText(auxiliar.hoje());
                     auxiliar.limpaCampos(telaCliente.getListaComponentes());
                     this.mostraBotoesCadastro();
