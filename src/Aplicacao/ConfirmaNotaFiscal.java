@@ -76,13 +76,20 @@ public class ConfirmaNotaFiscal implements PadraoFormulario, ActionListener {
    
     //Atributos da classe relacionados ao banco
     private int intCodigo;
+    private int intCodigoOS;
+    private int intCodigoEmitente;
+    private int intCodigoNota;
+    private int intCodigoPagamento;
     private String strDescricao;
+    private String strCodigoVerificacao;
+    private String strOutrasInformacoes;
+    private double dblValorTotal;
     
     public ConfirmaNotaFiscal(int codigoOS){
-        this.intCodigo = codigoOS;
+        this.intCodigoOS = codigoOS;
         this.iniciaComponentes();
         this.atribuiIcones();
-        this.preenchaCampos(this.intCodigo);
+        this.preenchaCampos(this.intCodigoOS);
         telaConfirmaNotaFiscal.setVisible(true);
         telaConfirmaNotaFiscal.setMaximizado(true);
     }
@@ -147,8 +154,16 @@ public class ConfirmaNotaFiscal implements PadraoFormulario, ActionListener {
         
         try {
             ResultSet rs;
-            rs = conexao.executar("SELECT demCodigo, demCNPJ, demRazaoSocial, demEndereco, demMunicipio FROM dadosEmitente WHERE demCodigo = 1");
+            rs = conexao.executar("SELECT demCodigo FROM dadosEmitente WHERE ROWNUM = 1");
             rs.next();
+            
+            this.intCodigoEmitente = rs.getInt(1);
+            
+            rs.close();
+            
+            rs = conexao.executar("SELECT demCodigo, demCNPJ, demRazaoSocial, demEndereco, demMunicipio FROM dadosEmitente WHERE demCodigo = " + this.intCodigoEmitente);
+            rs.next();
+            
             txtCNPJCPFEmitente.setText(rs.getString(2));
             txtRazaoSocial.setText(rs.getString(3));
             txtIM.setText("-");
@@ -228,7 +243,19 @@ public class ConfirmaNotaFiscal implements PadraoFormulario, ActionListener {
 
     @Override
     public void preencheCombos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        cboBandeira.addItem("");
+        cboBandeira.addItem("Master Card");
+        cboBandeira.addItem("Visa");
+        
+        cboDias.addItem("");
+        cboDias.addItem("30");
+        cboDias.addItem("60");
+        cboDias.addItem("90");
+        
+        cboParcelas.addItem("");
+        cboParcelas.addItem("1");
+        cboParcelas.addItem("2");
+        cboParcelas.addItem("3");
     }
 
     @Override
@@ -258,7 +285,14 @@ public class ConfirmaNotaFiscal implements PadraoFormulario, ActionListener {
 
     @Override
     public boolean cadastrar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(auxiliar.validaCampos(telaConfirmaNotaFiscal.getListaComponentes())){
+            this.strOutrasInformacoes = txtOutrasInformacoes.getText();
+            this.dblValorTotal = Double.parseDouble(txtValorTotal.getText());
+            
+            return true;
+        }
+        
+        return false;
     }
 
     @Override
@@ -273,6 +307,25 @@ public class ConfirmaNotaFiscal implements PadraoFormulario, ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent botao) {
+        
+        boolean ok ;
+        if (botao.getSource() == botCadastrar) {            
+            ok = cadastrar();
+            if(ok){	
+                try {
+                    ResultSet rs;
+                    conexao.executaProcedure("INSERT_NOTAFISCAL ('" + auxiliar.hoje() + "', '" + auxiliar.hoje() + "', " + this.dblValorTotal + ", " )");
+                    JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
+                    auxiliar.limpaCampos(telaCargos.getListaComponentes());
+                    this.preencheTabela();
+                }catch (SQLException b) {
+                    JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
+                }
+                catch (Exception b) {
+                    JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
+                }                                    
+            }
+        }
         
         if(botao.getSource() == botCancelar){
             telaConfirmaNotaFiscal.dispose();
@@ -293,6 +346,8 @@ public class ConfirmaNotaFiscal implements PadraoFormulario, ActionListener {
             cboDias.setObrigatorio(false);
             txtNomeTitular.setObrigatorio(false);
             
+            this.intCodigoPagamento = 1;
+            
         }
         
         if(botao.getSource() == rdbBoleto) {
@@ -308,6 +363,8 @@ public class ConfirmaNotaFiscal implements PadraoFormulario, ActionListener {
             cboParcelas.setObrigatorio(false);
             cboDias.setObrigatorio(true);
             txtNomeTitular.setObrigatorio(false);
+            
+            this.intCodigoPagamento = 2;
         }
         
         if(botao.getSource() == rdbCartao) {
@@ -323,6 +380,8 @@ public class ConfirmaNotaFiscal implements PadraoFormulario, ActionListener {
             cboParcelas.setObrigatorio(true);
             cboDias.setObrigatorio(false);
             txtNomeTitular.setObrigatorio(true);
+            
+            this.intCodigoPagamento = 3;
         }
         
         
