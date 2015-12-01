@@ -8,6 +8,7 @@ import Core.PComboBox;
 import Core.PFormattedTextField;
 import Core.PTextField;
 import Core.PadraoFormulario;
+import Core.Sessao;
 import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -72,7 +73,8 @@ public class Funcionario implements PadraoFormulario, ActionListener{
         this.adicionaEventos();
         
         this.preencheTabela();
-        this.setaNomes(); 
+        this.setaNomes();        
+        
     }
     
     public static void main(String[] args){
@@ -101,6 +103,12 @@ public class Funcionario implements PadraoFormulario, ActionListener{
         
         panelBotoesAlteracao.setVisible(false);
         panelBotoesCadastro.setVisible(true);
+        
+        Sessao sessao = Sessao.getInstance();
+        if(sessao.isAdm() == false){
+            botAlterarRegistro.setEnabled(false);
+            botExcluir.setEnabled(false);
+        }
     }
 
     @Override
@@ -195,7 +203,7 @@ public class Funcionario implements PadraoFormulario, ActionListener{
                         rs.next();                    
                         txtNome.setText(rs.getString(2));
                         txtTelefone.setText(rs.getString(3));
-                        cboCargo.setSelectedIndex(rs.getInt(4));                    
+                        auxiliar.setSelectedValue(cboCargo,rs.getInt(4));                    
                         
                         mostraBotoesAlteracao();
                         telaFuncionario.getTabbedPane().setSelectedIndex(0);

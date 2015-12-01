@@ -7,21 +7,17 @@ package Aplicacao;
 
 
 
-
-import Core.ComboItem;
-
 import Core.ConexaoBanco;
 import Core.MetodosAuxiliares;
 import Core.MontaInterfaces;
 import Core.PComboBox;
 import Core.PFormattedTextField;
 import Core.PTextField;
+import Core.Sessao;
 import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
@@ -29,15 +25,11 @@ import java.sql.SQLException;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JRadioButton;
-import javax.swing.text.DefaultFormatterFactory;
 
 
 /**
@@ -64,7 +56,6 @@ public class Cliente implements ActionListener{
     private String cliTelefone;
     private String cliCelular;
     private String cliEmail;
-    private String cliDataCadastro;
     private String cliObersavacao;
     private String cliTipo;
     
@@ -73,7 +64,6 @@ public class Cliente implements ActionListener{
     //Panels
     private JPanel panelConsulta = new JPanel(new GridBagLayout());
     private JPanel panelCadastro = new JPanel(new GridBagLayout());
-    private JPanel panelBotoes = new JPanel(new GridBagLayout());
     private JPanel panelCliPF = new JPanel(new GridBagLayout());
     private JPanel panelCliPJ = new JPanel(new GridBagLayout());
     private JPanel panelBotoesCadastro = new JPanel(new GridBagLayout());
@@ -87,11 +77,10 @@ public class Cliente implements ActionListener{
     private PTextField txtEndereco =  new PTextField();
     private PTextField txtBairro =  new PTextField();
     private PTextField txtCidade =  new PTextField();
-    private PFormattedTextField txtDataCadastro  =  new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_DATA));
     private PComboBox cboEstado=  new PComboBox();
     private PTextField txtEmail =  new PTextField();
     private PFormattedTextField txtCEP =  new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CEP));
-    private PFormattedTextField txtCelular = new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_TELEFONE));
+    private PFormattedTextField txtCelular = new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_CELULAR));
     private PFormattedTextField txtTelefone =  new PFormattedTextField(auxiliar.inseriMascara(MetodosAuxiliares.MASCARA_TELEFONE));
     private PTextField txtObservacao = new PTextField();
     private PTextField txtComplemento=  new PTextField();
@@ -165,6 +154,7 @@ public class Cliente implements ActionListener{
         //Adicionei os botões dentro do panelBotoes
         telaCliente.addBotoes("Cadastrar", botCadastrar, panelBotoesCadastro);
         telaCliente.addBotoes("Limpar", botLimpar, panelBotoesCadastro);
+        telaCliente.addBotoes("Modo Inserir", botInserir,panelBotoesAlteracao);
         telaCliente.addBotoes("Excluir Registro", botExcluir,panelBotoesAlteracao);
         telaCliente.addBotoes("Alterar Registro", botAlterarRegistro, panelBotoesAlteracao);        
 
@@ -175,7 +165,7 @@ public class Cliente implements ActionListener{
         
         //Criei objetos do tipo icone com o caminho do icone para coloca-los nos botões 
         Icon iconeCadastrar = new ImageIcon(getClass().getResource("/imagens/salvar.png"));
-        Icon iconeExcluir = new ImageIcon(getClass().getResource("/imagens/limpar.png"));
+        Icon iconeExcluir = new ImageIcon(getClass().getResource("/imagens/excluir.png"));
         Icon iconeInserir = new ImageIcon(getClass().getResource("/imagens/adicionar.png"));
         Icon iconeAlterar= new ImageIcon(getClass().getResource("/imagens/alterar.png"));
         Icon iconeLimpar = new ImageIcon(getClass().getResource("/imagens/limpar.png"));
@@ -268,7 +258,11 @@ public class Cliente implements ActionListener{
          
         telaCliente.addTabela(tblClientes, panelConsulta);
 
-        
+        Sessao sessao = Sessao.getInstance();
+        if(sessao.isAdm() == false){
+            botAlterarRegistro.setEnabled(false);
+            botExcluir.setEnabled(false);
+        }
         
         
     }//Fim do inicia componentes
@@ -302,7 +296,6 @@ public class Cliente implements ActionListener{
             txtEndereco.setName("Endereço");
             txtBairro.setName("Bairro");
             txtCidade.setName("Cidade");
-            txtDataCadastro.setName("Data de Cadastro");
             
             //PF
             txtRG.setName("RG");
@@ -357,7 +350,7 @@ public class Cliente implements ActionListener{
             this.cliNumEndereco = txtNumEndereco.getText();
             this.cliBairro= txtBairro.getText();
             this.cliCidade= txtCidade.getText();
-            this.cliDataCadastro=  txtDataCadastro.getText(); 
+            this.cliEstado = cboEstado.getSelectedItem().toString();
             this.cliEmail=  txtEmail.getText();
             this.cliCep = auxiliar.removeCaracteresString(txtCEP.getText());
             this.cliCelular = auxiliar.removeCaracteresString(txtCelular.getText());
@@ -382,7 +375,7 @@ public class Cliente implements ActionListener{
             this.cliNumEndereco = txtNumEndereco.getText();
             this.cliBairro= txtBairro.getText();
             this.cliCidade= txtCidade.getText();
-            this.cliDataCadastro=  txtDataCadastro.getText(); 
+            this.cliEstado = cboEstado.getSelectedItem().toString();
             this.cliEmail=  txtEmail.getText();
             this.cliCep = auxiliar.removeCaracteresString(txtCEP.getText());
             this.cliCelular = auxiliar.removeCaracteresString(txtCelular.getText());
@@ -440,7 +433,6 @@ public class Cliente implements ActionListener{
                         txtTelefone.setText(rs.getString(10));
                         txtCelular.setText(rs.getString(11));
                         txtEmail.setText(rs.getString(12));
-                        txtDataCadastro.setText(auxiliar.formataData(rs.getDate(13)));
                         txtObservacao.setText(rs.getString(14));
                         
                         //Verifica se o campo cliTipo é J ou F para fazer o select nas tabelas especializadas
@@ -578,7 +570,7 @@ public class Cliente implements ActionListener{
                         
                             
                     }
-                    //auxiliar.limpaCampos(telaCliente.getListaComponentes());
+                    auxiliar.limpaCampos(telaCliente.getListaComponentes());
                     this.preencheTabela();
                     
                 }catch (SQLException b) {
@@ -706,9 +698,6 @@ public class Cliente implements ActionListener{
             panelCliPJ.setVisible(false);
             panelCliPF.setVisible(true);
             
-            txtRG.setVisible(true);
-            txtCPF.setVisible(true);
-            
             txtRG.setObrigatorio(true);
             txtCPF.setObrigatorio(true);
 
@@ -717,13 +706,7 @@ public class Cliente implements ActionListener{
             txtCNPJ.setObrigatorio(false);
             txtIM.setObrigatorio(false);
             txtIE.setObrigatorio(false);
-            
-            txtRazaoSocial.setVisible(false);
-            txtNomeFantasia.setVisible(false);
-            txtCNPJ.setVisible(false);
-            txtIM.setVisible(false);
-            txtIE.setVisible(false);
-           
+
             
             rdbSelecionado = true;
         
@@ -739,15 +722,6 @@ public class Cliente implements ActionListener{
             
             txtRG.setObrigatorio(false);
             txtCPF.setObrigatorio(false);
-            
-            txtRG.setVisible(false);
-            txtCPF.setVisible(false);
-            
-            txtRazaoSocial.setVisible(true);
-            txtNomeFantasia.setVisible(true);
-            txtCNPJ.setVisible(true);
-            txtIM.setVisible(true);
-            txtIE.setVisible(true);
             
             txtRazaoSocial.setObrigatorio(true);
             txtNomeFantasia.setObrigatorio(true);

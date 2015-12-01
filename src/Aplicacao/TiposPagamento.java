@@ -11,6 +11,7 @@ import Core.MetodosAuxiliares;
 import Core.MontaInterfaces;
 import Core.PTextField;
 import Core.PadraoFormulario;
+import Core.Sessao;
 import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -97,6 +98,12 @@ public class TiposPagamento implements PadraoFormulario, ActionListener {
         
         panelBotoesAlteracao.setVisible(false);
         panelBotoesCadastro.setVisible(true);
+        
+        Sessao sessao = Sessao.getInstance();
+        if(sessao.isAdm() == false){
+            botAlterarRegistro.setEnabled(false);
+            botExcluir.setEnabled(false);
+        }
     }
 
     @Override

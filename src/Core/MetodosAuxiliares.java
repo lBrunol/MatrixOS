@@ -285,5 +285,18 @@ public class MetodosAuxiliares {
         return hoje;
     }
     
+    public static void setSelectedValue(JComboBox comboBox, int value){
+        ComboItem item;
+        for (int i = 1; i <= comboBox.getItemCount(); i++)
+        {
+            comboBox.setSelectedIndex(i);
+            item = (ComboItem) comboBox.getSelectedItem();
+            if (Integer.parseInt(item.getId()) == value){
+                comboBox.setSelectedIndex(item.getIndex());
+                break;
+            }
+        }
+    }
+    
   
 }

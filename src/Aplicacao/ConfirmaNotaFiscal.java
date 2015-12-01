@@ -16,14 +16,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -32,7 +31,7 @@ import javax.swing.table.DefaultTableModel;
 public class ConfirmaNotaFiscal implements PadraoFormulario, ActionListener {
     
     MetodosAuxiliares auxiliar = new MetodosAuxiliares();
-    MontaInterfaces telaConfirmaNotaFiscal = new MontaInterfaces("Confirmar dados para Nota Fiscal", "/imagens/nota-fiscal-eletronica.png");
+    MontaInterfaces telaConfirmaNotaFiscal = new MontaInterfaces("Confirmar dados para Nota Fiscal", "/imagens/nota-fiscal-eletronica-s-f-2.png");
     ConexaoBanco conexao = new ConexaoBanco();
     
     //Panels
@@ -90,8 +89,13 @@ public class ConfirmaNotaFiscal implements PadraoFormulario, ActionListener {
         this.iniciaComponentes();
         this.atribuiIcones();
         this.preenchaCampos(this.intCodigoOS);
+        this.preencheCombos();
+        this.adicionaEventos();
+        this.setaNomes();
         telaConfirmaNotaFiscal.setVisible(true);
         telaConfirmaNotaFiscal.setMaximizado(true);
+        
+        System.out.println(this.somaData(auxiliar.hoje(), 90));
     }
 
     @Override
@@ -137,15 +141,13 @@ public class ConfirmaNotaFiscal implements PadraoFormulario, ActionListener {
         txtRazaoSocial.setEnabled(false);
         txtRazaoSocialTomador.setEnabled(false);
         txtRazaoSocialTomador.setEnabled(false);
-        
-        rdbBoleto.addActionListener(this);
-        rdbCartao.addActionListener(this);
-        rdbVista.addActionListener(this);
-        
+        txtServico.setEnabled(false);
+        txtValorTotal.setEnabled(false);
+        txtUfTomador.setEnabled(false);        
     }
     
     public static void main(String[] args){
-        ConfirmaNotaFiscal cnf = new ConfirmaNotaFiscal(1);
+        ConfirmaNotaFiscal cnf = new ConfirmaNotaFiscal(2);
     }
     
     public void preenchaCampos(int codigo){        
@@ -231,6 +233,41 @@ public class ConfirmaNotaFiscal implements PadraoFormulario, ActionListener {
         }
         
     }
+    
+    public double[] calculaParcelas (double valor, int parcelas){
+        double[] valorParcelas;
+        valorParcelas = new double[parcelas];        
+        
+        for(int i = 0; i < parcelas; i++){
+            valorParcelas[i] = Math.round(((valor / parcelas)*100)/100);
+            
+            if(valor % parcelas != 0){
+                valorParcelas[parcelas -1] = Math.round((((valor / parcelas)*100)/100)-0.01);
+            }            
+            
+        }
+        
+        return valorParcelas;        
+    }
+    
+    public String somaData (String data, int dias){
+        String dataFormatada;
+        
+        try {
+            
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");  
+            java.sql.Date dataS = new java.sql.Date(format.parse(auxiliar.hoje()).getTime()); 
+            
+            dataS.setDate(dataS.getDate()+ dias);
+            
+            dataFormatada = auxiliar.formataData(dataS);
+            
+            return dataFormatada;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }        
+        return null;
+    }
 
     @Override
     public void atribuiIcones() {
@@ -260,38 +297,51 @@ public class ConfirmaNotaFiscal implements PadraoFormulario, ActionListener {
 
     @Override
     public void adicionaEventos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        botCancelar.addActionListener(this);
+        botFaturarNotaFiscal.addActionListener(this);
+        
+        rdbBoleto.addActionListener(this);
+        rdbCartao.addActionListener(this);
+        rdbVista.addActionListener(this);
     }
 
     @Override
     public void preencheTabela() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
     public void setaNomes() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        txtNomeTitular.setName("Nome do titular");
+        txtSSN.setName("SSN");
+        txtOutrasInformacoes.setName("Outras Informações");
+        txtNumeroCartao.setName("Número do Cartão");
+        cboBandeira.setName("Bandeira");
+        cboDias.setName("Parcelas");
+        cboParcelas.setName("Parcelas");
     }
 
     @Override
     public void mostraBotoesAlteracao() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
     public void mostraBotoesCadastro() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
     public boolean cadastrar() {
         if(auxiliar.validaCampos(telaConfirmaNotaFiscal.getListaComponentes())){
-            this.strOutrasInformacoes = txtOutrasInformacoes.getText();
-            this.dblValorTotal = Double.parseDouble(txtValorTotal.getText());
-            
+            if(rdbBoleto.isSelected() == false && rdbCartao.isSelected() == false && rdbVista.isSelected() == false){
+                JOptionPane.showMessageDialog(null, "Você deve preencher uma opção de pagamento");
+            }else{
+                this.strOutrasInformacoes = txtOutrasInformacoes.getText();
+                this.dblValorTotal = Double.parseDouble(txtValorTotal.getText());
+            }            
             return true;
-        }
-        
+        }        
         return false;
     }
 
@@ -309,15 +359,50 @@ public class ConfirmaNotaFiscal implements PadraoFormulario, ActionListener {
     public void actionPerformed(ActionEvent botao) {
         
         boolean ok ;
-        if (botao.getSource() == botCadastrar) {            
+        if (botao.getSource() == botFaturarNotaFiscal) {            
             ok = cadastrar();
             if(ok){	
                 try {
                     ResultSet rs;
-                    conexao.executaProcedure("INSERT_NOTAFISCAL ('" + auxiliar.hoje() + "', '" + auxiliar.hoje() + "', " + this.dblValorTotal + ", " )");
-                    JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
-                    auxiliar.limpaCampos(telaCargos.getListaComponentes());
-                    this.preencheTabela();
+                    conexao.executaProcedure("INSERT_NOTAFISCAL ('" + auxiliar.hoje() + "', '" + auxiliar.hoje() + "', " + this.dblValorTotal + ", 'A150A6S6D0A', '" + this.strOutrasInformacoes + "', " + this.intCodigoOS +", " + this.intCodigoEmitente + ")");
+                    
+                    rs = conexao.executar("SELECT MAX(notCodigo) FROM notaFiscal");
+                    rs.next();
+                    
+                    this.intCodigoNota = rs.getInt(1);
+                    
+                    if(rdbVista.isSelected()){
+                        conexao.executaProcedure("INSERT_CONTAS_RECEBER('" + auxiliar.hoje() + "', '" + auxiliar.hoje() + "', " + this.dblValorTotal + ", '" + auxiliar.hoje() + "', 0, 0, " + this.dblValorTotal + ", " + this.intCodigoNota + ", " + this.intCodigoPagamento + ")");
+                    }else if (rdbBoleto.isSelected()){
+                        
+                        double[] valorParcelas;
+                        int diasParcelas = 30;
+                        valorParcelas = new double[cboDias.getSelectedIndex()];                       
+                        
+                        valorParcelas = this.calculaParcelas(this.dblValorTotal, cboDias.getSelectedIndex());
+                        
+                        for(int i = 0; i < valorParcelas.length; i++){
+                            conexao.executaProcedure("INSERT_CONTAS_RECEBER('" + auxiliar.hoje() + "', '" + this.somaData(auxiliar.hoje(), diasParcelas) + "', " + valorParcelas[i] + ", '', 0, 0, 0, " + this.intCodigoNota + ", " + this.intCodigoPagamento + ")");
+                            diasParcelas = diasParcelas + 30;
+                        }
+                    
+                    }else if (rdbCartao.isSelected()){
+                        double[] valorParcelas;
+                        int diasParcelas = 30;
+                        valorParcelas = new double[Integer.parseInt(cboParcelas.getSelectedItem().toString())];                       
+                        
+                        valorParcelas = this.calculaParcelas(this.dblValorTotal, Integer.parseInt(cboParcelas.getSelectedItem().toString()));
+                        
+                        for(int i = 0; i < valorParcelas.length; i++){
+                            conexao.executaProcedure("INSERT_CONTAS_RECEBER('" + auxiliar.hoje() + "', '" + this.somaData(auxiliar.hoje(), diasParcelas) + "', " + valorParcelas[i] + ", '', 0, 0, 0, " + this.intCodigoNota + ", " + this.intCodigoPagamento + ")");
+                            diasParcelas = diasParcelas + 30;
+                        }
+                    }else {
+                        System.out.println("DEU MERDA");
+                    }
+                    
+                    JOptionPane.showMessageDialog(null, "Nota Faturada");
+                    telaConfirmaNotaFiscal.dispose();
                 }catch (SQLException b) {
                     JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
                 }
@@ -382,9 +467,6 @@ public class ConfirmaNotaFiscal implements PadraoFormulario, ActionListener {
             txtNomeTitular.setObrigatorio(true);
             
             this.intCodigoPagamento = 3;
-        }
-        
-        
-    }
-    
+        }       
+    }    
 }

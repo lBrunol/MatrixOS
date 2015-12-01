@@ -15,6 +15,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.Icon;
@@ -32,7 +34,7 @@ import javax.swing.JOptionPane;
  *
  * @author Fabiano
  */
-public class ConsultaContasReceber implements ActionListener, FocusListener {
+public class ConsultaContasReceber implements ActionListener, FocusListener, KeyListener {
     
     MetodosAuxiliares auxiliar = new MetodosAuxiliares();
     MontaInterfaces telaConsultaContas = new MontaInterfaces("Consulta Contas a Receber", "/imagens/contas-receber-2.png");
@@ -85,13 +87,7 @@ public class ConsultaContasReceber implements ActionListener, FocusListener {
         cboStatus.addItem("");
         cboStatus.addItem("Pago");
         cboStatus.addItem("Pendente");
-        cboStatus.addItem("Atrasado");        
-        
-        botPesquisar.addActionListener(this);
-        txtCliente.addFocusListener(this);
-        txtCodigo.addFocusListener(this);
-        txtData.addFocusListener(this);
-        cboStatus.addFocusListener(this);
+        cboStatus.addItem("Atrasado"); 
     }
     
     public void atribuiIcones() {
@@ -134,6 +130,13 @@ public class ConsultaContasReceber implements ActionListener, FocusListener {
                 }
             }
         });
+        
+        botPesquisar.addActionListener(this);
+        txtCliente.addFocusListener(this);
+        txtCodigo.addFocusListener(this);
+        txtData.addFocusListener(this);
+        cboStatus.addFocusListener(this);
+        txtCodigo.addKeyListener(this);
     }
 
     @Override
@@ -192,6 +195,25 @@ public class ConsultaContasReceber implements ActionListener, FocusListener {
             txtCodigo.setText("");
             txtData.setText("");
         }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        char key = e.getKeyChar();
+        int k = key;
+        if(!auxiliar.apenasNumeros(k)){
+            e.consume();
+        }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        
     }
 
 }

@@ -77,9 +77,9 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Menu Principal - Matrix OS");
-        setMaximumSize(new java.awt.Dimension(617, 768));
-        setMinimumSize(new java.awt.Dimension(617, 768));
-        setSize(new java.awt.Dimension(617, 768));
+        setMaximumSize(new java.awt.Dimension(617, 680));
+        setMinimumSize(new java.awt.Dimension(617, 680));
+        setSize(new java.awt.Dimension(617, 680));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         txtGerenciamento.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -372,6 +372,11 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         JButtonAjuda.addActionListener(this);
         JButtonRelatorioContasaReceber.addActionListener(this);
         JMenuCriacaoUsuarios.addActionListener(this);
+        JButtonLogoff.addActionListener(this);
+        
+        JButtonAjuda.setVisible(false);
+        txtAjuda.setVisible(false);
+        
     }// </editor-fold>         
     
     public void centralize() {	
@@ -482,8 +487,11 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
             dados.criaJanela();
             dados.setVisible(true);
          }else if(botao.getSource() == JMenuCriacaoUsuarios){
-             Aplicacao.Usuario usr = new Usuario();
-        
+             Aplicacao.Usuario usr = new Usuario();        
+         }else if(botao.getSource() == JButtonLogoff){
+             dispose();
+             Login lgn = new Login();
+             lgn.setVisible(true);
          }
     }    
 }

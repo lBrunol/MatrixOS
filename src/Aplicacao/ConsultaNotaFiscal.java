@@ -13,6 +13,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -24,7 +26,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 
 
-public class ConsultaNotaFiscal implements ActionListener, FocusListener{
+public class ConsultaNotaFiscal implements ActionListener, FocusListener, KeyListener{
     
     MetodosAuxiliares auxiliar = new MetodosAuxiliares();
     MontaInterfaces telaConsultaNotaFiscal = new MontaInterfaces("Consulta Notas Fiscais", "/imagens/nota-fiscal-eletronica-s-f-2.png");
@@ -74,7 +76,7 @@ public class ConsultaNotaFiscal implements ActionListener, FocusListener{
         botPesquisar.addActionListener(this);
         txtCliente.addFocusListener(this);
         txtData.addFocusListener(this);
-        
+        txtCodigo.addKeyListener(this);
     }
     
      public void atribuiIcones() {   
@@ -127,6 +129,25 @@ public class ConsultaNotaFiscal implements ActionListener, FocusListener{
 
     @Override
     public void focusLost(FocusEvent e) {
+        
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        char key = e.getKeyChar();
+        int k = key;
+        if(!auxiliar.apenasNumeros(k)){
+            e.consume();
+        }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
         
     }
 }

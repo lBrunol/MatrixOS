@@ -13,6 +13,7 @@ import Core.PComboBox;
 import Core.PFormattedTextField;
 import Core.PTextField;
 import Core.PadraoFormulario;
+import Core.Sessao;
 import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -131,6 +132,31 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         OrdemServico os = new OrdemServico();
     }
     
+    public boolean verificaFatura(){        
+        try {            
+            ResultSet rs;
+        
+            rs = conexao.executar("SELECT COUNT(notCodigo) FROM notaFiscal WHERE ordCodigo = " + intCodigoOS);
+            rs.next();
+
+            if(rs.getInt(1) == 1){
+                return true;
+            }else {
+                return false;
+            }
+            
+        }catch (SQLException b) {
+            JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
+            b.printStackTrace();
+        }
+        catch (Exception b) {
+            JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
+        }
+        
+        return false;
+        
+    }
+    
     @Override
     public void iniciaComponentes() {        
 
@@ -185,10 +211,18 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         txtDataAbertura.setEnabled(false);
         txtValorTotal.setEnabled(false);
         
+        botFaturarNotaFiscal.setEnabled(false);
+        
         //Formata os valores em moeda
         txtDataAbertura.setText(auxiliar.hoje());
         txtDataFechamento.setObrigatorio(false);
         txtComplemento.setObrigatorio(false);
+        
+        Sessao sessao = Sessao.getInstance();
+        if(sessao.isAdm() == false){
+            botAlterarRegistro.setEnabled(false);
+            botExcluir.setEnabled(false);
+        }
     }
     
     @Override
@@ -231,6 +265,7 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
         txtQtde.addFocusListener(this);
         txtQtde.addKeyListener(this);
         botAlterarRegistro.addActionListener(this);
+        botFaturarNotaFiscal.addActionListener(this);
         
         cboCliente.addActionListener(new ActionListener() {
             @Override
@@ -239,7 +274,7 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
                     ComboItem comboItem = (ComboItem) cboCliente.getSelectedItem();
                     intCodigoCliente = Integer.parseInt(comboItem.getId());
                     try {
-                        ResultSet rs = conexao.executar("SELECT cliTipo FROM cliente WHERE cliCodigo = " + intCodigoCliente);
+                        ResultSet rs = conexao.executar("SELECT UPPER(cliTipo) FROM cliente WHERE cliCodigo = " + intCodigoCliente);
                         rs.next();
                         if("J".equals(rs.getString(1).toUpperCase())){                        
                             rs = conexao.executar("SELECT cliEndereco, cliNumEndereco, cliComplemento, cliCEP, cliBairro, cliCidade, cliUF, cliTelefone, cliCNPJ, cliIM FROM cliente INNER JOIN cliPessoaJuridica ON cliente.cliCodigo = cliPessoaJuridica.cliCodigo WHERE cliente.cliCodigo = " + intCodigoCliente);
@@ -270,6 +305,7 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
                         JOptionPane.showMessageDialog(null, b.getCause());
                     }                
                     catch (SQLException b) {
+                        b.printStackTrace();
                         JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
                     }
                     catch (Exception b) {
@@ -318,7 +354,7 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(cboServico.getSelectedItem() != ""){
-                    ComboItem comboItem = (ComboItem) cboServico.getSelectedItem();
+                    ComboItem comboItem = (ComboItem) cboServico.getSelectedItem();                   
                     intCodigoServico = Integer.parseInt(comboItem.getId());
                     try {
                         ResultSet rs = conexao.executar("SELECT svcValorHora, svcDescricao FROM servicos WHERE svcCodigo = " + intCodigoServico);
@@ -364,22 +400,27 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
                         txtDataAbertura.setText(auxiliar.formataData(rs.getDate(3)));
                         txtDataFechamento.setText(auxiliar.formataData(rs.getDate(4)));
                         txtValorTotal.setText(auxiliar.formataValor(rs.getFloat(5)));
-                        cboFuncionario.setSelectedIndex(rs.getInt(7));
-                        cboCliente.setSelectedIndex(rs.getInt(8));                    
+                        
+                        auxiliar.setSelectedValue(cboFuncionario, rs.getInt(7));
+                        auxiliar.setSelectedValue(cboCliente,rs.getInt(8));                    
                         
                         rs.close();
                         
                         rs = conexao.executar("SELECT * FROM servicosOS WHERE ordCodigo =" + intCodigoOS);
                         rs.next();
-                        cboServico.setSelectedIndex(rs.getInt(4));
+                        auxiliar.setSelectedValue(cboServico,rs.getInt(4));
                         txtQtde.setText(rs.getString(2));
 
                         mostraBotoesAlteracao();
+                        botFaturarNotaFiscal.setEnabled(false);
+                        if(verificaFatura()){
+                            botFaturarNotaFiscal.setEnabled(true);
+                        }
                         telaOS.getTabbedPane().setSelectedIndex(0);
                         rs.close();
                     }             
                     catch (SQLException b) {
-                        JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
+                        JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");                        
                     }
                     catch (Exception b) {
                         JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
@@ -507,8 +548,13 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
                     intCodigoOS = rs.getInt(1);
                     conexao.executaProcedure("INSERT_SERVICOSOS ('"+ hoje + "', " + this.intQtdeServico + ", " + this.intCodigoOS + ", " + this.intCodigoServico + ")");
                     JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
+                    
+                    if(JOptionPane.showConfirmDialog(null, "Deseja Faturar está ordem de serviço?", "Faturar Ordem", JOptionPane.YES_NO_OPTION) == 0){
+                        ConfirmaNotaFiscal cfn = new ConfirmaNotaFiscal(intCodigoOS);
+                    }
                     auxiliar.limpaCampos(telaOS.getListaComponentes());
                     txtDataAbertura.setText(auxiliar.hoje());
+                    botFaturarNotaFiscal.setEnabled(false);
                     this.preencheTabela();
                 }catch (SQLException b) {
                     JOptionPane.showMessageDialog(null, b.getMessage() + ". Ocorreu um erro de SQL. Por favor, entre em contato com administrador do sistema.");
@@ -562,6 +608,11 @@ public class OrdemServico implements ActionListener, PadraoFormulario, FocusList
                 catch (Exception b) {
                     JOptionPane.showMessageDialog(null,"Erro desconhecido. Por favor entre em contato com administrador do sistema. \n" + b.getMessage());
                 }                                    
+            }
+        }
+        if (botao.getSource() == botFaturarNotaFiscal){
+            if(auxiliar.validaCampos(telaOS.getListaComponentes())){
+                ConfirmaNotaFiscal cnf = new ConfirmaNotaFiscal(intCodigoOS);            
             }
         }
     }  

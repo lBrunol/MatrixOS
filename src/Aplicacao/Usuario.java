@@ -10,6 +10,7 @@ import Core.MetodosAuxiliares;
 import Core.MontaInterfaces;
 import Core.PTextField;
 import Core.PadraoFormulario;
+import Core.Sessao;
 import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -176,7 +177,15 @@ public class Usuario implements PadraoFormulario, ActionListener {
     @Override
     public void preencheTabela() {
         try {
-            conexao.preencheTabela(tabela, "CONSULTA_USUARIOS(0)");            
+            Sessao sessao = Sessao.getInstance();
+            if(sessao.isAdm() == false){
+                JOptionPane.showMessageDialog(null, sessao.getUser() + sessao.getSenha());
+                conexao.preencheTabelaSelect(tabela, "SELECT * FROM usuarios WHERE LOWER(usrNome) = '" + sessao.getUser().toLowerCase() + "' AND usrSenha = '" + sessao.getSenha() + "'");
+                chkAdministrador.setEnabled(false);
+            }else{
+                conexao.preencheTabela(tabela, "CONSULTA_USUARIOS(0)");
+            }
+                        
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage()+ "\n" + e.getMessage());
         }
@@ -221,6 +230,10 @@ public class Usuario implements PadraoFormulario, ActionListener {
         if(auxiliar.validaCampos(telaUsuario.getListaComponentes())){ 
             this.strUsuario = txtNome.getText();
             this.strSenha = txtSenha.getText();
+            
+            Sessao.setSenha(this.strSenha);
+            Sessao.setUser(this.strUsuario);            
+            
             if(chkAdministrador.isSelected()){
                 this.strAdm = "S";
             }else{

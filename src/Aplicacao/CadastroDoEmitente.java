@@ -11,6 +11,7 @@ import Core.MontaInterfaces;
 import Core.PFormattedTextField;
 import Core.PTextField;
 import Core.PadraoFormulario;
+import Core.Sessao;
 import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -116,8 +117,12 @@ public class CadastroDoEmitente implements PadraoFormulario, ActionListener {
         
         panelBotoesAlteracao.setVisible(false);
         panelBotoesCadastro.setVisible(true);
-
         
+        Sessao sessao = Sessao.getInstance();
+        if(sessao.isAdm() == false){
+            botAlterarRegistro.setEnabled(false);
+            botExcluir.setEnabled(false);
+        }        
     }
 
     @Override

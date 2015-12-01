@@ -333,17 +333,18 @@ public class ConexaoBanco {
     
     
     
-    public void preencheCombo(final JComboBox combo, String sql){
+    public void preencheCombo(JComboBox combo, String sql){
         ResultSet rs;
         try {
-            this.conectar();
+            int index = 1;
             rs = this.executar(sql);
             while(rs.next()){
                 String id = rs.getString(1);
                 String nome = rs.getString(2);
                 
-                ComboItem cboItem = new ComboItem(id, nome);
+                ComboItem cboItem = new ComboItem(id, nome, index);
                 combo.addItem(cboItem);
+                index++;
             }
         }
         catch(SQLException e){  
@@ -352,5 +353,5 @@ public class ConexaoBanco {
             JOptionPane.showMessageDialog(null,"Ocorreu um erro ao listar a combobox " + e.getMessage() + " \n Favor entrar em contato com administrador");
         }
                 
-    }
+    }    
 }

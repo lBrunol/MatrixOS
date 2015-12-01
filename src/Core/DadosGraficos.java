@@ -27,7 +27,9 @@ import javax.swing.JLabel;
  * @author Bruno
  */
 public class DadosGraficos extends JFrame {
-
+    
+    MetodosAuxiliares auxiliar = new MetodosAuxiliares();
+        
     JPanel painelFundo;
     JTable tabela;
     JScrollPane barraRolagem;
@@ -143,7 +145,7 @@ public class DadosGraficos extends JFrame {
         double auxSomaFi = this.somaFi(fi);
 
         for (int i = 0; i < fa.length; i++) {
-            auxFra[i] = (fa[i] * 100) / auxSomaFi;
+            auxFra[i] = Math.round(((fa[i] * 100) / auxSomaFi)*100)/100;
         }
 
         return auxFra;
@@ -155,7 +157,7 @@ public class DadosGraficos extends JFrame {
         double auxSomaFi = this.somaFi(fi);
 
         for (int i = 0; i < fi.length; i++) {
-            auxFri[i] = (fi[i] * 100) / auxSomaFi;
+            auxFri[i] = Math.round(((fi[i] * 100) / auxSomaFi)*100)/100;
         }
 
         return auxFri;
@@ -175,7 +177,7 @@ public class DadosGraficos extends JFrame {
     private double calculaMedia(double somaXi, double somaFi) {
         double auxMedia;
 
-        auxMedia = somaXi / somaFi;
+        auxMedia = Math.round((somaXi / somaFi)*100)/100;
 
         return auxMedia;
     }
@@ -344,12 +346,12 @@ public class DadosGraficos extends JFrame {
         
         barraRolagem = new JScrollPane(tabela);
         painelFundo = new JPanel();
-        lblmedia = new JLabel("      Media: " + String.valueOf(media));
+        lblmedia = new JLabel("      Média: " + String.valueOf(media));
         lblmediana = new JLabel("      Mediana: " + String.valueOf(mediana));
         lblmoda = new JLabel("      Moda: " + String.valueOf(moda[0]));
         
-        Font fonte = new Font("Calibri",Font.BOLD, 30);
-        lbltitulo = new JLabel("                               Variável Discreta");
+        Font fonte = new Font("Calibri",Font.BOLD, 23);
+        lbltitulo = new JLabel("  Variável Discreta - Valor total das Ordens Emitidas");
         lbltitulo.setFont(fonte);
         
         ImageIcon icon = new ImageIcon(getClass().getResource("/imagens/relatorio.png"));
@@ -384,7 +386,7 @@ public class DadosGraficos extends JFrame {
         getContentPane().add(painelFundo);
         
         setSize(1000, 600);
-        setTitle("Variável Discreta - Valores totais das Ordens de Serviço");
+        setTitle("Variável Discreta - Valor total das Ordens Emitidas");
         centralize();
 
     }
@@ -416,6 +418,8 @@ public class DadosGraficos extends JFrame {
         tabela.getColumnModel().getColumn(1).setPreferredWidth(120);
         tabela.getColumnModel().getColumn(1).setPreferredWidth(120);
         pesquisar(modelo);
+        auxiliar.formataValorTabela(tabela, 0);
+        
     }
 
     public void pesquisar(DefaultTableModel modelo) {

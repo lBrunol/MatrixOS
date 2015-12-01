@@ -12,11 +12,13 @@ package Core;
 public class ComboItem {
     private String id;
     private String nome;
+    private int index;
     
     
-    public ComboItem(String id, String nome) {
+    public ComboItem(String id, String nome, int index) {
         this.id = id;
         this.nome = nome;
+        this.index = index;
     }
     
 
@@ -38,5 +40,12 @@ public class ComboItem {
      */
     public String getNome() {
         return nome;
+    }
+    
+    /**
+     * @return the index
+     */
+    public int getIndex() {
+        return index;
     }
 }

@@ -6,6 +6,7 @@
 package Aplicacao;
 
 import Core.ConexaoBanco;
+import Core.Sessao;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -83,6 +84,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
         
         //Adiciona eventos
         JButtonEntrar.addActionListener(this);
+        JButtonLimpar.addActionListener(this);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -210,6 +212,18 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                     rs.next();
                     if(rs.getInt(1) == 1) {
                         Aplicacao.MenuPrincipal menu = new MenuPrincipal();
+                        
+                        rs = cn.executar("SELECT usrAdministrador FROM usuarios WHERE usrNome ='" + txtNomeUsuario.getText().toLowerCase() + "' AND usrSenha = '" + txtSenhaUsuario.getText().toLowerCase() + "'");
+                        rs.next();
+                        Sessao sessao = Sessao.getInstance();
+                        if("S".equals(rs.getString(1).toUpperCase())){                            
+                            sessao.setAdm(true);
+                        }else{
+                            sessao.setAdm(false);
+                            
+                        }
+                        sessao.setUser(txtNomeUsuario.getText());
+                        sessao.setSenha(txtSenhaUsuario.getText());
                         menu.setVisible(true);
                         txtNomeUsuario.setText("");
                         txtSenhaUsuario.setText("");
@@ -229,5 +243,10 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Preencha os campos corretamente");
             }
         }
+        if(e.getSource() == JButtonLimpar){
+            txtNomeUsuario.setText("");
+            txtSenhaUsuario.setText("");
+        }
+        
     }
 }

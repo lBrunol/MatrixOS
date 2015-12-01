@@ -7,6 +7,7 @@ import Core.MetodosAuxiliares;
 import Core.MontaInterfaces;
 import Core.PTextField;
 import Core.PadraoFormulario;
+import Core.Sessao;
 import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -101,7 +102,13 @@ public class Servicos implements PadraoFormulario, ActionListener, KeyListener{
         telaServicos.addTabela(tblServicos, panelConsulta);
         
         panelBotoesAlteracao.setVisible(false);
-        panelBotoesCadastro.setVisible(true);        
+        panelBotoesCadastro.setVisible(true);
+        
+        Sessao sessao = Sessao.getInstance();
+        if(sessao.isAdm() == false){
+            botAlterarRegistro.setEnabled(false);
+            botExcluir.setEnabled(false);
+        }
     }
 
     @Override
@@ -133,6 +140,7 @@ public class Servicos implements PadraoFormulario, ActionListener, KeyListener{
         botAlterarRegistro.addActionListener(this);    
         txtAliquota.addKeyListener(this);
         txtValorHora.addKeyListener(this);
+        txtCodigoServico.addKeyListener(this);
         
         tblServicos.addMouseListener(new MouseAdapter() {
             @Override
