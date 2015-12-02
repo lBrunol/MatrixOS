@@ -6,12 +6,16 @@
 package Aplicacao;
 
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -78,14 +82,18 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         jMenuBar1 = new javax.swing.JMenuBar();
         JMenuUsuarios = new javax.swing.JMenu();
         JMenuCriacaoUsuarios = new javax.swing.JMenuItem();
+        JPanel panelPrincipal = new javax.swing.JPanel(new GridBagLayout());
+        scrollpane = new javax.swing.JScrollPane(panelPrincipal);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Menu Principal - Matrix OS");
-        setMaximumSize(new java.awt.Dimension(617, 680));
-        setMinimumSize(new java.awt.Dimension(617, 680));
-        setSize(new java.awt.Dimension(617, 680));
+        setMaximumSize(new java.awt.Dimension(700, 722));
+        setMinimumSize(new java.awt.Dimension(700, 722));
+        setPreferredSize(new Dimension(700, 722));
+        setSize(new java.awt.Dimension(700, 722));
         getContentPane().setLayout(new java.awt.GridBagLayout());
-
+        
+        
         txtGerenciamento.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txtGerenciamento.setText("Menu Principal - MatrixOS");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -96,7 +104,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.ipady = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(13, 10, 0, 0);
-        getContentPane().add(txtGerenciamento, gridBagConstraints);
+        panelPrincipal.add(txtGerenciamento, gridBagConstraints);
 
         JButtonOrdemdeServico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/icone-tipos-pagamento.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -108,7 +116,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.ipady = 101;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(28, 29, 0, 0);
-        getContentPane().add(JButtonOrdemdeServico, gridBagConstraints);
+        panelPrincipal.add(JButtonOrdemdeServico, gridBagConstraints);
 
         JButtonContasaReceber.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/contas-receber-low.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -119,7 +127,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.ipady = 16;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(27, 11, 0, 0);
-        getContentPane().add(JButtonContasaReceber, gridBagConstraints);
+        panelPrincipal.add(JButtonContasaReceber, gridBagConstraints);
 
         JButtonFuncionario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/funcionario.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -130,7 +138,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.ipady = 18;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(11, 8, 0, 0);
-        getContentPane().add(JButtonFuncionario, gridBagConstraints);
+        panelPrincipal.add(JButtonFuncionario, gridBagConstraints);
 
         JButtonServiços.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/servicos.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -141,7 +149,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.ipady = 30;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 8, 0, 0);
-        getContentPane().add(JButtonServiços, gridBagConstraints);
+        panelPrincipal.add(JButtonServiços, gridBagConstraints);
 
         JButtonNotasFiscais.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/nota-fiscal-eletronica-low.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -152,7 +160,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.ipady = 16;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(4, 10, 0, 0);
-        getContentPane().add(JButtonNotasFiscais, gridBagConstraints);
+        panelPrincipal.add(JButtonNotasFiscais, gridBagConstraints);
 
         JButtonBackupeRestauracao.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/icone-cargos-mid.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -164,7 +172,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.ipady = -14;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 20, 0, 20);
-        getContentPane().add(JButtonBackupeRestauracao, gridBagConstraints);
+        panelPrincipal.add(JButtonBackupeRestauracao, gridBagConstraints);
 
         JButtonEmitente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/dados-emitente-low.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -176,7 +184,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.ipady = 16;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(29, 20, 0, 20);
-        getContentPane().add(JButtonEmitente, gridBagConstraints);
+        panelPrincipal.add(JButtonEmitente, gridBagConstraints);
 
         JButtonCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/clientes.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -188,7 +196,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.ipady = 45;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(11, 11, 0, 0);
-        getContentPane().add(JButtonCliente, gridBagConstraints);
+        panelPrincipal.add(JButtonCliente, gridBagConstraints);
 
         JButtonAjuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/botao-ajuda.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -199,7 +207,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.ipadx = -17;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 34, 0, 0);
-        getContentPane().add(JButtonAjuda, gridBagConstraints);
+        panelPrincipal.add(JButtonAjuda, gridBagConstraints);
 
         txtAjuda.setText("Ajuda");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -207,7 +215,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(2, 44, 0, 0);
-        getContentPane().add(txtAjuda, gridBagConstraints);
+        panelPrincipal.add(txtAjuda, gridBagConstraints);
 
         JButtonLogoff.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/logoff.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -217,7 +225,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.ipady = 14;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 1, 0, 0);
-        getContentPane().add(JButtonLogoff, gridBagConstraints);
+        panelPrincipal.add(JButtonLogoff, gridBagConstraints);
 
         txtLogoff.setText("Logoff");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -226,7 +234,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.ipadx = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(2, 4, 0, 0);
-        getContentPane().add(txtLogoff, gridBagConstraints);
+        panelPrincipal.add(txtLogoff, gridBagConstraints);
 
         JButtonRelatorioContasaReceber.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/relatorio.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -237,7 +245,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.ipady = 76;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(13, 34, 0, 0);
-        getContentPane().add(JButtonRelatorioContasaReceber, gridBagConstraints);
+        panelPrincipal.add(JButtonRelatorioContasaReceber, gridBagConstraints);
 
         jLabel1.setText("Clientes");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -245,7 +253,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 100, 0, 0);
-        getContentPane().add(jLabel1, gridBagConstraints);
+        panelPrincipal.add(jLabel1, gridBagConstraints);
 
         jLabel2.setText("Serviços");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -253,7 +261,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 57, 0, 0);
-        getContentPane().add(jLabel2, gridBagConstraints);
+        panelPrincipal.add(jLabel2, gridBagConstraints);
 
         jLabel3.setText("Ordens de Serviço");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -262,7 +270,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.gridwidth = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 5, 0, 0);
-        getContentPane().add(jLabel3, gridBagConstraints);
+        panelPrincipal.add(jLabel3, gridBagConstraints);
 
         jLabel4.setText("Funcionários");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -271,7 +279,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 58, 0, 0);
-        getContentPane().add(jLabel4, gridBagConstraints);
+        panelPrincipal.add(jLabel4, gridBagConstraints);
 
         jLabel5.setText("Consulta Contas a Receber");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -280,7 +288,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(4, 30, 0, 0);
-        getContentPane().add(jLabel5, gridBagConstraints);
+        panelPrincipal.add(jLabel5, gridBagConstraints);
 
         jLabel6.setText("Consulta de Notas Fiscais");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -289,7 +297,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 30, 0, 0);
-        getContentPane().add(jLabel6, gridBagConstraints);
+        panelPrincipal.add(jLabel6, gridBagConstraints);
 
         jLabel7.setText("Emitente");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -299,7 +307,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 58, 0, 0);
-        getContentPane().add(jLabel7, gridBagConstraints);
+        panelPrincipal.add(jLabel7, gridBagConstraints);
 
         jLabel8.setText("Cargos");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -309,7 +317,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(3, 59, 0, 0);
-        getContentPane().add(jLabel8, gridBagConstraints);
+        panelPrincipal.add(jLabel8, gridBagConstraints);
 
         JButtonOrdemdeServico1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/os.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -321,7 +329,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.ipady = 45;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(11, 5, 0, 20);
-        getContentPane().add(JButtonOrdemdeServico1, gridBagConstraints);
+        panelPrincipal.add(JButtonOrdemdeServico1, gridBagConstraints);
 
         JButtonOrdemdeServico2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/os.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -333,7 +341,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.ipady = 45;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(11, 5, 0, 20);
-        getContentPane().add(JButtonOrdemdeServico2, gridBagConstraints);
+        panelPrincipal.add(JButtonOrdemdeServico2, gridBagConstraints);
 
         jLabel9.setText("Variável Discreta - Valores totais das Ordens de Serviço");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -342,7 +350,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.gridwidth = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 19, 27, 0);
-        getContentPane().add(jLabel9, gridBagConstraints);
+        panelPrincipal.add(jLabel9, gridBagConstraints);
 
         jLabel10.setText("Tipos de Pagamento");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -351,8 +359,17 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 54, 0, 0);
-        getContentPane().add(jLabel10, gridBagConstraints);
-
+        panelPrincipal.add(jLabel10, gridBagConstraints);
+        
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new Insets(10,10,10,10);           
+        gridBagConstraints.fill = GridBagConstraints.BOTH;  
+        gridBagConstraints.weightx = 1;  
+        gridBagConstraints.weighty = 1;
+        gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
+        
+        getContentPane().add(scrollpane, gridBagConstraints);
+        
         JMenuUsuarios.setText("Usuários");
 
         JMenuCriacaoUsuarios.setText("Gerenciamento de Usuários");
@@ -388,10 +405,10 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
 
         Dimension J = getSize();
 
-        if (J.height > T.height) setSize(J.width,T.height); 
-        if (J.width > T.width) setSize(T.width,J.height); 
+        if (J.height >= T.height) setSize(J.width,T.height); 
+        if (J.width >= T.width) setSize(T.width,J.height); 
 
-        setLocation((T.width - J.width )/2,(T.height-J.height)/2);
+        setLocation((T.width - J.width )/4,(T.height-J.height)/100);
     }
 
     /**
@@ -459,6 +476,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener 
     private javax.swing.JLabel txtAjuda;
     private javax.swing.JLabel txtGerenciamento;
     private javax.swing.JLabel txtLogoff;
+    private javax.swing.JScrollPane scrollpane;
     // End of variables declaration  
     
      Icon iconeSair = new ImageIcon(getClass().getResource("/imagens/logoff.png"));

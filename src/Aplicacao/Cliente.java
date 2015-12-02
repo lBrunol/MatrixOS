@@ -119,15 +119,16 @@ public class Cliente implements ActionListener{
     //construtor
     public  Cliente(){
         
-        telaCliente.setTamanho(1000, 1000);
-        telaCliente.setVisible(true); 
+        
         
         this.atribuiIcones();
         this.iniciaComponentes();
         this.setaNomes(); 
         this.preencheTabela();
         this.adicionaEventos();
-        
+        telaCliente.setTamanho(1000, 722);
+        telaCliente.setMaximizado(true);
+        telaCliente.setVisible(true); 
                
        
     }
